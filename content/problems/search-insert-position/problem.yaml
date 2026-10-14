@@ -1,0 +1,41 @@
+id: search-insert-position
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: { zh: "搜索插入位置", en: "Search Insert Position" }
+difficulty: easy
+topics: [binary-search]
+leetcode: { frontendId: 35, title: "Search Insert Position", slug: search-insert-position, difficulty: easy, tags: [Array, Binary Search], paidOnly: false, verifiedAt: "2026-10-14" }
+summary:
+  zh: 在严格递增数组 `nums` 中，若存在 `target` 返回其下标，否则返回它按顺序插入后的下标，要求 O(log n)。（本课程原创简述，完整题面见 LeetCode 官方页面。）
+  en: In the strictly increasing array `nums`, return the index of `target` if present, otherwise the index where it would be inserted in order, in O(log n). (Original summary written for Learn; see LeetCode for the official statement.)
+constraints:
+  - { zh: "1 ≤ n ≤ 10⁴，元素互不相同且递增", en: "1 ≤ n ≤ 10⁴, distinct and increasing" }
+  - { zh: "-10⁴ ≤ nums[i], target ≤ 10⁴", en: "-10⁴ ≤ nums[i], target ≤ 10⁴" }
+params:
+  - { name: nums, type: "int[]" }
+  - { name: target, type: int }
+returns: int
+comparator: { kind: exact }
+entry: { python: searchInsert, typescript: searchInsert }
+perCaseMs: 1000
+inputs:
+  - { type: "int[]", minLength: 1, smallMaxLength: 10, largeLength: 10000, sorted: asc, distinct: true, min: -10000, max: 10000, smallMin: -20, smallMax: 20 }
+  - { type: int, min: -10000, max: 10000, smallMin: -22, smallMax: 22 }
+hints:
+  - { zh: "插入位置可以描述为“第一个 ≥ target 的位置”。", en: "The insert position is the first index whose value is at least target." }
+  - { zh: "这正是下界模板：ok(i) = nums[i] ≥ target，答案范围包括 n（全部都小于 target）。", en: "That is the lower-bound template with ok(i) = nums[i] ≥ target, and the answer range includes n (everything is smaller)." }
+  - { zh: "lo = 0, hi = n；nums[mid] ≥ target 时 hi = mid，否则 lo = mid + 1；返回 lo。", en: "lo = 0, hi = n; if nums[mid] ≥ target set hi = mid, else lo = mid + 1; return lo." }
+solution:
+  explanation:
+    zh: 下界二分，搜索区间为 [0, n]，返回第一个 nums[i] ≥ target 的位置。时间 O(log n)。
+    en: Lower-bound binary search over [0, n], returning the first i with nums[i] ≥ target. O(log n) time.
+examples:
+  - { id: ex-1, args: [[2, 5, 8, 11], 8], expected: 2 }
+  - { id: ex-2, args: [[2, 5, 8, 11], 6], expected: 2 }
+  - { id: ex-3, args: [[2, 5, 8, 11], 99], expected: 4 }
+boundaryCases:
+  - args: [[1], 0]
+  - args: [[1], 1]
+  - args: [[1], 2]
+  - args: [[-10000, 10000], 0]

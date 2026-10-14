@@ -1,0 +1,38 @@
+id: maximum-depth-of-binary-tree
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: { zh: "二叉树的最大深度", en: "Maximum Depth of Binary Tree" }
+difficulty: easy
+topics: [trees]
+leetcode: { frontendId: 104, title: "Maximum Depth of Binary Tree", slug: maximum-depth-of-binary-tree, difficulty: easy, tags: [Tree, Depth-First Search, Breadth-First Search, Binary Tree], paidOnly: false, verifiedAt: "2026-10-14" }
+summary:
+  zh: 返回二叉树从根到最远叶子的路径上的节点数；空树深度为 0。（本课程原创简述，完整题面见 LeetCode 官方页面。）
+  en: Return the number of nodes on the longest root-to-leaf path of a binary tree; an empty tree has depth 0. (Original summary written for Learn; see LeetCode for the official statement.)
+constraints:
+  - { zh: "节点数在 [0, 10⁴] 范围内", en: "The number of nodes is in [0, 10⁴]" }
+  - { zh: "-100 ≤ Node.val ≤ 100", en: "-100 ≤ Node.val ≤ 100" }
+params:
+  - { name: root, type: tree }
+returns: int
+comparator: { kind: exact }
+entry: { python: maxDepth, typescript: maxDepth }
+perCaseMs: 1000
+inputs:
+  - { type: tree, minLength: 0, smallMaxLength: 9, largeLength: 3000, min: -100, max: 100, shape: chain }
+hints:
+  - { zh: "如果已经知道左右子树的最大深度，整棵树的最大深度是多少？", en: "If you knew the maximum depths of both subtrees, what is the depth of the whole tree?" }
+  - { zh: "整棵树深度 = 1 + max(左子树深度, 右子树深度)；空树深度为 0。", en: "Depth = 1 + max(left depth, right depth), and an empty tree has depth 0." }
+  - { zh: "写递归函数：空节点返回 0，否则返回 1 + max(递归左, 递归右)。也可以用 BFS 数层数。", en: "Recurse: return 0 for an empty node, otherwise 1 + max(recurse left, recurse right). Counting levels with BFS also works." }
+solution:
+  explanation:
+    zh: 后序递归：空节点为 0，节点深度为 1 加子树深度的较大者。时间 O(n)，递归栈空间 O(h)。
+    en: "Post-order recursion: empty is 0, and a node's depth is 1 plus the larger subtree depth. O(n) time, O(h) recursion space."
+examples:
+  - { id: ex-1, args: [[4, 2, 7, null, 3]], expected: 3 }
+  - { id: ex-2, args: [[]], expected: 0 }
+boundaryCases:
+  - args: [[1]]
+  - args: [[1, 2]]
+  - args: [[1, null, 2, null, 3]]
+  - args: [[1, 2, 3, 4, 5, 6, 7]]

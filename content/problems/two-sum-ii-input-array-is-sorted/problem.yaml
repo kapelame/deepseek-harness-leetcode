@@ -1,0 +1,42 @@
+id: two-sum-ii-input-array-is-sorted
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: { zh: "两数之和 II - 输入有序数组", en: "Two Sum II - Input Array Is Sorted" }
+difficulty: medium
+topics: [two-pointers]
+leetcode: { frontendId: 167, title: "Two Sum II - Input Array Is Sorted", slug: two-sum-ii-input-array-is-sorted, difficulty: medium, tags: [Array, Two Pointers, Binary Search], paidOnly: false, verifiedAt: "2026-10-14" }
+summary:
+  zh: 数组 `numbers` 按非递减顺序排列，找出和为 `target` 的两个数，返回它们从 1 开始计数的下标 `[index1, index2]`（index1 < index2）。恰好有一组答案，要求只用常数额外空间。（本课程原创简述，完整题面见 LeetCode 官方页面。）
+  en: "`numbers` is sorted in non-decreasing order. Return the 1-based indices `[index1, index2]` (index1 < index2) of two numbers that add up to `target`. Exactly one answer exists, and only constant extra space should be used. (Original summary written for Learn; see LeetCode for the official statement.)"
+constraints:
+  - { zh: "2 ≤ numbers.length ≤ 3·10⁴", en: "2 ≤ numbers.length ≤ 3·10⁴" }
+  - { zh: "-1000 ≤ numbers[i] ≤ 1000，非递减", en: "-1000 ≤ numbers[i] ≤ 1000, non-decreasing" }
+  - { zh: "恰好有一组答案", en: "Exactly one answer exists" }
+params:
+  - { name: numbers, type: "int[]" }
+  - { name: target, type: int }
+returns: "int[]"
+comparator: { kind: validator, name: pair-indices-sum-one-based }
+entry: { python: twoSum, typescript: twoSum }
+perCaseMs: 1000
+inputs:
+  - { type: "int[]", minLength: 2, smallMaxLength: 12, largeLength: 30000, sorted: asc, min: -1000, max: 1000, smallMin: -20, smallMax: 20 }
+  - { type: int, min: -2000, max: 2000 }
+hints:
+  - { zh: "数组有序。最小值加最大值和 target 比较，能告诉你什么？", en: "The array is sorted. What does comparing the smallest plus the largest value with target tell you?" }
+  - { zh: "如果最小 + 最大 > target，最大的那个数不可能出现在任何答案里；反之最小的数不可能。", en: "If smallest + largest > target, the largest value cannot be in any answer; in the opposite case the smallest cannot." }
+  - { zh: "left 从头、right 从尾出发：和太大则 right--，太小则 left++，相等就返回 [left+1, right+1]。", en: "Start left at the beginning and right at the end: if the sum is too large do right--, if too small do left++, and on equality return [left+1, right+1]." }
+solution:
+  explanation:
+    zh: 相向双指针。由于有序，和偏大时排除 numbers[right]，偏小时排除 numbers[left]，不会漏掉唯一答案。时间 O(n)，额外空间 O(1)。注意返回 1 开始的下标。
+    en: Opposite-direction pointers. Because the array is sorted, a large sum discards numbers[right] and a small sum discards numbers[left] without skipping the unique answer. O(n) time, O(1) extra space. Remember the indices are 1-based.
+examples:
+  - { id: ex-1, args: [[1, 4, 6, 9, 12], 15], expected: [3, 4] }
+  - { id: ex-2, args: [[-3, 0, 2, 5], -1], expected: [1, 3] }
+  - { id: ex-3, args: [[2, 2], 4], expected: [1, 2] }
+boundaryCases:
+  - args: [[-1000, 1000], 0]
+  - args: [[1, 2, 3, 4, 4], 8]
+  - args: [[0, 0, 3, 4], 0]
+  - args: [[-5, -3, -1, 7], -8]

@@ -1,0 +1,100 @@
+id: binary-search
+order: 4
+title: { zh: "二分查找：在单调性上每次砍掉一半", en: "Binary search: halve the space wherever a monotone predicate exists" }
+summary:
+  zh: 只要能把问题写成“某个条件从假变真只翻转一次”，就能每次检查中点、丢掉一半搜索空间，在 O(log n) 次检查内找到分界点。
+  en: Whenever a condition flips from false to true exactly once, checking the midpoint discards half of the search space, so the boundary is found in O(log n) checks.
+prerequisites: []
+problems: [binary-search, search-insert-position, koko-eating-bananas]
+variants: [binary-search-count-occurrences, binary-search-koko-rest]
+lesson:
+  motivation:
+    zh: |-
+      你在调试一个回归：1000 个提交中，某一次开始测试失败了，之后一直失败。逐个检查提交最坏要跑 1000 次测试。
+
+      但“这个提交之后测试会失败吗？”这个问题有一个关键性质：一旦变成“是”，之后就一直是“是”。检查中间那个提交，无论结果如何都能排除一半提交——只需大约 10 次测试。
+
+      二分查找不只用于有序数组里找数，它适用于任何**单调的判定条件**：数组元素 ≥ x、速度足够完成任务、容量足够装下货物……
+    en: |-
+      You are hunting a regression: among 1000 commits, tests start failing at some commit and keep failing afterwards. Checking commits one by one may take 1000 test runs.
+
+      The question "does the test fail at this commit?" has a key property: once the answer becomes yes, it stays yes. Testing the middle commit discards half of the candidates either way, so about 10 runs are enough.
+
+      Binary search is not only about finding a number in a sorted array; it applies to any **monotone predicate**: element ≥ x, speed fast enough to finish, capacity large enough to ship everything.
+  strategy:
+    zh: |-
+      **找第一个满足条件的位置**（下界）的模板：
+
+      ```
+      lo, hi = 0, n          # 答案在 [lo, hi] 中，hi = n 表示“都不满足”
+      while lo < hi:
+          mid = (lo + hi) // 2
+          if ok(mid): hi = mid      # mid 可能就是答案，保留
+          else:       lo = mid + 1  # mid 不满足，丢弃 mid 及左侧
+      return lo
+      ```
+
+      **不变量**：`[0, lo)` 中都不满足，`[hi, n)` 中都满足。每轮区间至少缩小一个元素，最终 `lo == hi` 就是分界点。
+
+      **对答案二分**：当问题是“最小的可行速度/容量”时，在答案的取值范围上二分，`ok(x)` 用一次 O(n) 的模拟判断可行性。总复杂度 O(n log R)。
+
+      **常见陷阱**：死循环（`lo = mid` 配合下取整）、区间开闭不一致、`mid` 溢出（Python 无此问题）、判定条件不单调。
+    en: |-
+      Template for the **first position that satisfies a condition** (lower bound):
+
+      ```
+      lo, hi = 0, n          # answer in [lo, hi]; hi = n means "none satisfies"
+      while lo < hi:
+          mid = (lo + hi) // 2
+          if ok(mid): hi = mid      # mid may be the answer, keep it
+          else:       lo = mid + 1  # mid fails, drop it and everything left of it
+      return lo
+      ```
+
+      **Invariant**: everything in `[0, lo)` fails and everything in `[hi, n)` satisfies. Each round removes at least one element, and `lo == hi` is the boundary.
+
+      **Binary search on the answer**: when the question is "the smallest feasible speed or capacity", search over the answer's range, with `ok(x)` checking feasibility in one O(n) simulation, for O(n log R) total.
+
+      **Pitfalls**: infinite loops (`lo = mid` with floor division), inconsistent interval ends, overflow in `mid` (not an issue in Python), and predicates that are not monotone.
+  example:
+    title: { zh: "例：在 [2, 3, 5, 8, 13, 21] 中找第一个 ≥ 9 的位置", en: "Example: first position ≥ 9 in [2, 3, 5, 8, 13, 21]" }
+    body:
+      zh: ok(i) 表示 nums[i] ≥ 9。区间 [lo, hi) 每轮至少缩小一半。
+      en: ok(i) means nums[i] ≥ 9. The interval [lo, hi) shrinks by about half each round.
+    traceColumns: [lo, hi, mid, "nums[mid]", decision]
+    trace:
+      - state: { lo: "0", hi: "6", mid: "3", "nums[mid]": "8", decision: "8 < 9 → lo = 4" }
+        note: { zh: "下标 0..3 都小于 9，一次排除 4 个。", en: "Indices 0..3 are all below 9: four discarded at once." }
+      - state: { lo: "4", hi: "6", mid: "5", "nums[mid]": "21", decision: "21 ≥ 9 → hi = 5" }
+        note: { zh: "下标 5 满足，但前面可能还有更早的满足者。", en: "Index 5 satisfies, but an earlier index might too." }
+      - state: { lo: "4", hi: "5", mid: "4", "nums[mid]": "13", decision: "13 ≥ 9 → hi = 4" }
+        note: { zh: "lo == hi == 4，答案是下标 4。", en: "lo == hi == 4: the answer is index 4." }
+  check:
+    - id: invariant
+      prompt:
+        zh: 在下界模板中，当 ok(mid) 为真时为什么写 hi = mid 而不是 hi = mid - 1？
+        en: In the lower-bound template, why set hi = mid rather than hi = mid - 1 when ok(mid) is true?
+      options:
+        - { zh: "为了让循环更快结束", en: "To end the loop sooner" }
+        - { zh: "因为 mid 本身可能就是第一个满足条件的位置，不能丢掉", en: "Because mid itself may be the first satisfying position and must not be discarded" }
+        - { zh: "两种写法没有区别", en: "The two are equivalent" }
+      answer: 1
+      explanation:
+        zh: hi = mid - 1 可能把唯一的答案排除掉。不变量要求 [hi, n) 都满足，mid 满足所以 hi 可以落在 mid。
+        en: hi = mid - 1 could discard the only answer. The invariant says [hi, n) all satisfy; mid satisfies, so hi may sit at mid.
+    - id: on-answer
+      prompt:
+        zh: “最小可行速度”能用二分查找，需要满足什么？
+        en: What makes "smallest feasible speed" searchable by binary search?
+      options:
+        - { zh: "速度越快越可行：若 x 可行，则任何更大的速度也可行", en: "Faster is never worse: if x is feasible, every larger speed is too" }
+        - { zh: "输入数组已经排序", en: "The input array is sorted" }
+        - { zh: "答案一定是 2 的幂", en: "The answer is a power of two" }
+      answer: 0
+      explanation:
+        zh: 可行性随速度单调，判定条件从假到真只翻转一次，所以可以二分分界点。
+        en: Feasibility is monotone in speed, so the predicate flips from false to true once and the boundary can be binary searched.
+  practiceProblem: koko-eating-bananas
+  reflectionPrompt:
+    zh: 写出你二分的判定条件，解释它为什么单调、循环的不变量是什么，以及总复杂度。
+    en: State your binary-search predicate, explain why it is monotone and what the loop invariant is, and give the total complexity.

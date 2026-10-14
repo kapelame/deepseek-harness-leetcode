@@ -1,0 +1,58 @@
+id: binary-search-koko-rest
+version: 1
+suiteVersion: 1
+parentProblemId: koko-eating-bananas
+topicId: binary-search
+title: { zh: "吃完每堆都要休息的速度", en: "Eating Speed With Rest Breaks" }
+summary:
+  zh: 每吃完一堆（最后一堆除外）都要休息 1 小时，求在 h 小时内吃完的最小速度，做不到则返回 -1。
+  en: After finishing each pile except the last, a one-hour rest is required; return the smallest speed that finishes within h hours, or -1 if impossible.
+statement:
+  zh: |-
+    有 `n` 堆香蕉 `piles`，按顺序一堆一堆地吃。以整数速度 `k` 吃时，一堆 `p` 根需要 `ceil(p / k)` 小时；每吃完一堆后（最后一堆除外）都必须休息 **1 小时**。
+
+    返回能在 `h` 小时内吃完全部香蕉的最小 `k`；如果无论多快都做不到，返回 -1。
+  en: |-
+    There are `n` banana piles `piles`, eaten one after another. At integer speed `k`, a pile of `p` bananas takes `ceil(p / k)` hours, and after each pile except the last a **one-hour rest** is required.
+
+    Return the smallest `k` that finishes everything within `h` hours, or -1 if no speed is fast enough.
+difficulty: medium
+skills: [binary search on the answer, feasibility check, impossible cases]
+differences:
+  - category: reasoning
+    description:
+      zh: 可行性判定变成 Σ ceil(p/k) + (n - 1) ≤ h，休息时间与速度无关。
+      en: The feasibility test becomes Σ ceil(p/k) + (n - 1) ≤ h, where the rest time does not depend on speed.
+  - category: output
+    description:
+      zh: 可能根本没有可行速度（h < 2n - 1），需要先判断并返回 -1。
+      en: No speed may be feasible (h < 2n - 1), which must be detected and answered with -1.
+transfer:
+  zh: “可行性随速度单调，所以对答案二分”的结构不变；改变的是判定函数，以及在搜索前检查最快速度是否可行，以免在没有答案的空间里二分。
+  en: "The structure \"feasibility is monotone in speed, so binary search the answer\" is unchanged; what changes is the predicate, plus checking the fastest speed first so you never search a space without an answer."
+entry: { python: minSpeedWithRest, typescript: minSpeedWithRest }
+params:
+  - { name: piles, type: "int[]" }
+  - { name: h, type: int }
+returns: int
+comparator: { kind: exact }
+perCaseMs: 1000
+inputs:
+  - { type: "int[]", minLength: 1, smallMaxLength: 8, largeLength: 10000, min: 1, max: 1000000000, smallMin: 1, smallMax: 20 }
+  - { type: int, min: 1, max: 1 }
+constraints:
+  - { zh: "1 ≤ n ≤ 10⁴，1 ≤ piles[i] ≤ 10⁹，1 ≤ h ≤ 10⁹", en: "1 ≤ n ≤ 10⁴, 1 ≤ piles[i] ≤ 10⁹, 1 ≤ h ≤ 10⁹" }
+examples:
+  - args: [[3, 7, 4], 7]
+    expected: 4
+  - args: [[3, 7, 4], 4]
+    expected: -1
+boundaryCases:
+  - args: [[5], 1]
+  - args: [[5, 5], 3]
+  - args: [[5, 5], 2]
+  - args: [[1000000000, 1], 1000000000]
+hints:
+  - { zh: "速度 k 时总耗时是多少？哪一部分与 k 无关？", en: "What is the total time at speed k, and which part does not depend on k?" }
+  - { zh: "总耗时 = Σ ceil(p/k) + (n-1)。即使 k 无限大也要 n + (n-1) 小时，所以 h < 2n-1 时无解。", en: "Total = Σ ceil(p/k) + (n - 1). Even infinite speed needs n + (n - 1) hours, so h < 2n - 1 has no answer." }
+  - { zh: "先检查 h ≥ 2n-1，否则返回 -1；然后在 [1, max(piles)] 上二分，判定 Σ ceil(p/k) + n - 1 ≤ h。", en: "First check h ≥ 2n - 1, else return -1; then binary search [1, max(piles)] with Σ ceil(p/k) + n - 1 ≤ h." }

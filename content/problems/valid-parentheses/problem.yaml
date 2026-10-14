@@ -1,0 +1,39 @@
+id: valid-parentheses
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: { zh: "有效的括号", en: "Valid Parentheses" }
+difficulty: easy
+topics: [stack]
+leetcode: { frontendId: 20, title: "Valid Parentheses", slug: valid-parentheses, difficulty: easy, tags: [String, Stack, Bracket Sequences], paidOnly: false, verifiedAt: "2026-10-14" }
+summary:
+  zh: 字符串 `s` 只包含 `()[]{}`。判断其中每个右括号是否都能和同类型、最近未配对的左括号正确配对，且没有剩余的左括号。（本课程原创简述，完整题面见 LeetCode 官方页面。）
+  en: "`s` contains only `()[]{}`. Decide whether every closing bracket matches the most recent unmatched opening bracket of the same type and no opening bracket is left over. (Original summary written for Learn; see LeetCode for the official statement.)"
+constraints:
+  - { zh: "1 ≤ s.length ≤ 10⁴", en: "1 ≤ s.length ≤ 10⁴" }
+params:
+  - { name: s, type: string }
+returns: bool
+comparator: { kind: exact }
+entry: { python: isValid, typescript: isValid }
+perCaseMs: 1000
+inputs:
+  - { type: string, minLength: 1, smallMaxLength: 8, largeLength: 10000, alphabet: "()[]{}" }
+hints:
+  - { zh: "遇到右括号时，它应该和哪一个左括号配对？", en: "When you meet a closing bracket, which opening bracket must it match?" }
+  - { zh: "和最近出现、还没配对的左括号配对——这是后进先出的结构。", en: "The most recent unmatched opening bracket: a last-in, first-out structure." }
+  - { zh: "左括号入栈；右括号时检查栈非空且栈顶类型对应，然后出栈；最后栈必须为空。", en: "Push openers; for a closer check the stack is non-empty with a matching top, then pop; the stack must end empty." }
+solution:
+  explanation:
+    zh: 用栈保存未配对的左括号，右括号必须匹配栈顶。时间 O(n)，空间 O(n)。
+    en: A stack holds unmatched openers and each closer must match the top. O(n) time and space.
+examples:
+  - { id: ex-1, args: ["{[]()}"], expected: true }
+  - { id: ex-2, args: ["([)]"], expected: false }
+  - { id: ex-3, args: ["(("], expected: false }
+boundaryCases:
+  - args: ["("]
+  - args: [")"]
+  - args: ["()"]
+  - args: ["]["]
+  - args: ["(]"]

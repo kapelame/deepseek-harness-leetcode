@@ -1,0 +1,40 @@
+id: minimum-size-subarray-sum
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: { zh: "长度最小的子数组", en: "Minimum Size Subarray Sum" }
+difficulty: medium
+topics: [sliding-window]
+leetcode: { frontendId: 209, title: "Minimum Size Subarray Sum", slug: minimum-size-subarray-sum, difficulty: medium, tags: [Array, Binary Search, Sliding Window, Prefix Sum], paidOnly: false, verifiedAt: "2026-10-14" }
+summary:
+  zh: 给定正整数数组 `nums` 和正整数 `target`，返回和不小于 `target` 的最短连续子数组长度；不存在则返回 0。（本课程原创简述，完整题面见 LeetCode 官方页面。）
+  en: Given positive integers `nums` and a positive `target`, return the length of the shortest contiguous subarray whose sum is at least `target`, or 0 if none exists. (Original summary written for Learn; see LeetCode for the official statement.)
+constraints:
+  - { zh: "1 ≤ target ≤ 10⁹", en: "1 ≤ target ≤ 10⁹" }
+  - { zh: "1 ≤ nums.length ≤ 10⁵，1 ≤ nums[i] ≤ 10⁴", en: "1 ≤ nums.length ≤ 10⁵, 1 ≤ nums[i] ≤ 10⁴" }
+params:
+  - { name: target, type: int }
+  - { name: nums, type: "int[]" }
+returns: int
+comparator: { kind: exact }
+entry: { python: minSubArrayLen, typescript: minSubArrayLen }
+perCaseMs: 1000
+inputs:
+  - { type: int, min: 1, max: 1000000000, smallMin: 1, smallMax: 30 }
+  - { type: "int[]", minLength: 1, smallMaxLength: 10, largeLength: 50000, min: 1, max: 10000, smallMin: 1, smallMax: 8 }
+hints:
+  - { zh: "所有元素都是正数。窗口变长时和会怎样变化？", en: "All elements are positive. What happens to the sum when the window grows?" }
+  - { zh: "和随窗口扩大单调增加、随收缩单调减小，所以一旦满足条件，就可以尝试从左边收缩来找更短的。", en: "The sum grows as the window grows and shrinks as it shrinks, so once the condition holds you can shrink from the left to look for something shorter." }
+  - { zh: "right 右移累加；当和 ≥ target 时，记录长度并移出 nums[left]、left++，重复直到不满足。", en: "Move right and add; while the sum is at least target, record the length, subtract nums[left], and advance left." }
+solution:
+  explanation:
+    zh: 可变窗口求最短：扩张右端累加，满足条件时尽量收缩左端并记录长度。元素为正保证了单调性。时间 O(n)，空间 O(1)。
+    en: "Shortest variable window: grow the right end, and while the condition holds shrink the left end and record lengths. Positive elements guarantee monotonicity. O(n) time, O(1) space."
+examples:
+  - { id: ex-1, args: [9, [2, 4, 1, 5, 3]], expected: 3, explanation: { zh: "没有长度为 2 的窗口能达到 9；[1, 5, 3] 的和恰好为 9。", en: "No window of length 2 reaches 9; [1, 5, 3] sums to exactly 9." } }
+  - { id: ex-2, args: [100, [1, 2, 3]], expected: 0 }
+boundaryCases:
+  - args: [1, [1]]
+  - args: [5, [5, 1, 1]]
+  - args: [6, [1, 1, 1, 1, 1, 1]]
+  - args: [1000000000, [10000, 10000]]

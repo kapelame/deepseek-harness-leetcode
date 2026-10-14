@@ -1,0 +1,74 @@
+{
+  "name": "dsh-plugin-learn",
+  "version": "0.1.0",
+  "description": "Algorithm learning mode for DeepSeek Harness: lessons, Docker-isolated judging, a tutor with progressive hints, variant reviews, and reminder email",
+  "license": "MIT",
+  "type": "module",
+  "icon": "./icon.svg",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kapelame/dsh-plugin-learn.git"
+  },
+  "keywords": ["dsh", "deepseek-harness", "dsh-plugin", "leetcode", "algorithms"],
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./service": "./lib/service.js",
+    "./client": "./lib/client.js",
+    "./typert": {
+      "types": "./lib/typert.host.d.ts",
+      "default": "./lib/typert.host.js"
+    },
+    "./remote": "./lib/typert.remote-client.js",
+    "./package.json": "./package.json",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./locale/*.json": "./locale/*.json"
+  },
+  "files": [
+    "lib",
+    "content",
+    "runtime",
+    "locale",
+    "icon.svg",
+    "cordis.patch.yml"
+  ],
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "nodemailer": "^7.0.5",
+    "zod": "4.4.3"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "*",
+    "@deepseek-ai/schemastery": "*",
+    "@deepseek-ai/dsh-brand": ">=0.2.0-rc.2 <0.3.0",
+    "@deepseek-ai/dsh-credentials": ">=0.2.0-rc.2 <0.3.0",
+    "@deepseek-ai/dsh-llm": ">=0.2.0-rc.2 <0.3.0",
+    "@deepseek-ai/dsh-tools": ">=0.2.0-rc.2 <0.3.0",
+    "@deepseek-ai/dsh-typert-protocol": ">=0.2.0-rc.2 <0.3.0"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/dsh-credentials": { "optional": true }
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-api-remotes",
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-layout",
+        "@deepseek-ai/dsh-client-ui-primitives",
+        "@deepseek-ai/dsh-client-ui-sidebar",
+        "@deepseek-ai/dsh-api-gateway"
+      ],
+      "platform": "web",
+      "external": [
+        "@deepseek-ai/dsh-api-gateway/client"
+      ]
+    }
+  },
+  "engines": {
+    "node": "^22.19 || >=24"
+  }
+}

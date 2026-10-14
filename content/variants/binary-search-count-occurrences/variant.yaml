@@ -1,0 +1,58 @@
+id: binary-search-count-occurrences
+version: 1
+suiteVersion: 1
+parentProblemId: binary-search
+topicId: binary-search
+title: { zh: "有序数组中的出现次数", en: "Occurrences in a Sorted Array" }
+summary:
+  zh: 在可能含重复值的有序数组中，用 O(log n) 统计 target 出现的次数。
+  en: Count how many times target occurs in a sorted array that may contain duplicates, in O(log n).
+statement:
+  zh: |-
+    给定按非递减顺序排列的整数数组 `nums`（可能有重复值）和整数 `target`，返回 `target` 在数组中出现的次数。
+
+    要求时间复杂度为 O(log n)：数组可能很长，而且 `target` 可能出现很多次。
+  en: |-
+    Given an integer array `nums` sorted in non-decreasing order (duplicates allowed) and an integer `target`, return how many times `target` occurs.
+
+    Aim for O(log n): the array can be long and `target` can occur many times.
+difficulty: medium
+skills: [lower bound, upper bound, boundary search]
+differences:
+  - category: input-structure
+    description:
+      zh: 数组允许重复值，target 可能占据一整段连续区间，而不是单个位置。
+      en: Duplicates are allowed, so target may occupy a whole contiguous block instead of one position.
+  - category: output
+    description:
+      zh: 需要返回出现次数，即这段区间的长度，而不是任意一个下标。
+      en: Return the number of occurrences, the length of that block, rather than any single index.
+transfer:
+  zh: “在单调条件上二分找分界点”保持不变；变化是需要两个分界点——第一个 ≥ target 的位置和第一个 > target 的位置，二者之差就是次数。找到一个等于 target 的位置后向两边线性扩展会退化成 O(n)。
+  en: "Binary searching a monotone condition for a boundary stays the same; the change is needing two boundaries, the first position ≥ target and the first position > target, whose difference is the count. Expanding linearly around one match degrades to O(n)."
+entry: { python: countOccurrences, typescript: countOccurrences }
+params:
+  - { name: nums, type: "int[]" }
+  - { name: target, type: int }
+returns: int
+comparator: { kind: exact }
+perCaseMs: 1000
+inputs:
+  - { type: "int[]", minLength: 0, smallMaxLength: 10, largeLength: 50000, sorted: asc, min: -5, max: 5, smallMin: -3, smallMax: 3 }
+  - { type: int, min: -6, max: 6, smallMin: -4, smallMax: 4 }
+constraints:
+  - { zh: "0 ≤ n ≤ 10⁵，非递减", en: "0 ≤ n ≤ 10⁵, non-decreasing" }
+examples:
+  - args: [[1, 2, 2, 2, 5], 2]
+    expected: 3
+  - args: [[1, 2, 2, 2, 5], 4]
+    expected: 0
+boundaryCases:
+  - args: [[], 1]
+  - args: [[7], 7]
+  - args: [[7, 7, 7, 7], 7]
+  - args: [[1, 3], 2]
+hints:
+  - { zh: "所有等于 target 的元素在有序数组中是连续的一段。这段的左右边界各是什么？", en: "All elements equal to target form one contiguous block. What are its left and right boundaries?" }
+  - { zh: "左边界是第一个 ≥ target 的位置，右边界（开区间）是第一个 > target 的位置。两个都可以用下界二分求出。", en: "The left boundary is the first position ≥ target and the right (exclusive) boundary is the first position > target. Both are lower-bound searches." }
+  - { zh: "写一个 lower_bound(x) 函数，答案是 lower_bound(target + 1) - lower_bound(target)。", en: "Write lower_bound(x); the answer is lower_bound(target + 1) - lower_bound(target)." }

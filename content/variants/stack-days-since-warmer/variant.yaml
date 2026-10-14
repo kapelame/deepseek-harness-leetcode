@@ -1,0 +1,56 @@
+id: stack-days-since-warmer
+version: 1
+suiteVersion: 1
+parentProblemId: daily-temperatures
+topicId: stack
+title: { zh: "距上一个更暖日子的天数", en: "Days Since a Warmer Day" }
+summary:
+  zh: 对每一天，回看最近一个温度严格更高的日子，求相隔天数；没有则为 0。
+  en: For each day, look back to the most recent strictly warmer day and report how many days ago it was, or 0.
+statement:
+  zh: |-
+    给定每天的温度 `temperatures`，对每一天 `i`，找出满足 `j < i` 且 `temperatures[j] > temperatures[i]` 的**最大**的 `j`，答案为 `i - j`；如果不存在这样的 `j`，答案为 0。
+
+    返回所有天的答案。
+  en: |-
+    Given daily `temperatures`, for each day `i` find the **largest** `j` with `j < i` and `temperatures[j] > temperatures[i]`; the answer is `i - j`, or 0 if no such `j` exists.
+
+    Return the answers for every day.
+difficulty: medium
+skills: [monotonic stack, previous greater element]
+differences:
+  - category: reasoning
+    description:
+      zh: 方向从“向后找下一个更大”变成“向前找上一个更大”，每一天在入栈前就能直接从栈顶得到自己的答案。
+      en: The direction flips from the next greater element to the previous greater one, so each day reads its answer from the stack top right before it is pushed.
+  - category: output
+    description:
+      zh: 答案在处理当前元素时确定，而不是在之后某个元素弹出它时确定。
+      en: An answer is fixed while processing the current element, not later when another element pops it.
+transfer:
+  zh: 单调栈“弹出被支配的元素、栈中保持单调”的思路保留；需要想清楚被弹出的是谁（不比当前高的旧日子永远不会成为后面日子的答案），以及答案在弹完之后取栈顶。
+  en: "The monotonic stack idea of popping dominated elements carries over; what to think through is who gets popped (older days not warmer than today can never answer a later day) and that the answer is the top after popping."
+entry: { python: daysSinceWarmer, typescript: daysSinceWarmer }
+params:
+  - { name: temperatures, type: "int[]" }
+returns: "int[]"
+comparator: { kind: exact }
+perCaseMs: 1000
+inputs:
+  - { type: "int[]", minLength: 1, smallMaxLength: 10, largeLength: 30000, min: 30, max: 100, smallMin: 30, smallMax: 36 }
+constraints:
+  - { zh: "1 ≤ n ≤ 10⁵，30 ≤ temperatures[i] ≤ 100", en: "1 ≤ n ≤ 10⁵, 30 ≤ temperatures[i] ≤ 100" }
+examples:
+  - args: [[75, 70, 72, 71, 80]]
+    expected: [0, 1, 2, 1, 0]
+  - args: [[60, 60]]
+    expected: [0, 0]
+boundaryCases:
+  - args: [[30]]
+  - args: [[100, 30, 30]]
+  - args: [[30, 40, 50]]
+  - args: [[50, 40, 45, 41]]
+hints:
+  - { zh: "如果某个更早的日子不比今天暖，它还可能成为之后某天的“上一个更暖日子”吗？", en: "If an earlier day is not warmer than today, can it ever be the previous warmer day for a later day?" }
+  - { zh: "不可能——今天比它更近且至少一样暖。所以可以把它从候选中永久删除，候选在栈中保持温度严格递减。", en: "No: today is closer and at least as warm, so that day can be dropped forever, leaving candidates with strictly decreasing temperatures on a stack." }
+  - { zh: "对第 i 天，先弹出所有温度 ≤ 今天的栈顶；若栈非空，答案为 i - 栈顶，否则为 0；再把 i 入栈。", en: "For day i, pop every top with temperature ≤ today's; the answer is i - top if the stack is non-empty, else 0; then push i." }

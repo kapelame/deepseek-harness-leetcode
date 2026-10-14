@@ -1,0 +1,37 @@
+id: daily-temperatures
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: { zh: "每日温度", en: "Daily Temperatures" }
+difficulty: medium
+topics: [stack]
+leetcode: { frontendId: 739, title: "Daily Temperatures", slug: daily-temperatures, difficulty: medium, tags: [Array, Stack, Monotonic Stack], paidOnly: false, verifiedAt: "2026-10-14" }
+summary:
+  zh: 对每一天，计算还要再等几天才会出现更高的温度；之后都不会更高则为 0。（本课程原创简述，完整题面见 LeetCode 官方页面。）
+  en: For each day, compute how many days until a strictly warmer temperature; use 0 if none follows. (Original summary written for Learn; see LeetCode for the official statement.)
+constraints:
+  - { zh: "1 ≤ n ≤ 10⁵，30 ≤ temperatures[i] ≤ 100", en: "1 ≤ n ≤ 10⁵, 30 ≤ temperatures[i] ≤ 100" }
+params:
+  - { name: temperatures, type: "int[]" }
+returns: "int[]"
+comparator: { kind: exact }
+entry: { python: dailyTemperatures, typescript: dailyTemperatures }
+perCaseMs: 1000
+inputs:
+  - { type: "int[]", minLength: 1, smallMaxLength: 10, largeLength: 30000, min: 30, max: 100, smallMin: 30, smallMax: 36 }
+hints:
+  - { zh: "哪些天“还在等待”更暖的一天？新的一天到来时，它能解决谁？", en: "Which days are still waiting for a warmer day? When a new day arrives, whom can it answer?" }
+  - { zh: "用栈保存仍在等待的下标；它们的温度从栈底到栈顶单调不增。", en: "Keep waiting indices on a stack; their temperatures never increase from bottom to top." }
+  - { zh: "对第 i 天，当栈顶温度 < temperatures[i] 时弹出栈顶 j，answer[j] = i - j；然后把 i 入栈。", en: "For day i, while the top's temperature is below temperatures[i], pop j and set answer[j] = i - j; then push i." }
+solution:
+  explanation:
+    zh: 单调栈保存尚未找到更暖日子的下标，新温度弹出所有更冷的栈顶并写入距离。每个下标进出栈各一次，时间 O(n)，空间 O(n)。
+    en: A monotonic stack keeps indices still waiting; a new temperature pops every colder top and records the distance. Each index is pushed and popped once, O(n) time and space.
+examples:
+  - { id: ex-1, args: [[70, 68, 72, 71, 75]], expected: [2, 1, 2, 1, 0] }
+  - { id: ex-2, args: [[50, 50, 50]], expected: [0, 0, 0] }
+boundaryCases:
+  - args: [[30]]
+  - args: [[100, 30]]
+  - args: [[30, 100]]
+  - args: [[40, 39, 38, 41]]

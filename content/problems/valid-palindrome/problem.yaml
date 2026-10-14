@@ -1,0 +1,40 @@
+id: valid-palindrome
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: { zh: "验证回文串", en: "Valid Palindrome" }
+difficulty: easy
+topics: [two-pointers]
+leetcode: { frontendId: 125, title: "Valid Palindrome", slug: valid-palindrome, difficulty: easy, tags: [Two Pointers, String], paidOnly: false, verifiedAt: "2026-10-14" }
+summary:
+  zh: 只考虑字母和数字并忽略大小写，判断字符串 `s` 正着读和反着读是否相同。（本课程原创简述，完整题面见 LeetCode 官方页面。）
+  en: Considering only letters and digits and ignoring case, decide whether `s` reads the same forwards and backwards. (Original summary written for Learn; see LeetCode for the official statement.)
+constraints:
+  - { zh: "1 ≤ s.length ≤ 2·10⁵", en: "1 ≤ s.length ≤ 2·10⁵" }
+  - { zh: "s 由可打印 ASCII 字符组成", en: "s consists of printable ASCII characters" }
+params:
+  - { name: s, type: string }
+returns: bool
+comparator: { kind: exact }
+entry: { python: isPalindrome, typescript: isPalindrome }
+perCaseMs: 1000
+inputs:
+  - { type: string, minLength: 1, smallMaxLength: 12, largeLength: 200000, alphabet: "abcAB01 ,.:!" }
+hints:
+  - { zh: "回文的定义是对称位置的字符相同。你能直接比较对称位置吗？", en: "A palindrome has equal characters at mirrored positions. Can you compare mirrored positions directly?" }
+  - { zh: "用两个指针从两端向中间走；遇到不是字母或数字的字符就跳过它。", en: "Walk two pointers inward from both ends, skipping characters that are not letters or digits." }
+  - { zh: "当两个指针都指向有效字符时，比较它们的小写形式；不同则返回 false，否则同时向内移动，直到相遇。", en: "When both pointers sit on valid characters, compare their lowercase forms; return false on a mismatch, otherwise move both inward until they meet." }
+solution:
+  explanation:
+    zh: 相向双指针，跳过非字母数字字符，比较小写后的字符。时间 O(n)，额外空间 O(1)，无需构造过滤后的新字符串。
+    en: Two pointers move inward, skip non-alphanumeric characters, and compare lowercase characters. O(n) time and O(1) extra space, without building a filtered copy.
+examples:
+  - { id: ex-1, args: ["Step on no pets!"], expected: true }
+  - { id: ex-2, args: ["race a car"], expected: false }
+  - { id: ex-3, args: [".,"], expected: true, explanation: { zh: "没有有效字符时视为回文。", en: "With no valid characters the string counts as a palindrome." } }
+boundaryCases:
+  - args: ["a"]
+  - args: ["0P"]
+  - args: ["Aa"]
+  - args: ["ab@ba"]
+  - args: ["1a2"]

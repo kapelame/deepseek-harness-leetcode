@@ -1,0 +1,88 @@
+id: stack
+order: 5
+title: { zh: "栈：处理“最近的、尚未解决的”元素", en: "Stacks: resolve the most recent unresolved element" }
+summary:
+  zh: 当新元素总是与“最近还没配对/还没解决”的元素交互时，用栈保存这些待解决元素，每个元素只入栈、出栈一次。
+  en: When each new element interacts with the most recent element still waiting to be matched or resolved, keep those waiting elements on a stack; each is pushed and popped once.
+prerequisites: []
+problems: [valid-parentheses, daily-temperatures, evaluate-reverse-polish-notation]
+variants: [stack-first-bracket-error, stack-days-since-warmer]
+lesson:
+  motivation:
+    zh: |-
+      编辑器要在你输入代码时检查括号是否配对：`f(a[i], {k: g(x)})`。
+
+      一种笨办法是不断删除相邻的一对 `()`、`[]`、`{}` 直到删不动，每轮扫描整串，最坏 O(n²)。
+
+      观察配对规则：遇到一个右括号时，它必须和**最近出现、且还没配对的左括号**配对。“最近的、未解决的”正是后进先出——栈。同样的结构出现在“下一个更大元素”问题中：每个元素等待的是“之后第一个比它大的数”，而最近还在等待的元素最先被解决。
+    en: |-
+      An editor checks bracket pairs as you type: `f(a[i], {k: g(x)})`.
+
+      A naive approach repeatedly deletes adjacent `()`, `[]`, `{}` pairs until nothing changes, rescanning the string each round, O(n²) in the worst case.
+
+      Look at the matching rule: a closing bracket must match **the most recent opening bracket that is still unmatched**. "Most recent unresolved" is last-in, first-out: a stack. The same structure appears in "next greater element" problems, where each element waits for the first larger value after it and the most recently waiting elements are resolved first.
+  strategy:
+    zh: |-
+      **配对型**：左括号入栈；右括号到来时，栈顶必须是对应的左括号，否则无效；扫描结束时栈必须为空。
+
+      **单调栈**（下一个更大元素）：栈中保存“还在等待答案”的下标，且对应的值从栈底到栈顶单调不增。新元素 x 到来时，弹出所有比 x 小的栈顶——x 就是它们等待的答案；然后把 x 压栈。
+
+      **求值型**（后缀表达式）：数字入栈；遇到运算符时弹出两个操作数（注意顺序：先弹出的是右操作数），计算后压回结果。
+
+      **不变量**：栈中恰好是“已读入但尚未解决”的元素，按出现顺序排列。
+
+      **复杂度**：每个元素最多入栈、出栈各一次，总时间 O(n)，空间 O(n)。
+    en: |-
+      **Matching**: push opening brackets; for a closing bracket the top must be its partner, otherwise the string is invalid; the stack must be empty at the end.
+
+      **Monotonic stack** (next greater element): the stack holds indices still waiting for an answer, with values non-increasing from bottom to top. When x arrives, pop every top smaller than x, because x answers them, then push x.
+
+      **Evaluation** (postfix expressions): push numbers; for an operator pop two operands (the first popped is the right operand), compute, and push the result.
+
+      **Invariant**: the stack holds exactly the elements read but not yet resolved, in arrival order.
+
+      **Complexity**: each element is pushed and popped at most once, so O(n) time and O(n) space.
+  example:
+    title: { zh: "例：检查 \"{[()]}(\" 是否配对", en: "Example: checking \"{[()]}(\"" }
+    body:
+      zh: 栈中保存尚未配对的左括号。
+      en: The stack holds opening brackets that are not matched yet.
+    traceColumns: [char, action, stack]
+    trace:
+      - state: { char: "{ [ (", action: "依次入栈", stack: "{ [ (" }
+        note: { zh: "三个左括号都在等待配对。", en: "Three openers are waiting." }
+      - state: { char: ")", action: "栈顶 ( 配对，出栈", stack: "{ [" }
+        note: { zh: "右括号只看栈顶，即最近未配对的左括号。", en: "A closer only looks at the top: the most recent unmatched opener." }
+      - state: { char: "] }", action: "依次配对出栈", stack: "（空）" }
+        note: { zh: "栈空说明前缀完全配对。", en: "An empty stack means the prefix is fully matched." }
+      - state: { char: "(", action: "入栈", stack: "(" }
+        note: { zh: "扫描结束时栈非空 → 无效。", en: "The stack is non-empty at the end, so the string is invalid." }
+  check:
+    - id: top-only
+      prompt:
+        zh: 读到右括号 ']' 时，为什么只需要检查栈顶？
+        en: When reading ']', why is checking only the top of the stack enough?
+      options:
+        - { zh: "因为它必须和最近出现且尚未配对的左括号配对", en: "Because it must match the most recent unmatched opening bracket" }
+        - { zh: "因为栈中只会有一个元素", en: "Because the stack holds one element at most" }
+        - { zh: "因为 ']' 总在字符串末尾", en: "Because ']' is always at the end" }
+      answer: 0
+      explanation:
+        zh: 比栈顶更早的左括号必须在栈顶之后才能闭合，否则会交叉，比如 “([)]”。
+        en: Older openers must close after the top one, otherwise brackets cross as in “([)]”.
+    - id: amortized
+      prompt:
+        zh: 单调栈中一次 while 循环可能弹出很多元素，为什么总时间仍是 O(n)？
+        en: One while loop in a monotonic stack can pop many elements; why is the total still O(n)?
+      options:
+        - { zh: "因为每个元素最多被弹出一次", en: "Because each element is popped at most once" }
+        - { zh: "因为数组是有序的", en: "Because the array is sorted" }
+        - { zh: "因为 while 循环最多执行常数次", en: "Because the loop runs a constant number of times" }
+      answer: 0
+      explanation:
+        zh: n 个元素入栈 n 次、出栈至多 n 次，所有弹出操作的总数不超过 n（均摊分析）。
+        en: n pushes allow at most n pops in total across all loops (amortized analysis).
+  practiceProblem: daily-temperatures
+  reflectionPrompt:
+    zh: 说明你的栈里保存了什么、栈中元素满足什么顺序性质、每个元素在何时被解决，以及复杂度。
+    en: Explain what your stack stores, what ordering property its elements satisfy, when each element gets resolved, and the complexity.

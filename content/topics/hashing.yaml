@@ -1,0 +1,106 @@
+id: hashing
+order: 1
+title:
+  zh: 哈希表：用空间换查找时间
+  en: "Hashing: trading space for lookup time"
+summary:
+  zh: 当问题反复问“我之前见过某个值吗？”时，用哈希表把每次查找从 O(n) 降到期望 O(1)。
+  en: When a problem keeps asking "have I seen this value before?", a hash table turns each O(n) search into an expected O(1) lookup.
+prerequisites: []
+problems: [two-sum, contains-duplicate, group-anagrams]
+variants: [hashing-distinct-pair-sums, hashing-count-index-pairs]
+lesson:
+  motivation:
+    zh: |-
+      假设你在整理一份 10 万条的报销记录，需要找出两笔金额之和恰好等于某个预算的记录。
+
+      最直接的做法是两层循环：拿每一笔去和后面的每一笔相加。10 万条记录大约要比较 50 亿次，即使每次比较只要 1 纳秒，也要等好几秒；数据再大十倍就要几分钟。
+
+      仔细看这个过程，第二层循环其实只在问一件事：**“预算减去当前金额”这个值，之前出现过吗？** 如果能在常数时间内回答这个问题，整个算法只需扫一遍数据。
+    en: |-
+      Suppose you are reconciling 100,000 expense records and need two records whose amounts add up to an exact budget.
+
+      The obvious approach is two nested loops: add each record to every later record. That is about 5 billion comparisons; even at one nanosecond each you wait seconds, and ten times more data takes minutes.
+
+      Look at what the inner loop really asks: **has the value "budget minus the current amount" appeared before?** If that question can be answered in constant time, one pass over the data is enough.
+  strategy:
+    zh: |-
+      **哈希表**把“键”通过哈希函数映射到存储位置，因此按键查找、插入的期望时间是 O(1)。Python 的 `dict` / `set` 和 TypeScript 的 `Map` / `Set` 都是哈希表。
+
+      通用模式是“边扫描边记录”：
+
+      1. 从左到右遍历数组。
+      2. 对当前元素，先在表里**查询**它需要的“搭档”（例如补数 `target - x`）。
+      3. 再把当前元素**放入**表中，供后面的元素查询。
+
+      **不变量**：处理到下标 `i` 时，表中恰好包含 `nums[0..i-1]` 的信息。先查后放保证了不会把同一个元素用两次。
+
+      **复杂度**：时间 O(n)（期望），额外空间 O(n)。这就是“用空间换时间”。
+
+      **常见陷阱**：
+      - 先放后查会让 `x + x = target` 错误地匹配到自己。
+      - 键必须可哈希：列表不能直接当键，可以转成元组或排序后的字符串。
+      - 需要计数时用 `Counter` / `Map<值, 次数>`，而不是 `set`。
+    en: |-
+      A **hash table** maps each key to a storage slot through a hash function, so lookup and insertion by key take expected O(1) time. Python's `dict` / `set` and TypeScript's `Map` / `Set` are hash tables.
+
+      The general pattern is "record while you scan":
+
+      1. Walk the array from left to right.
+      2. For the current element, first **query** the table for the partner it needs (for example the complement `target - x`).
+      3. Then **insert** the current element so later elements can find it.
+
+      **Invariant**: when you reach index `i`, the table holds exactly the information from `nums[0..i-1]`. Querying before inserting guarantees an element is never paired with itself.
+
+      **Complexity**: expected O(n) time and O(n) extra space; you trade memory for speed.
+
+      **Common pitfalls**:
+      - Inserting before querying lets `x + x = target` match the element with itself.
+      - Keys must be hashable: a list cannot be a key, but a tuple or a sorted string can.
+      - When you need counts, use `Counter` / `Map<value, count>` rather than a `set`.
+  example:
+    title:
+      zh: 例：在 [5, 2, 8, 6] 中找和为 11 的两个下标
+      en: "Example: two indices in [5, 2, 8, 6] that sum to 11"
+    body:
+      zh: 下表记录每一步要找的补数、查询前的表内容，以及做出的决定。注意第 3 步之前表里从未出现 5 的补数 6，直到扫描到 6 时才在表中找到 5。
+      en: The table shows, at each step, the complement being searched, the table before the query, and the decision. The complement of 6 is 5, which has been in the table since step 0.
+    traceColumns: [i, "nums[i]", need, table before, decision]
+    trace:
+      - state: { i: "0", "nums[i]": "5", need: "6", table before: "{}", decision: "6 not seen; store 5→0" }
+        note: { zh: "表为空，只能记录。", en: "The table is empty, so we only record." }
+      - state: { i: "1", "nums[i]": "2", need: "9", table before: "{5:0}", decision: "9 not seen; store 2→1" }
+        note: { zh: "9 不在表中。", en: "9 is not in the table." }
+      - state: { i: "2", "nums[i]": "8", need: "3", table before: "{5:0, 2:1}", decision: "3 not seen; store 8→2" }
+        note: { zh: "3 不在表中。", en: "3 is not in the table." }
+      - state: { i: "3", "nums[i]": "6", need: "5", table before: "{5:0, 2:1, 8:2}", decision: "found 5 at 0 → [0, 3]" }
+        note: { zh: "补数 5 已在表中，一次查询就找到答案。", en: "The complement 5 is already in the table; one lookup finds the answer." }
+  check:
+    - id: insert-order
+      prompt:
+        zh: 在“先查后放”的模式中，如果改成“先把当前元素放进表，再查补数”，对 nums=[3, 4]、target=6 会发生什么？
+        en: In the query-then-insert pattern, what happens for nums=[3, 4], target=6 if you insert the current element before querying its complement?
+      options:
+        - { zh: "仍然正确返回空结果", en: "It still correctly finds no pair" }
+        - { zh: "会把 3 和它自己配对，错误地返回 [0, 0]", en: "It pairs 3 with itself and wrongly returns [0, 0]" }
+        - { zh: "会抛出异常", en: "It raises an exception" }
+      answer: 1
+      explanation:
+        zh: 3 被放入表后，补数 6-3=3 立刻能查到它自己。先查后放保证查询时表里只有之前的元素。
+        en: After 3 is inserted, its complement 6-3=3 immediately finds itself. Querying first ensures the table only holds earlier elements.
+    - id: complexity
+      prompt:
+        zh: 对长度为 n 的数组使用哈希表找补数，期望时间和额外空间分别是多少？
+        en: Using a hash table to find complements in an array of length n, what are the expected time and extra space?
+      options:
+        - { zh: "时间 O(n²)，空间 O(1)", en: "Time O(n²), space O(1)" }
+        - { zh: "时间 O(n log n)，空间 O(1)", en: "Time O(n log n), space O(1)" }
+        - { zh: "时间 O(n)，空间 O(n)", en: "Time O(n), space O(n)" }
+      answer: 2
+      explanation:
+        zh: 每个元素查询和插入各一次，期望 O(1)，共 O(n)；表中最多存 n 个元素。
+        en: Each element is queried and inserted once in expected O(1), so O(n) total; the table holds up to n entries.
+  practiceProblem: two-sum
+  reflectionPrompt:
+    zh: 用两三句话说明：你的解法里哈希表存了什么、为什么必须先查询再插入，以及时间和空间复杂度。
+    en: In two or three sentences, explain what your hash table stores, why you query before inserting, and the time and space complexity.

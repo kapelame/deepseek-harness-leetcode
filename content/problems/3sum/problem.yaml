@@ -1,0 +1,39 @@
+id: 3sum
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: { zh: "三数之和", en: "3Sum" }
+difficulty: medium
+topics: [two-pointers]
+leetcode: { frontendId: 15, title: "3Sum", slug: 3sum, difficulty: medium, tags: [Array, Two Pointers, Sorting], paidOnly: false, verifiedAt: "2026-10-14" }
+summary:
+  zh: 找出数组 `nums` 中所有和为 0 的三元组（来自三个不同位置），结果中不能有重复的三元组；三元组的顺序和三元组内部的顺序都不限。（本课程原创简述，完整题面见 LeetCode 官方页面。）
+  en: Find every triple of values from three different positions in `nums` that sums to 0, without duplicate triples; neither the order of triples nor the order inside a triple matters. (Original summary written for Learn; see LeetCode for the official statement.)
+constraints:
+  - { zh: "3 ≤ nums.length ≤ 3000", en: "3 ≤ nums.length ≤ 3000" }
+  - { zh: "-10⁵ ≤ nums[i] ≤ 10⁵", en: "-10⁵ ≤ nums[i] ≤ 10⁵" }
+params:
+  - { name: nums, type: "int[]" }
+returns: "int[][]"
+comparator: { kind: unordered-nested }
+entry: { python: threeSum, typescript: threeSum }
+perCaseMs: 2000
+inputs:
+  - { type: "int[]", minLength: 3, smallMaxLength: 10, largeLength: 1500, min: -100000, max: 100000, smallMin: -6, smallMax: 6 }
+hints:
+  - { zh: "如果固定三元组中最小的那个数，剩下的问题是什么？", en: "If you fix the smallest number of the triple, what problem remains?" }
+  - { zh: "排序后固定 nums[i]，就变成在 i 右侧的有序区间里找两个数和为 -nums[i]——正是上一题的双指针。", en: "After sorting, fixing nums[i] leaves finding two numbers summing to -nums[i] in the sorted range to its right: exactly the previous two-pointer problem." }
+  - { zh: "跳过与前一个相同的 nums[i]；找到一组后，left 和 right 也要跳过重复值再继续。", en: "Skip nums[i] equal to the previous one; after finding a triple, also move left and right past repeated values before continuing." }
+solution:
+  explanation:
+    zh: 排序后枚举第一个数 i（跳过重复），在 [i+1, n-1] 上做相向双指针找和为 -nums[i] 的两数；每找到一组就把两个指针都越过重复值。时间 O(n²)，除输出外额外空间 O(1)（不计排序）。
+    en: Sort, enumerate the first value i (skipping repeats), and run opposite pointers on [i+1, n-1] for two numbers summing to -nums[i]; after each match move both pointers past repeated values. O(n²) time and O(1) extra space besides the output and sort.
+examples:
+  - { id: ex-1, args: [[-2, 0, 1, 1, 2]], expected: [[-2, 0, 2], [-2, 1, 1]] }
+  - { id: ex-2, args: [[1, 2, 3]], expected: [] }
+  - { id: ex-3, args: [[0, 0, 0, 0]], expected: [[0, 0, 0]], explanation: { zh: "重复值只产生一个三元组。", en: "Repeated values produce one triple." } }
+boundaryCases:
+  - args: [[-1, 0, 1]]
+  - args: [[-4, 2, 2, 2]]
+  - args: [[3, -3, 0, 3, -3]]
+  - args: [[-100000, 50000, 50000]]

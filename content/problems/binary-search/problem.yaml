@@ -1,0 +1,41 @@
+id: binary-search
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: { zh: "二分查找", en: "Binary Search" }
+difficulty: easy
+topics: [binary-search]
+leetcode: { frontendId: 704, title: "Binary Search", slug: binary-search, difficulty: easy, tags: [Array, Binary Search], paidOnly: false, verifiedAt: "2026-10-14" }
+summary:
+  zh: 在严格递增的整数数组 `nums` 中查找 `target`，存在则返回下标，否则返回 -1，要求 O(log n)。（本课程原创简述，完整题面见 LeetCode 官方页面。）
+  en: Search the strictly increasing array `nums` for `target`; return its index or -1, in O(log n). (Original summary written for Learn; see LeetCode for the official statement.)
+constraints:
+  - { zh: "1 ≤ n ≤ 10⁴，元素互不相同且递增", en: "1 ≤ n ≤ 10⁴, distinct and increasing" }
+  - { zh: "-10⁴ < nums[i], target < 10⁴", en: "-10⁴ < nums[i], target < 10⁴" }
+params:
+  - { name: nums, type: "int[]" }
+  - { name: target, type: int }
+returns: int
+comparator: { kind: exact }
+entry: { python: search, typescript: search }
+perCaseMs: 1000
+inputs:
+  - { type: "int[]", minLength: 1, smallMaxLength: 10, largeLength: 10000, sorted: asc, distinct: true, min: -9999, max: 9999, smallMin: -20, smallMax: 20 }
+  - { type: int, min: -9999, max: 9999, smallMin: -22, smallMax: 22 }
+hints:
+  - { zh: "看一眼中间的元素，能排除多少候选？", en: "Looking at the middle element, how many candidates can you discard?" }
+  - { zh: "中间元素比 target 小，则 target 只可能在右半边；比 target 大则在左半边。", en: "If the middle is smaller than target, target can only be in the right half; if larger, only in the left half." }
+  - { zh: "维护 lo、hi，循环取 mid 比较并缩小区间，区间为空时返回 -1。", en: "Keep lo and hi, compare at mid and shrink the interval, and return -1 when it becomes empty." }
+solution:
+  explanation:
+    zh: 标准二分：在闭区间 [lo, hi] 内比较 nums[mid] 与 target，相等返回，否则丢掉一半。时间 O(log n)，空间 O(1)。
+    en: "Standard binary search on the closed interval [lo, hi]: compare nums[mid] with target, return on equality, otherwise discard half. O(log n) time, O(1) space."
+examples:
+  - { id: ex-1, args: [[-3, 1, 4, 7, 12], 7], expected: 3 }
+  - { id: ex-2, args: [[-3, 1, 4, 7, 12], 5], expected: -1 }
+boundaryCases:
+  - args: [[5], 5]
+  - args: [[5], -5]
+  - args: [[1, 2], 2]
+  - args: [[1, 2], 0]
+  - args: [[-9999, 9999], 9999]

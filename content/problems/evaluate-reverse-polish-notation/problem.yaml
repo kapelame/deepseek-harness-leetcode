@@ -1,0 +1,38 @@
+id: evaluate-reverse-polish-notation
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: { zh: "逆波兰表达式求值", en: "Evaluate Reverse Polish Notation" }
+difficulty: medium
+topics: [stack]
+leetcode: { frontendId: 150, title: "Evaluate Reverse Polish Notation", slug: evaluate-reverse-polish-notation, difficulty: medium, tags: [Array, Math, Stack], paidOnly: false, verifiedAt: "2026-10-14" }
+summary:
+  zh: "`tokens` 是一个合法的后缀表达式，由整数和 `+ - * /` 组成，除法向零取整。返回表达式的值。（本课程原创简述，完整题面见 LeetCode 官方页面。）"
+  en: "`tokens` is a valid postfix expression of integers and `+ - * /`, where division truncates toward zero. Return its value. (Original summary written for Learn; see LeetCode for the official statement.)"
+constraints:
+  - { zh: "1 ≤ tokens.length ≤ 10⁴", en: "1 ≤ tokens.length ≤ 10⁴" }
+  - { zh: "表达式合法，不会除以 0，中间结果在 32 位整数范围内", en: "The expression is valid, never divides by zero, and stays within 32-bit integers" }
+params:
+  - { name: tokens, type: "string[]" }
+returns: int
+comparator: { kind: exact }
+entry: { python: evalRPN, typescript: evalRPN }
+perCaseMs: 1000
+inputs:
+  - { type: "string[]", minLength: 1, smallMaxLength: 9, largeLength: 9999, word: { minLength: 1, maxLength: 1 } }
+hints:
+  - { zh: "运算符需要哪两个操作数？它们是何时出现的？", en: "Which two operands does an operator need, and when did they appear?" }
+  - { zh: "运算符作用于最近得到的两个值，这些值可以保存在栈里。", en: "An operator applies to the two most recent values, which can live on a stack." }
+  - { zh: "数字入栈；运算符时先弹出 b、再弹出 a，压入 a op b。除法用向零取整（Python 中用 int(a / b)）。", en: "Push numbers; for an operator pop b then a and push a op b. Division truncates toward zero (int(a / b) in Python)." }
+solution:
+  explanation:
+    zh: 数字入栈，运算符弹出两个操作数计算后压栈；注意操作数顺序和向零取整。时间 O(n)，空间 O(n)。
+    en: Push numbers; operators pop two operands, compute, and push. Mind the operand order and truncation toward zero. O(n) time and space.
+examples:
+  - { id: ex-1, args: [["3", "4", "+", "2", "*"]], expected: 14 }
+  - { id: ex-2, args: [["7", "-2", "/"]], expected: -3, explanation: { zh: "-3.5 向零取整为 -3。", en: "-3.5 truncates toward zero to -3." } }
+boundaryCases:
+  - args: [["42"]]
+  - args: [["-5"]]
+  - args: [["1", "3", "-"]]
+  - args: [["6", "4", "/"]]

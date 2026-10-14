@@ -1,0 +1,59 @@
+id: two-pointers-closest-pair
+version: 1
+suiteVersion: 1
+parentProblemId: two-sum-ii-input-array-is-sorted
+topicId: two-pointers
+title: { zh: "最接近目标的两数之和", en: "Closest Pair Sum" }
+summary:
+  zh: 在有序数组中选两个不同位置的数，使它们的和尽量接近 target，返回最小的差距。
+  en: Pick two numbers at different positions of a sorted array so their sum is as close to target as possible, and return the smallest gap.
+statement:
+  zh: |-
+    给定按非递减顺序排列的整数数组 `nums`（长度至少为 2）和整数 `target`，在所有满足 `i < j` 的下标对中，返回 `|nums[i] + nums[j] - target|` 的最小值。
+
+    这里不保证存在和恰好等于 `target` 的一对数。
+  en: |-
+    Given an integer array `nums` sorted in non-decreasing order (length at least 2) and an integer `target`, return the minimum of `|nums[i] + nums[j] - target|` over all index pairs with `i < j`.
+
+    A pair summing exactly to `target` may not exist.
+difficulty: medium
+skills: [opposite pointers, monotone search, optimization over pairs]
+differences:
+  - category: output
+    description:
+      zh: 不再寻找恰好等于目标的一对，而是在所有配对中求最优（最小差距）。
+      en: Instead of finding a pair that hits the target exactly, optimize over all pairs for the smallest gap.
+  - category: reasoning
+    description:
+      zh: 移动指针前必须先用当前组合更新答案，因为排除的候选中可能正好有最优解的一部分。
+      en: You must update the best answer with the current pair before moving a pointer, because the pair being discarded may itself be optimal.
+transfer:
+  zh: 有序性带来的“和偏大就左移 right、偏小就右移 left”的排除规则完全保留；变化在于每一步都要记录当前差距，而不是只在相等时返回。
+  en: "The ordering argument carries over unchanged: a large sum moves right left and a small sum moves left right. What changes is recording the current gap at every step instead of returning only on equality."
+entry: { python: closestPairGap, typescript: closestPairGap }
+params:
+  - { name: nums, type: "int[]" }
+  - { name: target, type: int }
+returns: int
+comparator: { kind: exact }
+perCaseMs: 1000
+inputs:
+  - { type: "int[]", minLength: 2, smallMaxLength: 10, largeLength: 20000, sorted: asc, min: -1000000, max: 1000000, smallMin: -30, smallMax: 30 }
+  - { type: int, min: -1000000, max: 1000000, smallMin: -40, smallMax: 40 }
+constraints:
+  - { zh: "2 ≤ nums.length ≤ 2·10⁴，非递减", en: "2 ≤ nums.length ≤ 2·10⁴, non-decreasing" }
+  - { zh: "-10⁶ ≤ nums[i], target ≤ 10⁶", en: "-10⁶ ≤ nums[i], target ≤ 10⁶" }
+examples:
+  - args: [[1, 4, 6, 9], 12]
+    expected: 1
+  - args: [[-5, -2, 3, 8], 4]
+    expected: 1
+boundaryCases:
+  - args: [[0, 0], 0]
+  - args: [[1, 2], 100]
+  - args: [[-3, -3, -3], 1]
+  - args: [[1, 3, 5, 7], 8]
+hints:
+  - { zh: "哪些配对值得检查？双指针每一步排除的候选里，会不会恰好有最优解？", en: "Which pairs are worth checking? Could a candidate that a pointer move discards be the optimum?" }
+  - { zh: "每次移动前，先用当前 nums[left] + nums[right] 更新最小差距；被排除的元素与当前另一端的组合就是它最好的机会。", en: "Before each move, update the smallest gap with nums[left] + nums[right]; that pairing is the discarded element's best chance." }
+  - { zh: "和小于 target 时 left++，大于时 right--，等于时差距为 0 可以直接返回。", en: "Move left++ when the sum is below target and right-- when above; an equal sum gives gap 0 and can return immediately." }

@@ -1,0 +1,92 @@
+id: sliding-window
+order: 3
+title: { zh: "滑动窗口：增量维护一段连续区间", en: "Sliding window: maintain a contiguous range incrementally" }
+summary:
+  zh: 当答案是一段连续子数组或子串时，让窗口两端只向右移动，增量更新窗口状态，而不是每次从头重算。
+  en: When the answer is a contiguous subarray or substring, move both window ends only rightwards and update the window state incrementally instead of recomputing it.
+prerequisites: [hashing, two-pointers]
+problems: [maximum-average-subarray-i, longest-substring-without-repeating-characters, minimum-size-subarray-sum]
+variants: [sliding-window-at-most-twice, sliding-window-distinct-window-sum]
+lesson:
+  motivation:
+    zh: |-
+      一家咖啡店记录了一年里每天的销量，老板想知道“连续 7 天销量之和最大是多少”。
+
+      直接做法是对每个起点重新加 7 个数：365 × 7 次加法还不算多。但如果问题变成“连续 30 天”或数据有 10 万天，每个窗口重算的成本 O(k) 乘上窗口数 O(n)，就变成 O(n·k)。
+
+      相邻的两个窗口其实只差两个元素：**移出最左边的一天，加入新的一天**。如果窗口的状态（和、计数、最大值……）能在 O(1) 内这样更新，整趟扫描就是 O(n)。
+    en: |-
+      A coffee shop logged daily sales for a year, and the owner wants the largest total over any 7 consecutive days.
+
+      Re-adding 7 numbers for every start is fine at 365 × 7, but for 30-day windows or 100,000 days, recomputing each window costs O(k) per window and O(n·k) overall.
+
+      Two neighbouring windows differ by only two elements: **one day leaves on the left and one day enters on the right**. If the window state (sum, counts, …) updates in O(1) this way, one scan costs O(n).
+  strategy:
+    zh: |-
+      **固定长度窗口**：先算出前 k 个元素的状态；之后每右移一步，加入 `nums[right]`、移出 `nums[right - k]`，并更新答案。
+
+      **可变长度窗口**（求“最长/最短的满足条件的区间”）：
+
+      1. `right` 每次右移一格，把新元素加入窗口状态。
+      2. 当窗口**违反**条件时（如出现重复字符），不断右移 `left` 并移出元素，直到恢复合法。
+      3. 此时窗口是“以 right 结尾的最长合法窗口”，用它更新答案。求最短时则相反：窗口**满足**条件时尽量收缩并记录。
+
+      **不变量**：处理完每个 `right` 后，`[left, right]` 是以 `right` 结尾的最优（最长合法或最短满足）窗口。`left` 从不回退，所以两个指针合计移动 O(n) 次。
+
+      **适用前提**：窗口的“合法性”必须具有单调性——扩大一个违法窗口不会让它变合法（或缩小一个合法窗口仍然合法）。例如“和 ≥ target”在元素都为正时满足单调性，有负数时就不成立。
+    en: |-
+      **Fixed-size window**: compute the state of the first k elements; each step right then adds `nums[right]`, removes `nums[right - k]`, and updates the answer.
+
+      **Variable-size window** (longest or shortest range satisfying a condition):
+
+      1. Move `right` one step and add the new element to the window state.
+      2. While the window **violates** the condition (for example a repeated character), move `left` right and remove elements until it is valid again.
+      3. The window is now the longest valid window ending at `right`; update the answer. For a shortest window, shrink while the window **satisfies** the condition and record each size.
+
+      **Invariant**: after processing each `right`, `[left, right]` is the best window ending at `right`. `left` never moves back, so both pointers move O(n) times in total.
+
+      **Precondition**: validity must be monotone: growing an invalid window never makes it valid (equivalently, shrinking a valid window keeps it valid). "Sum ≥ target" is monotone only when all elements are positive.
+  example:
+    title: { zh: "例：\"abcab\" 中不含重复字符的最长子串", en: "Example: longest substring without repeats in \"abcab\"" }
+    body:
+      zh: 用哈希表记录窗口中每个字符的个数；新字符造成重复时收缩左端。
+      en: A hash table counts characters in the window; when the new character repeats, the left end shrinks.
+    traceColumns: [right, char, action, window, best]
+    trace:
+      - state: { right: "0", char: "a", action: "加入 a", window: "a", best: "1" }
+        note: { zh: "窗口合法。", en: "The window is valid." }
+      - state: { right: "2", char: "c", action: "加入 c", window: "abc", best: "3" }
+        note: { zh: "三个字符都不同。", en: "All three characters differ." }
+      - state: { right: "3", char: "a", action: "a 重复 → 移出左端 a", window: "bca", best: "3" }
+        note: { zh: "只需移出到重复字符被移走为止，left 不回退。", en: "Remove from the left only until the repeated a leaves; left never moves back." }
+      - state: { right: "4", char: "b", action: "b 重复 → 移出左端 b", window: "cab", best: "3" }
+        note: { zh: "每个字符最多进窗口一次、出窗口一次，总共 O(n)。", en: "Each character enters and leaves at most once, so the scan is O(n)." }
+  check:
+    - id: never-back
+      prompt:
+        zh: 可变长度滑动窗口的时间复杂度为什么是 O(n) 而不是 O(n²)？
+        en: Why is a variable-size sliding window O(n) rather than O(n²)?
+      options:
+        - { zh: "因为内层 while 循环最多执行一次", en: "Because the inner while loop runs at most once" }
+        - { zh: "因为 left 和 right 都只向右移动，各自最多移动 n 次", en: "Because left and right only move right, each at most n times" }
+        - { zh: "因为使用了哈希表", en: "Because it uses a hash table" }
+      answer: 1
+      explanation:
+        zh: 单次 while 可能移动很多步，但 left 从不回退，所以所有 while 的总步数不超过 n。
+        en: One while loop may run many steps, but left never moves back, so all of them together take at most n steps.
+    - id: monotone
+      prompt:
+        zh: “和至少为 target 的最短子数组”用滑动窗口求解，需要什么条件？
+        en: What condition does a sliding window need to find the shortest subarray with sum at least target?
+      options:
+        - { zh: "数组已排序", en: "The array is sorted" }
+        - { zh: "所有元素为正数，使得收缩窗口时和单调减小", en: "All elements are positive, so shrinking the window strictly decreases the sum" }
+        - { zh: "target 是偶数", en: "target is even" }
+      answer: 1
+      explanation:
+        zh: 有负数时，收缩窗口可能让和变大，“满足后就收缩”的推理不再成立。
+        en: With negatives, shrinking can increase the sum, so "shrink while it satisfies" no longer holds.
+  practiceProblem: longest-substring-without-repeating-characters
+  reflectionPrompt:
+    zh: 说明你的窗口在什么时候扩张、什么时候收缩、窗口状态存了什么，以及为什么总时间是 O(n)。
+    en: Explain when your window grows and shrinks, what state it keeps, and why the total time is O(n).

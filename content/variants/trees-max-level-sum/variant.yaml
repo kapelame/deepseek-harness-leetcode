@@ -1,0 +1,56 @@
+id: trees-max-level-sum
+version: 1
+suiteVersion: 1
+parentProblemId: binary-tree-level-order-traversal
+topicId: trees
+title: { zh: "和最大的层", en: "Level With the Largest Sum" }
+summary:
+  zh: 返回节点值之和最大的那一层的层号（从 1 开始），并列时取最小层号；空树返回 0。
+  en: Return the 1-based level whose node values have the largest sum, preferring the smallest level on ties; return 0 for an empty tree.
+statement:
+  zh: |-
+    给定二叉树的根节点 `root`，根所在层为第 1 层，其孩子为第 2 层，依此类推。
+
+    返回节点值之和**最大**的层号；如果有多层并列最大，返回其中**最小**的层号。空树返回 0。注意节点值可能为负数。
+  en: |-
+    Given the root of a binary tree, the root is on level 1, its children on level 2, and so on.
+
+    Return the level with the **largest** sum of node values; if several levels tie, return the **smallest** of them. Return 0 for an empty tree. Node values may be negative.
+difficulty: medium
+skills: [breadth-first traversal, per-level aggregation, tie-breaking]
+differences:
+  - category: output
+    description:
+      zh: 不再输出每层的全部值，而是对每层求和后在层之间比较，并按规则处理并列。
+      en: Instead of listing every level's values, sum each level and compare levels, with an explicit tie rule.
+  - category: constraints
+    description:
+      zh: 节点值可以是负数，因此“更深的层节点更多所以和更大”这样的直觉不成立，最大和可能为负。
+      en: Values can be negative, so intuitions like "deeper levels have more nodes and larger sums" fail, and the best sum can be negative.
+transfer:
+  zh: “每轮恰好处理一层”的 BFS 框架完全保留；变化是每层只保留一个聚合值（和），并在层间维护最优值和对应层号。
+  en: "The BFS frame of processing exactly one level per round carries over; the change is keeping one aggregate (the sum) per level and tracking the best sum and its level across rounds."
+entry: { python: maxLevelSum, typescript: maxLevelSum }
+params:
+  - { name: root, type: tree }
+returns: int
+comparator: { kind: exact }
+perCaseMs: 1000
+inputs:
+  - { type: tree, minLength: 0, smallMaxLength: 9, largeLength: 5000, min: -1000, max: 1000, smallMin: -5, smallMax: 5 }
+constraints:
+  - { zh: "节点数在 [0, 10⁴] 范围内，-10⁵ ≤ Node.val ≤ 10⁵", en: "Nodes in [0, 10⁴], -10⁵ ≤ Node.val ≤ 10⁵" }
+examples:
+  - args: [[1, 7, 0, 7, -8, null, null]]
+    expected: 2
+  - args: [[-5, -1, -2]]
+    expected: 2
+boundaryCases:
+  - args: [[]]
+  - args: [[-3]]
+  - args: [[0, 0, 0]]
+  - args: [[2, 1, 1]]
+hints:
+  - { zh: "层序遍历中，每一轮恰好处理一层。这一轮结束时你能得到这层的什么信息？", en: "In level-order traversal each round handles exactly one level. What can you know about the level when the round ends?" }
+  - { zh: "每轮把弹出节点的值加起来就是该层的和；用变量记录目前最大的和与层号。", en: "Adding the popped values gives the level sum; keep the best sum and its level in variables." }
+  - { zh: "只在严格更大时更新最优层号，这样并列时保留较小的层号；最优和初始为负无穷而不是 0。", en: "Update only on a strictly larger sum so ties keep the smaller level, and start the best sum at negative infinity rather than 0." }

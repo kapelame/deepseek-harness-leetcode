@@ -1,0 +1,62 @@
+id: stack-first-bracket-error
+version: 1
+suiteVersion: 1
+parentProblemId: valid-parentheses
+topicId: stack
+title: { zh: "第一个括号错误的位置", en: "First Bracket Error Position" }
+summary:
+  zh: 不只判断括号串是否有效，还要指出第一个出错的位置。
+  en: Do not just decide validity; report where the bracket string first goes wrong.
+statement:
+  zh: |-
+    字符串 `s` 只包含 `()[]{}`。从左到右扫描：
+
+    - 如果某个右括号没有能与之配对的左括号（栈空或类型不符），返回它的位置（从 1 开始）。
+    - 如果扫描完整串都没有这样的右括号，但仍有未闭合的左括号，返回 `s.length + 1`。
+    - 如果完全有效，返回 0。
+  en: |-
+    `s` contains only `()[]{}`. Scan from left to right:
+
+    - If a closing bracket has no partner (nothing open, or the wrong type), return its 1-based position.
+    - If the scan finds no such closing bracket but some opening brackets remain unclosed, return `s.length + 1`.
+    - If the string is fully valid, return 0.
+difficulty: medium
+skills: [bracket matching stack, error localization]
+differences:
+  - category: output
+    description:
+      zh: 输出从布尔值变成第一个错误的位置，并且要区分“中途出错”和“结尾仍有未闭合括号”两种情况。
+      en: The output changes from a boolean to the first error position, distinguishing a mid-string mismatch from openers left unclosed at the end.
+  - category: reasoning
+    description:
+      zh: 必须在第一次失配时立刻停止并报告该位置，而不能继续扫描后再整体判断。
+      en: You must stop at the first mismatch and report that position instead of scanning on and judging the whole string.
+transfer:
+  zh: “右括号只与最近未配对的左括号配对”的栈不变量完全保留；需要改变的是失败时返回的信息——记录当前位置，并在结尾用栈是否为空区分两类错误。
+  en: The stack invariant that a closer pairs only with the most recent unmatched opener carries over; what changes is the information returned on failure, the current position, with the final stack telling the two error kinds apart.
+entry: { python: firstBracketError, typescript: firstBracketError }
+params:
+  - { name: s, type: string }
+returns: int
+comparator: { kind: exact }
+perCaseMs: 1000
+inputs:
+  - { type: string, minLength: 1, smallMaxLength: 8, largeLength: 20000, alphabet: "()[]{}" }
+constraints:
+  - { zh: "1 ≤ s.length ≤ 2·10⁴", en: "1 ≤ s.length ≤ 2·10⁴" }
+examples:
+  - args: ["([]{})"]
+    expected: 0
+  - args: ["([)]"]
+    expected: 3
+  - args: ["{[]"]
+    expected: 4
+boundaryCases:
+  - args: [")"]
+  - args: ["("]
+  - args: ["()]"]
+  - args: ["(]"]
+hints:
+  - { zh: "上一题在发现失配时返回 false。这时你知道哪些额外信息？", en: "The previous problem returned false on a mismatch. What extra information do you have at that moment?" }
+  - { zh: "失配时你正在处理的下标就是第一个错误位置；扫描完成后若栈非空，错误发生在“结尾之后”。", en: "The index you are processing at the mismatch is the first error; if the stack is non-empty after the scan, the error is past the end." }
+  - { zh: "与验证括号相同的栈循环，失配时返回 i + 1；循环结束后返回 0（栈空）或 n + 1。", en: "Use the same stack loop as validation, return i + 1 on a mismatch, and after the loop return 0 for an empty stack or n + 1 otherwise." }

@@ -1,0 +1,92 @@
+id: two-pointers
+order: 2
+title: { zh: "双指针：利用有序性每步排除一批候选", en: "Two pointers: use order to discard candidates every step" }
+summary:
+  zh: 在有序数组或对称结构上，从两端（或同向）移动两个下标，每一步都能安全地排除一整批不可能的答案。
+  en: On sorted arrays or symmetric structures, move two indices from both ends (or in the same direction) so every step safely discards a whole batch of impossible answers.
+prerequisites: [hashing]
+problems: [valid-palindrome, two-sum-ii-input-array-is-sorted, 3sum]
+variants: [two-pointers-closest-pair, two-pointers-count-smaller-pairs]
+lesson:
+  motivation:
+    zh: |-
+      仓库里有一排按重量从轻到重排好的箱子，你要找出两只总重恰好为 W 的箱子，但手边只有一台秤，不能额外记录。
+
+      上一课的哈希表需要 O(n) 额外空间；暴力枚举所有配对要 O(n²) 次称重。我们没有利用到一个重要事实：**箱子已经排好序了**。
+
+      如果最轻 + 最重 已经超过 W，那么“最重的那只”和任何箱子配对都只会更重——它可以被直接排除。这种“一次比较排除一整行候选”的推理，就是双指针的核心。
+    en: |-
+      A row of boxes is sorted from lightest to heaviest, and you must find two boxes weighing exactly W in total, with only a scale and no notebook.
+
+      Last lesson's hash table needs O(n) extra space, and trying every pair costs O(n²) weighings. Neither uses an important fact: **the boxes are sorted**.
+
+      If the lightest plus the heaviest already exceeds W, the heaviest box is too heavy with every other box, so it can be discarded at once. Discarding a whole row of candidates with one comparison is the core of two pointers.
+  strategy:
+    zh: |-
+      **相向双指针**：`left = 0`、`right = n - 1`。比较当前组合与目标：
+
+      - 和太小 → 只有让 `left` 右移才可能变大；`nums[left]` 与任何 `right' ≤ right` 配对都不够大，可被排除。
+      - 和太大 → `right` 左移，同理排除 `nums[right]`。
+      - 相等 → 找到答案（或记录后继续）。
+
+      **不变量**：如果存在答案对 (i, j)，那么始终有 `left ≤ i` 且 `j ≤ right`。每一步只排除被证明不可能的候选，所以不会错过答案。
+
+      **复杂度**：每步至少移动一个指针，共 O(n) 步，额外空间 O(1)。若输入未排序，先排序需 O(n log n)。
+
+      **同类结构**：判断回文时，两个指针从两端向中间比较对称位置；“三数之和”先固定一个数，再在剩余有序区间上跑相向双指针，同时跳过重复值去重。
+    en: |-
+      **Opposite-direction pointers**: start with `left = 0` and `right = n - 1` and compare the current pair with the target:
+
+      - Sum too small → only moving `left` right can increase it; `nums[left]` with any `right' ≤ right` is too small, so it is discarded.
+      - Sum too large → move `right` left, discarding `nums[right]` by the same argument.
+      - Equal → record the answer (and continue if you need all of them).
+
+      **Invariant**: if an answer pair (i, j) exists, then `left ≤ i` and `j ≤ right` always hold. Each step discards only candidates proven impossible, so no answer is skipped.
+
+      **Complexity**: each step moves at least one pointer, so O(n) steps and O(1) extra space. Unsorted input needs an O(n log n) sort first.
+
+      **Related shapes**: a palindrome check compares mirrored positions while two pointers walk inward; 3Sum fixes one number and runs opposite pointers on the sorted remainder, skipping repeated values to avoid duplicate triples.
+  example:
+    title: { zh: "例：在有序数组 [1, 4, 6, 9, 12] 中找和为 15 的两个数", en: "Example: two numbers summing to 15 in sorted [1, 4, 6, 9, 12]" }
+    body:
+      zh: 每一行显示两个指针的位置、当前和，以及据此排除了谁。
+      en: Each row shows both pointers, the current sum, and what that comparison rules out.
+    traceColumns: [left, right, sum, decision]
+    trace:
+      - state: { left: "0 (1)", right: "4 (12)", sum: "13", decision: "13 < 15 → 1 太小，left++" }
+        note: { zh: "1 与任何数相加都不超过 1 + 12 = 13，排除 1。", en: "1 plus anything is at most 13, so 1 is discarded." }
+      - state: { left: "1 (4)", right: "4 (12)", sum: "16", decision: "16 > 15 → 12 太大，right--" }
+        note: { zh: "12 与剩下最小的 4 相加都超过 15，排除 12。", en: "12 plus the smallest remaining 4 already exceeds 15, so 12 is discarded." }
+      - state: { left: "1 (4)", right: "3 (9)", sum: "13", decision: "13 < 15 → left++" }
+        note: { zh: "排除 4。", en: "Discard 4." }
+      - state: { left: "2 (6)", right: "3 (9)", sum: "15", decision: "找到 6 + 9" }
+        note: { zh: "四次比较就完成，暴力需要 10 次。", en: "Four comparisons instead of the ten a brute force needs." }
+  check:
+    - id: move-rule
+      prompt:
+        zh: 在有序数组上找和为 target 的两个数，若 nums[left] + nums[right] > target，下一步应该怎么做？
+        en: Searching a sorted array for two numbers that sum to target, what should happen when nums[left] + nums[right] > target?
+      options:
+        - { zh: "left 右移", en: "Move left to the right" }
+        - { zh: "right 左移", en: "Move right to the left" }
+        - { zh: "两个都移动", en: "Move both pointers" }
+      answer: 1
+      explanation:
+        zh: nums[right] 与当前最小的 nums[left] 相加都已超过目标，它不可能出现在任何答案中，所以排除它。
+        en: nums[right] exceeds the target even with the smallest remaining value, so it cannot be in any answer; discard it.
+    - id: why-sorted
+      prompt:
+        zh: 双指针排除候选的正确性依赖于什么？
+        en: What does the correctness of discarding candidates rely on?
+      options:
+        - { zh: "数组中没有重复值", en: "The array has no duplicates" }
+        - { zh: "数组有序，因此移动指针时和的变化方向是确定的", en: "The array is sorted, so moving a pointer changes the sum in a known direction" }
+        - { zh: "数组长度是偶数", en: "The array length is even" }
+      answer: 1
+      explanation:
+        zh: 有序性保证右移 left 只会让和变大、左移 right 只会让和变小，这样才能论证被排除的候选不可能是答案。
+        en: Sortedness guarantees moving left only increases the sum and moving right only decreases it, which proves the discarded candidates cannot be answers.
+  practiceProblem: two-sum-ii-input-array-is-sorted
+  reflectionPrompt:
+    zh: 说明你的双指针在每一步排除了哪些候选、为什么不会漏掉答案，以及时间和空间复杂度。
+    en: Explain which candidates your pointers discard at each step, why no answer is skipped, and the time and space complexity.

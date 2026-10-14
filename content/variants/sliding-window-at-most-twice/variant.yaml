@@ -1,0 +1,57 @@
+id: sliding-window-at-most-twice
+version: 1
+suiteVersion: 1
+parentProblemId: longest-substring-without-repeating-characters
+topicId: sliding-window
+title: { zh: "每个字符至多出现两次的最长子串", en: "Longest Substring With Each Character At Most Twice" }
+summary:
+  zh: 求最长的连续子串，使其中每个字符最多出现两次。
+  en: Find the longest contiguous substring in which every character occurs at most twice.
+statement:
+  zh: |-
+    给定字符串 `s`，返回它的一个最长连续子串的长度，要求该子串中每个字符最多出现 **两次**。
+
+    例如 `"aabba"` 中 `"aabb"` 合法，而 `"aabba"` 中字符 a 出现了三次，不合法。
+  en: |-
+    Given a string `s`, return the length of its longest contiguous substring in which each character occurs **at most twice**.
+
+    For example `"aabb"` is valid inside `"aabba"`, but the whole string is not, because a occurs three times.
+difficulty: medium
+skills: [variable sliding window, frequency counting]
+differences:
+  - category: constraints
+    description:
+      zh: 合法条件从“没有重复”放宽为“每个字符最多两次”，窗口里需要记录次数而不是是否出现。
+      en: Validity relaxes from "no repeats" to "each character at most twice", so the window must store counts instead of presence.
+  - category: reasoning
+    description:
+      zh: 不能再直接把 left 跳到“上一次出现位置之后”，必须逐步收缩直到该字符次数降到 2。
+      en: You can no longer jump left past "the previous occurrence"; you must shrink step by step until that character's count drops to 2.
+transfer:
+  zh: “右端扩张、违法时左端收缩、left 永不回退”的可变窗口框架完全保留；需要改变的是窗口状态（次数表）和违法判定。
+  en: "The variable window frame carries over: grow on the right, shrink on the left when invalid, never move left back. What changes is the window state (a count table) and the validity test."
+entry: { python: longestAtMostTwice, typescript: longestAtMostTwice }
+params:
+  - { name: s, type: string }
+returns: int
+comparator: { kind: exact }
+perCaseMs: 1000
+inputs:
+  - { type: string, minLength: 0, smallMaxLength: 10, largeLength: 50000, alphabet: "abcdefghij", smallAlphabet: "abc" }
+constraints:
+  - { zh: "0 ≤ s.length ≤ 5·10⁴，小写字母", en: "0 ≤ s.length ≤ 5·10⁴, lowercase letters" }
+examples:
+  - args: ["aabba"]
+    expected: 4
+  - args: ["abcabcabc"]
+    expected: 6
+boundaryCases:
+  - args: [""]
+  - args: ["a"]
+  - args: ["aaa"]
+  - args: ["abab"]
+  - args: ["aaabbb"]
+hints:
+  - { zh: "上一题的窗口在出现重复时收缩。这里窗口什么时候才算违法？", en: "The previous window shrank on a repeat. When is this window invalid?" }
+  - { zh: "当新加入的字符次数变成 3 时窗口违法；用计数表记录窗口中每个字符的次数。", en: "The window becomes invalid when the new character's count reaches 3; keep a count per character." }
+  - { zh: "违法时 while 收缩：count[s[left]] -= 1，left += 1，直到新字符的次数回到 2。", en: "While invalid, shrink: count[s[left]] -= 1, left += 1, until the new character's count is back to 2." }

@@ -1,0 +1,53 @@
+id: contains-duplicate
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: { zh: "存在重复元素", en: "Contains Duplicate" }
+difficulty: easy
+topics: [hashing]
+leetcode:
+  frontendId: 217
+  title: Contains Duplicate
+  slug: contains-duplicate
+  difficulty: easy
+  tags: [Array, Hash Table, Sorting]
+  paidOnly: false
+  verifiedAt: "2026-10-14"
+summary:
+  zh: 判断整数数组 `nums` 中是否有某个值出现至少两次；有则返回 true，否则返回 false。（本课程原创简述，完整题面见 LeetCode 官方页面。）
+  en: Return true if some value appears at least twice in the integer array `nums`, otherwise false. (Original summary written for Learn; see LeetCode for the official statement.)
+constraints:
+  - { zh: "1 ≤ nums.length ≤ 10⁵", en: "1 ≤ nums.length ≤ 10⁵" }
+  - { zh: "-10⁹ ≤ nums[i] ≤ 10⁹", en: "-10⁹ ≤ nums[i] ≤ 10⁹" }
+params:
+  - { name: nums, type: "int[]" }
+returns: bool
+comparator: { kind: exact }
+entry: { python: containsDuplicate, typescript: containsDuplicate }
+perCaseMs: 1000
+inputs:
+  - { type: "int[]", minLength: 1, smallMaxLength: 10, largeLength: 10000, distinct: true, min: -100000, max: 100000, smallMin: -20, smallMax: 20 }
+hints:
+  - zh: 扫描到某个元素时，你需要回答的问题是什么？
+    en: When you reach an element, what question do you need to answer?
+  - zh: 问题是“这个值之前出现过吗？”——这正是集合擅长的成员查询。
+    en: The question is "has this value appeared before?", which is exactly a set membership query.
+  - zh: 维护一个已见集合；遇到已在集合中的值就返回 true，扫描结束返回 false。
+    en: Keep a set of seen values; return true when the current value is already in it, and false after the scan.
+solution:
+  explanation:
+    zh: 用集合记录见过的值，遇到重复立即返回 true。时间 O(n)，空间 O(n)。也可以排序后比较相邻元素，时间 O(n log n)、额外空间更少。
+    en: Record seen values in a set and return true on the first repeat. O(n) time and O(n) space. Sorting and comparing neighbours takes O(n log n) time with less extra space.
+examples:
+  - id: ex-1
+    args: [[4, 9, 2, 9]]
+    expected: true
+    explanation: { zh: "9 出现了两次。", en: "9 appears twice." }
+  - id: ex-2
+    args: [[8, 3, 5]]
+    expected: false
+boundaryCases:
+  - args: [[1]]
+  - args: [[0, 0]]
+  - args: [[-1000000000, 1000000000]]
+  - args: [[2, 1, 2]]

@@ -1,0 +1,62 @@
+id: two-sum
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: { zh: "两数之和", en: "Two Sum" }
+difficulty: easy
+topics: [hashing]
+leetcode:
+  frontendId: 1
+  title: Two Sum
+  slug: two-sum
+  difficulty: easy
+  tags: [Array, Hash Table]
+  paidOnly: false
+  verifiedAt: "2026-10-14"
+summary:
+  zh: 给定整数数组 `nums` 和整数 `target`，返回两个不同下标，使对应元素之和等于 `target`。输入保证恰好存在一组答案，下标顺序不限。（本课程原创简述，完整题面见 LeetCode 官方页面。）
+  en: Given an integer array `nums` and an integer `target`, return two different indices whose elements add up to `target`. Exactly one answer exists; the indices may be returned in any order. (Original summary written for Learn; see LeetCode for the official statement.)
+constraints:
+  - { zh: "2 ≤ nums.length ≤ 10⁴", en: "2 ≤ nums.length ≤ 10⁴" }
+  - { zh: "-10⁹ ≤ nums[i], target ≤ 10⁹", en: "-10⁹ ≤ nums[i], target ≤ 10⁹" }
+  - { zh: "恰好存在一组有效答案", en: "Exactly one valid answer exists" }
+params:
+  - { name: nums, type: "int[]" }
+  - { name: target, type: int }
+returns: "int[]"
+comparator: { kind: validator, name: pair-indices-sum }
+entry: { python: twoSum, typescript: twoSum }
+perCaseMs: 1000
+inputs:
+  - { type: "int[]", minLength: 2, smallMaxLength: 12, largeLength: 10000, min: -1000000000, max: 1000000000, smallMin: -50, smallMax: 50 }
+  - { type: int, min: -1000000000, max: 1000000000 }
+hints:
+  - zh: 对每个元素 x，你真正需要知道的是哪个值是否“已经出现过”？
+    en: For each element x, which single value do you need to know has already appeared?
+  - zh: 补数是 target - x。如果能用 O(1) 时间判断补数是否在前面出现过，并取得它的下标，就只需扫描一遍。
+    en: The complement is target - x. If you can check in O(1) whether it appeared earlier and get its index, one pass is enough.
+  - zh: 用字典记录“值 → 下标”。遍历时先查补数是否在字典中，找到就返回两个下标；否则把当前值和下标放入字典。
+    en: Keep a dictionary from value to index. For each element, first look up its complement and return both indices if found; otherwise store the current value and index.
+solution:
+  explanation:
+    zh: 维护“值 → 下标”的哈希表。对下标 i 的元素 x，先查询 target - x；存在则返回 [表中下标, i]，否则记录 x → i。先查后放避免了元素和自己配对。时间 O(n)，空间 O(n)。
+    en: Maintain a value-to-index hash table. For element x at index i, look up target - x; if present return [stored index, i], otherwise record x → i. Querying before inserting avoids pairing an element with itself. O(n) time and O(n) space.
+examples:
+  - id: ex-1
+    args: [[5, 2, 8, 6], 11]
+    expected: [0, 3]
+    explanation: { zh: "5 + 6 = 11。", en: "5 + 6 = 11." }
+  - id: ex-2
+    args: [[-4, 10, 4], 0]
+    expected: [0, 2]
+    explanation: { zh: "负数同样适用：-4 + 4 = 0。", en: "Negatives work the same way: -4 + 4 = 0." }
+  - id: ex-3
+    args: [[7, 7], 14]
+    expected: [0, 1]
+    explanation: { zh: "两个相等的值可以组成答案，但不能把同一个下标用两次。", en: "Two equal values may form the answer, but one index cannot be used twice." }
+boundaryCases:
+  - args: [[1, 2], 3]
+  - args: [[1000000000, -1000000000], 0]
+  - args: [[0, 4, 3, 0], 0]
+  - args: [[3, 2, 4], 6]
+  - args: [[-1, -2, -3, -4, -5], -8]

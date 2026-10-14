@@ -1,0 +1,40 @@
+id: maximum-average-subarray-i
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: { zh: "子数组最大平均数 I", en: "Maximum Average Subarray I" }
+difficulty: easy
+topics: [sliding-window]
+leetcode: { frontendId: 643, title: "Maximum Average Subarray I", slug: maximum-average-subarray-i, difficulty: easy, tags: [Array, Sliding Window], paidOnly: false, verifiedAt: "2026-10-14" }
+summary:
+  zh: 在整数数组 `nums` 中找出长度恰好为 `k` 的连续子数组的最大平均值。误差在 1e-5 以内视为正确。（本课程原创简述，完整题面见 LeetCode 官方页面。）
+  en: Return the maximum average of a contiguous subarray of length exactly `k` in `nums`. Answers within 1e-5 are accepted. (Original summary written for Learn; see LeetCode for the official statement.)
+constraints:
+  - { zh: "1 ≤ k ≤ n ≤ 10⁵", en: "1 ≤ k ≤ n ≤ 10⁵" }
+  - { zh: "-10⁴ ≤ nums[i] ≤ 10⁴", en: "-10⁴ ≤ nums[i] ≤ 10⁴" }
+params:
+  - { name: nums, type: "int[]" }
+  - { name: k, type: int }
+returns: float
+comparator: { kind: float, tolerance: 0.00001 }
+entry: { python: findMaxAverage, typescript: findMaxAverage }
+perCaseMs: 1000
+inputs:
+  - { type: "int[]", minLength: 1, smallMaxLength: 10, largeLength: 50000, min: -10000, max: 10000, smallMin: -10, smallMax: 10 }
+  - { type: int, min: 1, max: 1 }
+hints:
+  - { zh: "平均值最大等价于和最大（k 固定）。相邻两个窗口的和有什么关系？", en: "With k fixed, the largest average is the largest sum. How do the sums of neighbouring windows relate?" }
+  - { zh: "下一个窗口的和 = 当前和 + 新进入的元素 - 移出的元素。", en: "The next window's sum is the current sum plus the entering element minus the leaving element." }
+  - { zh: "先算前 k 个的和，然后对 i 从 k 到 n-1 更新 sum += nums[i] - nums[i-k]，记录最大和，最后除以 k。", en: "Compute the first k elements' sum, then for i from k to n-1 update sum += nums[i] - nums[i-k], track the maximum, and divide by k at the end." }
+solution:
+  explanation:
+    zh: 固定长度窗口：维护窗口和，每步加入一个、移出一个，记录最大和，返回最大和除以 k。时间 O(n)，空间 O(1)。
+    en: "Fixed-size window: maintain the window sum, add one element and remove one per step, track the maximum, and return it divided by k. O(n) time, O(1) space."
+examples:
+  - { id: ex-1, args: [[3, -1, 4, 1, 5], 2], expected: 3.0, explanation: { zh: "最大和的窗口是 [1, 5]。", en: "The best window is [1, 5]." } }
+  - { id: ex-2, args: [[-7], 1], expected: -7.0 }
+boundaryCases:
+  - args: [[10000, 10000, 10000], 3]
+  - args: [[-10000, -10000], 1]
+  - args: [[0, 0, 0, 1], 4]
+  - args: [[5, -5, 5, -5, 5], 2]

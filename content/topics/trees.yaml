@@ -1,0 +1,96 @@
+id: trees
+order: 6
+title: { zh: "树的遍历：把问题拆给子树", en: "Tree traversal: delegate the problem to subtrees" }
+summary:
+  zh: 深度优先遍历把“整棵树的答案”拆成“子树答案的组合”，广度优先遍历按层处理节点；两者都只访问每个节点一次。
+  en: Depth-first traversal combines answers from subtrees into the answer for the whole tree, while breadth-first traversal handles nodes level by level; both visit each node once.
+prerequisites: [stack]
+problems: [maximum-depth-of-binary-tree, invert-binary-tree, binary-tree-level-order-traversal]
+variants: [trees-max-level-sum, trees-good-nodes]
+lesson:
+  motivation:
+    zh: |-
+      公司的组织架构是一棵树：CEO 下面有若干经理，经理下面有员工。HR 想知道“汇报链最长有几层”，以及“每一层各有哪些人”。
+
+      如果把整棵树当作一个整体去想，问题很难下手。但树有一个关键的递归结构：**每个节点的子节点本身又是一棵树**。最长汇报链 = 1 + 子树中最长的汇报链。只要会处理“一个节点 + 已经算好的子树答案”，整棵树就解决了。
+
+      “每一层有哪些人”则需要另一种顺序：先处理完第一层，再处理第二层——用队列按层推进。
+    en: |-
+      A company's org chart is a tree: the CEO has managers, who have employees. HR wants the length of the longest reporting chain and the list of people on each level.
+
+      Thinking about the whole tree at once is hard, but trees have a key recursive structure: **every child is the root of a smaller tree**. The longest chain is 1 plus the longest chain among the subtrees. If you can handle "one node plus answers already computed for its subtrees", the whole tree is solved.
+
+      "Who is on each level" needs a different order: finish level one before level two, advancing level by level with a queue.
+  strategy:
+    zh: |-
+      **深度优先（递归）**：定义 `solve(node)` 返回以 node 为根的子树的答案。
+
+      1. 基本情况：`node` 为空时返回空树的答案（如深度 0）。
+      2. 递归求出左右子树的答案。
+      3. 用当前节点和子树答案组合出结果（如 `1 + max(left, right)`）。
+
+      需要从根往下传递信息（如“路径上的最大值”）时，把它作为参数传给递归。
+
+      **广度优先（队列）**：队列初始放入根；每一轮先记下当前队列长度 `size`，恰好弹出 `size` 个节点——它们就是同一层——并把它们的子节点入队。
+
+      **复杂度**：两者都访问每个节点一次，时间 O(n)。递归的额外空间是树高 O(h)（链状树最坏 O(n)），BFS 的空间是最宽一层的节点数。
+
+      **输入格式**：本课程用层序数组表示树，例如 `[3, 9, 20, null, null, 15, 7]`，`null` 表示空位置；评测会把它转换成 `TreeNode`。
+    en: |-
+      **Depth-first (recursion)**: define `solve(node)` as the answer for the subtree rooted at node.
+
+      1. Base case: for an empty `node` return the empty tree's answer (depth 0, for example).
+      2. Recursively solve the left and right subtrees.
+      3. Combine the current node with the subtree answers (for example `1 + max(left, right)`).
+
+      When information flows from the root downward (such as the maximum on the path), pass it as a parameter.
+
+      **Breadth-first (queue)**: start with the root in a queue; each round records the current queue length `size`, pops exactly `size` nodes, which form one level, and enqueues their children.
+
+      **Complexity**: both visit each node once, O(n) time. Recursion uses O(h) extra space for tree height h (O(n) for a chain); BFS uses space for the widest level.
+
+      **Input format**: trees are given as level-order arrays such as `[3, 9, 20, null, null, 15, 7]`, where `null` marks an empty position; the judge converts them to `TreeNode`.
+  example:
+    title: { zh: "例：树 [4, 2, 7, null, 3] 的最大深度", en: "Example: maximum depth of [4, 2, 7, null, 3]" }
+    body:
+      zh: 递归从叶子向上返回子树深度。节点 2 只有右孩子 3。
+      en: Recursion returns subtree depths from the leaves upward. Node 2 has only a right child, 3.
+    traceColumns: [node, left depth, right depth, returns]
+    trace:
+      - state: { node: "3", left depth: "0", right depth: "0", returns: "1" }
+        note: { zh: "叶子：两个空子树深度都是 0。", en: "A leaf: both empty subtrees have depth 0." }
+      - state: { node: "2", left depth: "0", right depth: "1", returns: "2" }
+        note: { zh: "1 + max(0, 1)。", en: "1 + max(0, 1)." }
+      - state: { node: "7", left depth: "0", right depth: "0", returns: "1" }
+        note: { zh: "另一个叶子。", en: "Another leaf." }
+      - state: { node: "4", left depth: "2", right depth: "1", returns: "3" }
+        note: { zh: "根节点组合两棵子树的答案：最大深度 3。", en: "The root combines both subtree answers: depth 3." }
+  check:
+    - id: base-case
+      prompt:
+        zh: 计算最大深度的递归中，空节点应该返回什么？
+        en: In the recursive maximum-depth computation, what should an empty node return?
+      options:
+        - { zh: "0", en: "0" }
+        - { zh: "1", en: "1" }
+        - { zh: "-1", en: "-1" }
+      answer: 0
+      explanation:
+        zh: 空树没有节点，深度为 0，这样叶子节点得到 1 + max(0, 0) = 1。
+        en: An empty tree has no nodes, so depth 0; a leaf then gets 1 + max(0, 0) = 1.
+    - id: level-size
+      prompt:
+        zh: 层序遍历时，为什么要在每一轮开始时记录队列长度？
+        en: In level-order traversal, why record the queue length at the start of each round?
+      options:
+        - { zh: "为了知道这一轮恰好要处理多少个同层节点，之后入队的是下一层", en: "To know exactly how many nodes belong to this level; nodes enqueued afterwards are the next level" }
+        - { zh: "为了限制内存使用", en: "To limit memory use" }
+        - { zh: "为了按值排序", en: "To sort nodes by value" }
+      answer: 0
+      explanation:
+        zh: 本轮开始时队列里恰好是当前层的全部节点，处理它们时新加入的孩子属于下一层。
+        en: At the start of a round the queue holds exactly the current level; children added while processing belong to the next level.
+  practiceProblem: maximum-depth-of-binary-tree
+  reflectionPrompt:
+    zh: 说明你的递归函数返回什么、基本情况是什么、如何组合子树的答案，以及时间和空间复杂度。
+    en: Explain what your recursive function returns, its base case, how subtree answers combine, and the time and space complexity.

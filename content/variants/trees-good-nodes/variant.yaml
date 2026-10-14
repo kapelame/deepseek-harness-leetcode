@@ -1,0 +1,56 @@
+id: trees-good-nodes
+version: 1
+suiteVersion: 1
+parentProblemId: maximum-depth-of-binary-tree
+topicId: trees
+title: { zh: "路径上的“领先”节点", en: "Nodes Leading Their Path" }
+summary:
+  zh: 统计有多少个节点的值不小于从根到它的路径上所有节点的值。
+  en: Count the nodes whose value is at least every value on the path from the root to them.
+statement:
+  zh: |-
+    给定二叉树的根节点 `root`，如果一个节点的值 **大于或等于** 从根到它（含两端）路径上所有节点的值，就称它为“领先节点”。根节点总是领先节点。
+
+    返回领先节点的数量；空树返回 0。
+  en: |-
+    Given the root of a binary tree, a node is **leading** if its value is **greater than or equal to** every value on the path from the root to it, inclusive. The root is always leading.
+
+    Return the number of leading nodes, or 0 for an empty tree.
+difficulty: medium
+skills: [depth-first traversal, passing state down the recursion]
+differences:
+  - category: reasoning
+    description:
+      zh: 答案不再只由子树向上汇总，还依赖从根往下传递的信息（路径上的最大值），需要把它作为递归参数。
+      en: The answer no longer flows only upward from subtrees; it depends on information passed down from the root (the path maximum), which becomes a recursion parameter.
+  - category: output
+    description:
+      zh: 需要统计满足条件的节点个数，而不是求一条路径的长度。
+      en: Count qualifying nodes instead of measuring the length of one path.
+transfer:
+  zh: “递归处理左右子树并组合结果”的结构不变（个数 = 当前是否领先 + 左子树个数 + 右子树个数）；新的部分是向下传递路径最大值这一“继承属性”。
+  en: "The recurse-and-combine structure stays (count = current node leads + left count + right count); the new part is passing the path maximum downward as an inherited attribute."
+entry: { python: countLeadingNodes, typescript: countLeadingNodes }
+params:
+  - { name: root, type: tree }
+returns: int
+comparator: { kind: exact }
+perCaseMs: 1000
+inputs:
+  - { type: tree, minLength: 0, smallMaxLength: 9, largeLength: 3000, min: -10000, max: 10000, smallMin: -3, smallMax: 3, shape: chain }
+constraints:
+  - { zh: "节点数在 [0, 10⁵] 范围内，-10⁴ ≤ Node.val ≤ 10⁴", en: "Nodes in [0, 10⁵], -10⁴ ≤ Node.val ≤ 10⁴" }
+examples:
+  - args: [[3, 1, 4, 3, null, 1, 5]]
+    expected: 4
+  - args: [[3, 3, null, 4, 2]]
+    expected: 3
+boundaryCases:
+  - args: [[]]
+  - args: [[1]]
+  - args: [[2, 2, 2]]
+  - args: [[5, 4, 6, 5, null, null, 7]]
+hints:
+  - { zh: "判断一个节点是否领先，需要知道它上方路径的什么信息？", en: "To decide whether a node leads, what do you need to know about the path above it?" }
+  - { zh: "只需要路径上目前的最大值。把这个值作为参数传给递归：visit(node, path_max)。", en: "Only the maximum so far on the path. Pass it into the recursion: visit(node, path_max)." }
+  - { zh: "node.val ≥ path_max 时计数加 1；向孩子递归时传入 max(path_max, node.val)；空节点返回 0。", en: "Count 1 when node.val ≥ path_max, recurse into children with max(path_max, node.val), and return 0 for an empty node." }

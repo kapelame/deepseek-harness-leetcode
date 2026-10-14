@@ -1,0 +1,63 @@
+id: hashing-count-index-pairs
+version: 1
+suiteVersion: 1
+parentProblemId: two-sum
+topicId: hashing
+title: { zh: "统计下标对", en: "Count Index Pairs" }
+summary:
+  zh: 统计所有和为目标值的下标对 (i, j)，i < j，重复值按出现位置分别计数。
+  en: Count every index pair (i, j) with i < j whose values add up to the target, counting repeated values by position.
+statement:
+  zh: |-
+    给定整数数组 `nums` 和整数 `target`，返回满足 `i < j` 且 `nums[i] + nums[j] = target` 的下标对 `(i, j)` 的数量。
+
+    与“不同数值对”不同，这里每个位置都算数：`[2, 2, 2]` 中和为 4 的下标对有 3 个。答案可能超过 32 位整数范围。
+  en: |-
+    Given an integer array `nums` and an integer `target`, return the number of index pairs `(i, j)` with `i < j` and `nums[i] + nums[j] = target`.
+
+    Unlike distinct value pairs, every position counts: `[2, 2, 2]` has 3 index pairs summing to 4. The answer may exceed the 32-bit integer range.
+difficulty: medium
+skills: [complement lookup, running frequency, counting]
+differences:
+  - category: output
+    description:
+      zh: 返回所有满足条件的下标对数量，而不是其中一对。
+      en: Return how many index pairs qualify instead of one pair.
+  - category: reasoning
+    description:
+      zh: 每个元素要和之前所有补数配对，表里需要存出现次数，而且必须先累加再插入，才不会把元素和自己配对。
+      en: Each element pairs with every earlier complement, so the table stores counts, and you must add before inserting to avoid self-pairs.
+transfer:
+  zh: “扫描时查询之前出现过的补数”这一模式完全保留；变化在于把“找到就返回”改成“把之前补数出现的次数累加起来”，表从记录下标变成记录次数。
+  en: The scan-and-query-earlier-complements pattern carries over unchanged. What changes is replacing "return on first match" with "add how many earlier complements exist", so the table records counts instead of indices.
+entry: { python: countPairs, typescript: countPairs }
+params:
+  - { name: nums, type: "int[]" }
+  - { name: target, type: int }
+returns: int
+comparator: { kind: exact }
+perCaseMs: 1000
+inputs:
+  - { type: "int[]", minLength: 1, smallMaxLength: 12, largeLength: 20000, min: -50, max: 50, smallMin: -4, smallMax: 4 }
+  - { type: int, min: -60, max: 60, smallMin: -6, smallMax: 6 }
+constraints:
+  - { zh: "1 ≤ nums.length ≤ 10⁵", en: "1 ≤ nums.length ≤ 10⁵" }
+  - { zh: "-10⁶ ≤ nums[i], target ≤ 10⁶", en: "-10⁶ ≤ nums[i], target ≤ 10⁶" }
+examples:
+  - args: [[2, 2, 2], 4]
+    expected: 3
+  - args: [[1, 4, 3, 2], 5]
+    expected: 2
+boundaryCases:
+  - args: [[5], 10]
+  - args: [[5, 5], 10]
+  - args: [[0, 0, 0, 0], 0]
+  - args: [[1, -1, 1, -1], 0]
+  - args: [[1, 2], 7]
+hints:
+  - zh: 扫描到 nums[j] 时，以 j 作为较大下标的配对有多少个？
+    en: When you reach nums[j], how many pairs have j as the larger index?
+  - zh: 正好等于之前出现过的 target - nums[j] 的次数。用哈希表记录每个值出现了几次。
+    en: Exactly the number of earlier occurrences of target - nums[j]. Track how many times each value has appeared in a hash table.
+  - zh: 先把 count[target - x] 加到答案上，再执行 count[x] += 1；顺序反过来会把 x + x = target 的元素和自己配对。
+    en: Add count[target - x] to the answer before doing count[x] += 1; the reverse order pairs x with itself when x + x = target.

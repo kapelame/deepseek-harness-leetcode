@@ -1,0 +1,59 @@
+id: two-pointers-count-smaller-pairs
+version: 1
+suiteVersion: 1
+parentProblemId: two-sum-ii-input-array-is-sorted
+topicId: two-pointers
+title: { zh: "和小于目标的配对数", en: "Pairs Below Target" }
+summary:
+  zh: 统计有序数组中和严格小于 target 的下标对数量。
+  en: Count index pairs in a sorted array whose sum is strictly below target.
+statement:
+  zh: |-
+    给定按非递减顺序排列的整数数组 `nums` 和整数 `target`，返回满足 `i < j` 且 `nums[i] + nums[j] < target` 的下标对 `(i, j)` 的数量。
+
+    相同的数值出现在不同位置时分别计数。答案可能很大，但不会超过 64 位整数范围。
+  en: |-
+    Given an integer array `nums` sorted in non-decreasing order and an integer `target`, return the number of index pairs `(i, j)` with `i < j` and `nums[i] + nums[j] < target`.
+
+    Equal values at different positions count separately. The answer can be large but fits in a 64-bit integer.
+difficulty: medium
+skills: [opposite pointers, counting a block of pairs at once]
+differences:
+  - category: output
+    description:
+      zh: 要统计满足不等式的全部配对，而不是找一对相等的组合。
+      en: Count every pair satisfying an inequality instead of finding one pair with an exact sum.
+  - category: reasoning
+    description:
+      zh: 当 nums[left] + nums[right] < target 时，left 与 (left, right] 中每个位置的组合都满足条件，可以一次性计入 right - left 对。
+      en: When nums[left] + nums[right] < target, left pairs validly with every index in (left, right], so right - left pairs are counted at once.
+transfer:
+  zh: 相向双指针和“偏大左移 right、偏小右移 left”的论证不变；新的关键是利用有序性一次计入一整段配对，而不是逐对检查。
+  en: Opposite pointers and the "large moves right, small moves left" argument stay the same; the new insight is using order to count a whole block of pairs at once instead of checking pairs one by one.
+entry: { python: countPairsBelow, typescript: countPairsBelow }
+params:
+  - { name: nums, type: "int[]" }
+  - { name: target, type: int }
+returns: int
+comparator: { kind: exact }
+perCaseMs: 1000
+inputs:
+  - { type: "int[]", minLength: 1, smallMaxLength: 10, largeLength: 20000, sorted: asc, min: -10000, max: 10000, smallMin: -8, smallMax: 8 }
+  - { type: int, min: -10000, max: 10000, smallMin: -10, smallMax: 10 }
+constraints:
+  - { zh: "1 ≤ nums.length ≤ 2·10⁴，非递减", en: "1 ≤ nums.length ≤ 2·10⁴, non-decreasing" }
+  - { zh: "-10⁴ ≤ nums[i], target ≤ 10⁴", en: "-10⁴ ≤ nums[i], target ≤ 10⁴" }
+examples:
+  - args: [[1, 2, 3, 5], 6]
+    expected: 3
+  - args: [[-1, 0, 0, 2], 0]
+    expected: 2
+boundaryCases:
+  - args: [[5], 100]
+  - args: [[1, 1], 2]
+  - args: [[1, 1], 3]
+  - args: [[-10000, 10000], 0]
+hints:
+  - { zh: "固定 left，若 nums[left] + nums[right] 已经小于 target，那 left 与哪些位置的组合也一定满足？", en: "Fix left. If nums[left] + nums[right] is already below target, which other pairings with left must also qualify?" }
+  - { zh: "与 left+1 到 right 之间的每个位置都满足，因为它们都不大于 nums[right]。", en: "Every index from left+1 to right qualifies, because none of those values exceeds nums[right]." }
+  - { zh: "和小于 target 时把 right - left 加到答案上并 left++；否则 right--。", en: "When the sum is below target add right - left and do left++; otherwise do right--." }

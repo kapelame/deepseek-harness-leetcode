@@ -1,0 +1,40 @@
+id: koko-eating-bananas
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: { zh: "爱吃香蕉的珂珂", en: "Koko Eating Bananas" }
+difficulty: medium
+topics: [binary-search]
+leetcode: { frontendId: 875, title: "Koko Eating Bananas", slug: koko-eating-bananas, difficulty: medium, tags: [Array, Binary Search], paidOnly: false, verifiedAt: "2026-10-14" }
+summary:
+  zh: 有若干堆香蕉 `piles`，每小时可以选一堆吃掉至多 `k` 根（这一堆不足 k 根就吃完这一堆）。求能在 `h` 小时内吃完全部香蕉的最小整数速度 `k`。（本课程原创简述，完整题面见 LeetCode 官方页面。）
+  en: There are banana piles `piles`. Each hour Koko eats up to `k` bananas from one pile (finishing the pile if it has fewer). Return the smallest integer speed `k` that finishes everything within `h` hours. (Original summary written for Learn; see LeetCode for the official statement.)
+constraints:
+  - { zh: "1 ≤ piles.length ≤ 10⁴，piles.length ≤ h ≤ 10⁹", en: "1 ≤ piles.length ≤ 10⁴, piles.length ≤ h ≤ 10⁹" }
+  - { zh: "1 ≤ piles[i] ≤ 10⁹", en: "1 ≤ piles[i] ≤ 10⁹" }
+params:
+  - { name: piles, type: "int[]" }
+  - { name: h, type: int }
+returns: int
+comparator: { kind: exact }
+entry: { python: minEatingSpeed, typescript: minEatingSpeed }
+perCaseMs: 1000
+inputs:
+  - { type: "int[]", minLength: 1, smallMaxLength: 8, largeLength: 10000, min: 1, max: 1000000000, smallMin: 1, smallMax: 20 }
+  - { type: int, min: 1, max: 1 }
+hints:
+  - { zh: "给定速度 k，你能快速算出需要多少小时吗？速度变大时所需小时数怎样变化？", en: "Given a speed k, can you compute the hours needed? How do hours change as k grows?" }
+  - { zh: "所需小时 = Σ ceil(pile / k)，随 k 增大单调不增。于是“k 可行”从假变真只翻转一次。", en: "Hours = Σ ceil(pile / k), which never increases as k grows, so 'k is feasible' flips from false to true once." }
+  - { zh: "在 [1, max(piles)] 上做下界二分，ok(k) 为 Σ ceil(p/k) ≤ h。", en: "Lower-bound binary search over [1, max(piles)] with ok(k) = Σ ceil(p/k) ≤ h." }
+solution:
+  explanation:
+    zh: 对答案二分。可行性 Σ ceil(p/k) ≤ h 随 k 单调，在 [1, max(piles)] 上找第一个可行的 k。时间 O(n log max)。
+    en: Binary search on the answer. Feasibility Σ ceil(p/k) ≤ h is monotone in k, so find the first feasible k in [1, max(piles)]. O(n log max) time.
+examples:
+  - { id: ex-1, args: [[3, 7, 4], 5], expected: 4, explanation: { zh: "速度 4 需要 1+2+1=4 小时；速度 3 需要 1+3+2=6 小时。", en: "Speed 4 takes 1+2+1=4 hours; speed 3 takes 1+3+2=6 hours." } }
+  - { id: ex-2, args: [[10], 1], expected: 10 }
+boundaryCases:
+  - args: [[1], 1]
+  - args: [[1000000000], 2]
+  - args: [[5, 5, 5], 3]
+  - args: [[5, 5, 5], 1000000000]

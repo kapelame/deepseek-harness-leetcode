@@ -1,0 +1,37 @@
+id: binary-tree-level-order-traversal
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: { zh: "二叉树的层序遍历", en: "Binary Tree Level Order Traversal" }
+difficulty: medium
+topics: [trees]
+leetcode: { frontendId: 102, title: "Binary Tree Level Order Traversal", slug: binary-tree-level-order-traversal, difficulty: medium, tags: [Tree, Breadth-First Search, Binary Tree], paidOnly: false, verifiedAt: "2026-10-14" }
+summary:
+  zh: 按从上到下的层次返回二叉树的节点值，每一层从左到右排成一个列表。（本课程原创简述，完整题面见 LeetCode 官方页面。）
+  en: Return the node values level by level from top to bottom, each level as a left-to-right list. (Original summary written for Learn; see LeetCode for the official statement.)
+constraints:
+  - { zh: "节点数在 [0, 2000] 范围内", en: "The number of nodes is in [0, 2000]" }
+  - { zh: "-1000 ≤ Node.val ≤ 1000", en: "-1000 ≤ Node.val ≤ 1000" }
+params:
+  - { name: root, type: tree }
+returns: "int[][]"
+comparator: { kind: exact }
+entry: { python: levelOrder, typescript: levelOrder }
+perCaseMs: 1000
+inputs:
+  - { type: tree, minLength: 0, smallMaxLength: 9, largeLength: 2000, min: -1000, max: 1000 }
+hints:
+  - { zh: "用什么结构能保证先处理完第一层的所有节点，再处理第二层？", en: "Which structure guarantees finishing every node of one level before the next level?" }
+  - { zh: "队列（先进先出）。关键是区分层与层：每一轮开始时，队列里恰好是当前层的全部节点。", en: "A queue (first in, first out). The key is separating levels: at the start of each round the queue holds exactly the current level." }
+  - { zh: "每轮记下 size = len(queue)，弹出 size 个节点收集其值并把孩子入队，把这一层的列表加入结果。", en: "Each round, record size = len(queue), pop that many nodes collecting their values and enqueueing children, and append the level list." }
+solution:
+  explanation:
+    zh: BFS 按层处理：每轮弹出当前层的全部节点，收集值并加入下一层的孩子。时间 O(n)，空间 O(最宽层)。
+    en: "Level-by-level BFS: each round pops the whole current level, records its values, and enqueues the next level. O(n) time, O(width) space."
+examples:
+  - { id: ex-1, args: [[3, 9, 20, null, null, 15, 7]], expected: [[3], [9, 20], [15, 7]] }
+  - { id: ex-2, args: [[]], expected: [] }
+boundaryCases:
+  - args: [[1]]
+  - args: [[1, null, 2, null, 3]]
+  - args: [[1, 2, 3, 4, null, null, 5]]

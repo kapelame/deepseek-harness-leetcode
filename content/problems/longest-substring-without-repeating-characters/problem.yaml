@@ -1,0 +1,40 @@
+id: longest-substring-without-repeating-characters
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: { zh: "无重复字符的最长子串", en: "Longest Substring Without Repeating Characters" }
+difficulty: medium
+topics: [sliding-window, hashing]
+leetcode: { frontendId: 3, title: "Longest Substring Without Repeating Characters", slug: longest-substring-without-repeating-characters, difficulty: medium, tags: [Hash Table, String, Sliding Window], paidOnly: false, verifiedAt: "2026-10-14" }
+summary:
+  zh: 返回字符串 `s` 中不包含重复字符的最长连续子串的长度。（本课程原创简述，完整题面见 LeetCode 官方页面。）
+  en: Return the length of the longest contiguous substring of `s` with no repeated character. (Original summary written for Learn; see LeetCode for the official statement.)
+constraints:
+  - { zh: "0 ≤ s.length ≤ 5·10⁴", en: "0 ≤ s.length ≤ 5·10⁴" }
+  - { zh: "s 由英文字母、数字、符号和空格组成", en: "s consists of English letters, digits, symbols, and spaces" }
+params:
+  - { name: s, type: string }
+returns: int
+comparator: { kind: exact }
+entry: { python: lengthOfLongestSubstring, typescript: lengthOfLongestSubstring }
+perCaseMs: 1000
+inputs:
+  - { type: string, minLength: 0, smallMaxLength: 10, largeLength: 50000, alphabet: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 !?", smallAlphabet: "abcd" }
+hints:
+  - { zh: "如果 s[i..j] 有重复字符，那么包含它的更长子串还有可能合法吗？", en: "If s[i..j] contains a repeat, can any longer substring containing it be valid?" }
+  - { zh: "维护一个没有重复字符的窗口，右端每次加入一个字符；出现重复时只需把左端移过上一次出现的位置。", en: "Keep a repeat-free window that grows by one character on the right; on a repeat, move the left end just past the previous occurrence." }
+  - { zh: "用哈希表记录每个字符在窗口中的次数（或最近下标），重复时收缩 left，然后用 right - left + 1 更新答案。", en: "Track counts (or last indices) of characters in a hash table, shrink left on a repeat, then update the answer with right - left + 1." }
+solution:
+  explanation:
+    zh: 可变窗口 + 哈希表。right 逐个加入字符；若该字符已在窗口中，left 跳到它上次出现位置之后。每个位置的窗口都是以它结尾的最长合法子串。时间 O(n)，空间 O(字符集)。
+    en: Variable window with a hash table. right adds characters one by one; if the character is already in the window, left jumps past its previous occurrence. Each window is the longest valid substring ending there. O(n) time, O(alphabet) space.
+examples:
+  - { id: ex-1, args: ["abcab"], expected: 3 }
+  - { id: ex-2, args: ["zzzz"], expected: 1 }
+  - { id: ex-3, args: [""], expected: 0 }
+boundaryCases:
+  - args: [" "]
+  - args: ["au"]
+  - args: ["dvdf"]
+  - args: ["abba"]
+  - args: ["tmmzuxt"]

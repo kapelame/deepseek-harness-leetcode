@@ -1,0 +1,63 @@
+id: hashing-distinct-pair-sums
+version: 1
+suiteVersion: 1
+parentProblemId: two-sum
+topicId: hashing
+title: { zh: "不同的数值配对", en: "Distinct Value Pairs" }
+summary:
+  zh: 统计和为目标值的“不同数值对”有多少个，重复的数值只算一次。
+  en: Count how many distinct value pairs add up to the target; repeated values count once.
+statement:
+  zh: |-
+    给定整数数组 `nums`（可能包含重复值）和整数 `target`，统计满足 `a + b = target` 的**不同数值对** `{a, b}`（`a ≤ b`）的数量。
+
+    `a` 和 `b` 必须来自数组中两个不同的位置；同一对数值无论出现多少次只计一次。例如 `a = b` 时，该值至少要在数组中出现两次。
+  en: |-
+    Given an integer array `nums` (which may contain repeated values) and an integer `target`, count the **distinct value pairs** `{a, b}` with `a ≤ b` and `a + b = target`.
+
+    `a` and `b` must come from two different positions, and each pair of values counts once no matter how often it occurs. When `a = b`, that value must appear at least twice.
+difficulty: medium
+skills: [complement lookup, frequency counting, deduplication]
+differences:
+  - category: output
+    description:
+      zh: 不再返回某一对下标，而是统计所有满足条件的数值对数量。
+      en: Instead of returning one index pair, count every qualifying value pair.
+  - category: reasoning
+    description:
+      zh: 数组可能有重复值，必须按“数值”去重，并单独处理 a = b 需要出现两次的情况。
+      en: Repeated values are allowed, so pairs must be deduplicated by value and the a = b case needs two occurrences.
+transfer:
+  zh: 迁移的是“对每个值查补数”的哈希思路；需要改变的是表里存的内容——从“值 → 下标”变成“值 → 出现次数”，并且枚举不同的值而不是下标来避免重复计数。
+  en: The transferable idea is looking up each value's complement in a hash table. What changes is what the table stores, from value→index to value→count, and you enumerate distinct values instead of indices to avoid double counting.
+entry: { python: countDistinctPairs, typescript: countDistinctPairs }
+params:
+  - { name: nums, type: "int[]" }
+  - { name: target, type: int }
+returns: int
+comparator: { kind: exact }
+perCaseMs: 1000
+inputs:
+  - { type: "int[]", minLength: 1, smallMaxLength: 12, largeLength: 20000, min: -10000, max: 10000, smallMin: -6, smallMax: 6 }
+  - { type: int, min: -10000, max: 10000, smallMin: -8, smallMax: 8 }
+constraints:
+  - { zh: "1 ≤ nums.length ≤ 10⁵", en: "1 ≤ nums.length ≤ 10⁵" }
+  - { zh: "-10⁶ ≤ nums[i], target ≤ 10⁶", en: "-10⁶ ≤ nums[i], target ≤ 10⁶" }
+examples:
+  - args: [[1, 5, 3, 3, 5, 1], 6]
+    expected: 2
+  - args: [[3, 4, 2], 6]
+    expected: 1
+boundaryCases:
+  - args: [[3], 6]
+  - args: [[3, 3], 6]
+  - args: [[0, 0, 0], 0]
+  - args: [[-2, 2, -2, 2], 0]
+  - args: [[1, 2, 3], 100]
+hints:
+  - zh: 重复的数值会让同一对被计数多次。你应该按什么来枚举，才能自然地去重？
+    en: Repeated values would count the same pair many times. What should you enumerate so duplicates disappear naturally?
+  - zh: 先统计每个值出现的次数，再枚举不同的值 a，看 target - a 是否存在。注意 a = target - a 时需要它至少出现两次。
+    en: Count occurrences first, then enumerate distinct values a and check whether target - a exists. When a = target - a, it must appear at least twice.
+  - zh: 只在 a ≤ target - a 时计数，就不会把 {a, b} 和 {b, a} 算两遍。
+    en: Count only when a ≤ target - a so {a, b} and {b, a} are not counted twice.

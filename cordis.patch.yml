@@ -1,0 +1,7 @@
+- insert:
+    - id: learn
+      name: dsh-plugin-learn/service
+      config:
+        dataRoot: !!js dshHomePath('learn')
+    - id: learn-ui
+      name: dsh-plugin-learn

@@ -1,0 +1,53 @@
+id: group-anagrams
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: { zh: "字母异位词分组", en: "Group Anagrams" }
+difficulty: medium
+topics: [hashing]
+leetcode:
+  frontendId: 49
+  title: Group Anagrams
+  slug: group-anagrams
+  difficulty: medium
+  tags: [Array, Hash Table, String, Sorting]
+  paidOnly: false
+  verifiedAt: "2026-10-14"
+summary:
+  zh: 把字符串数组 `strs` 中互为字母异位词（字母种类和次数完全相同）的单词放在同一组，返回所有分组。组的顺序和组内顺序都不限。（本课程原创简述，完整题面见 LeetCode 官方页面。）
+  en: Put the words of `strs` that are anagrams of each other (same letters with the same counts) into the same group and return all groups. Neither the group order nor the order inside a group matters. (Original summary written for Learn; see LeetCode for the official statement.)
+constraints:
+  - { zh: "1 ≤ strs.length ≤ 10⁴", en: "1 ≤ strs.length ≤ 10⁴" }
+  - { zh: "0 ≤ strs[i].length ≤ 100，只含小写英文字母", en: "0 ≤ strs[i].length ≤ 100, lowercase English letters only" }
+params:
+  - { name: strs, type: "string[]" }
+returns: "string[][]"
+comparator: { kind: unordered-nested }
+entry: { python: groupAnagrams, typescript: groupAnagrams }
+perCaseMs: 1500
+inputs:
+  - { type: "string[]", minLength: 1, smallMaxLength: 10, largeLength: 4000, word: { minLength: 0, maxLength: 16, smallMaxLength: 4 } }
+hints:
+  - zh: 两个单词何时属于同一组？能否给每个单词算出一个“组的名字”？
+    en: When do two words belong to the same group? Can you compute a "group name" for each word?
+  - zh: 互为异位词的单词，排序后的字母序列相同（或 26 个字母的计数相同）。这可以作为哈希表的键。
+    en: Anagrams have the same sorted letters (or the same 26 letter counts). That can be the hash table key.
+  - zh: 建一个“键 → 单词列表”的字典，键用排序后的字符串或计数元组，最后返回字典的所有值。
+    en: Build a dictionary from key to word list, using the sorted string or a count tuple as the key, and return all its values.
+solution:
+  explanation:
+    zh: 对每个单词计算规范键（排序后的字符串，或 26 维计数元组），用字典把单词追加到对应列表，最后返回所有列表。排序键的时间为 O(n·k log k)，计数键为 O(n·k)。
+    en: Compute a canonical key for each word (its sorted string or a 26-count tuple), append the word to that key's list, and return all lists. Sorted keys cost O(n·k log k); count keys cost O(n·k).
+examples:
+  - id: ex-1
+    args: [["stop", "pots", "tops", "opt", "top"]]
+    expected: [["stop", "pots", "tops"], ["opt", "top"]]
+  - id: ex-2
+    args: [[""]]
+    expected: [[""]]
+    explanation: { zh: "空字符串自成一组。", en: "The empty string forms its own group." }
+boundaryCases:
+  - args: [["a"]]
+  - args: [["", ""]]
+  - args: [["ab", "ba", "abc", "cab", "b"]]
+  - args: [["aab", "aba", "abb"]]

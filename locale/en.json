@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Learn mode",
+    "description": "Algorithm lessons, execution-grounded judging, variant reviews, and reminder email. Requires Docker."
+  }
+}

@@ -1,0 +1,58 @@
+id: sliding-window-distinct-window-sum
+version: 1
+suiteVersion: 1
+parentProblemId: maximum-average-subarray-i
+topicId: sliding-window
+title: { zh: "元素互不相同的定长窗口最大和", en: "Maximum Sum of a Distinct Fixed Window" }
+summary:
+  zh: 在所有长度为 k 且元素互不相同的连续窗口中，求最大和；没有这样的窗口时返回 0。
+  en: Among windows of length k whose elements are all distinct, return the largest sum, or 0 when none exists.
+statement:
+  zh: |-
+    给定正整数数组 `nums` 和整数 `k`，考虑所有长度恰好为 `k` 的连续子数组。只有当子数组中的元素**互不相同**时，它才计入候选。
+
+    返回候选子数组的最大元素和；如果没有任何候选，返回 0。
+  en: |-
+    Given an array of positive integers `nums` and an integer `k`, consider every contiguous subarray of length exactly `k`. A subarray qualifies only if its elements are **all distinct**.
+
+    Return the largest sum of a qualifying subarray, or 0 if none qualifies.
+difficulty: medium
+skills: [fixed sliding window, window frequency table]
+differences:
+  - category: reasoning
+    description:
+      zh: 除了维护窗口和，还要在窗口滑动时增量维护“窗口内有没有重复值”。
+      en: Besides the window sum, the window must incrementally track whether it contains a repeated value.
+  - category: output
+    description:
+      zh: 返回满足条件的最大和（整数），没有合格窗口时返回 0，而不是平均值。
+      en: Return the largest qualifying sum as an integer, or 0 when no window qualifies, instead of an average.
+transfer:
+  zh: 定长窗口“加入一个、移出一个”的增量更新保持不变；新增的状态是一个计数表和“重复值个数”，它们同样可以在每一步 O(1) 更新。
+  en: "The fixed-window update of adding one element and removing one stays the same; the new state is a count table plus the number of duplicated values, both updated in O(1) per step."
+entry: { python: maxDistinctWindowSum, typescript: maxDistinctWindowSum }
+params:
+  - { name: nums, type: "int[]" }
+  - { name: k, type: int }
+returns: int
+comparator: { kind: exact }
+perCaseMs: 1000
+inputs:
+  - { type: "int[]", minLength: 1, smallMaxLength: 10, largeLength: 50000, min: 1, max: 30000, smallMin: 1, smallMax: 5 }
+  - { type: int, min: 1, max: 1 }
+constraints:
+  - { zh: "1 ≤ k ≤ n ≤ 5·10⁴，1 ≤ nums[i] ≤ 3·10⁴", en: "1 ≤ k ≤ n ≤ 5·10⁴, 1 ≤ nums[i] ≤ 3·10⁴" }
+examples:
+  - args: [[1, 5, 4, 2, 9, 9, 9], 3]
+    expected: 15
+  - args: [[4, 4, 4], 3]
+    expected: 0
+boundaryCases:
+  - args: [[7], 1]
+  - args: [[2, 2], 1]
+  - args: [[1, 2, 1, 2], 2]
+  - args: [[3, 1, 3], 3]
+hints:
+  - { zh: "定长窗口的和你已经会增量维护了。怎样同样增量地知道窗口里有没有重复？", en: "You can already maintain the window sum. How can you also know, incrementally, whether the window has a repeat?" }
+  - { zh: "维护窗口中每个值的出现次数，以及“出现次数 ≥ 2 的值”有多少个。", en: "Keep a count per value in the window and the number of values whose count is at least 2." }
+  - { zh: "加入/移出元素时更新次数；当次数从 1 变 2 或从 2 变 1 时调整重复计数；重复计数为 0 时用窗口和更新答案。", en: "Update counts when adding and removing; adjust the duplicate counter when a count moves between 1 and 2; when it is 0, update the answer with the window sum." }
