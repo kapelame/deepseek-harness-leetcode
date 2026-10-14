@@ -1,0 +1,20 @@
+id: "convert-sorted-array-to-binary-search-tree"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "将有序数组转换为二叉搜索树", "en": "Convert Sorted Array to Binary Search Tree"}
+difficulty: easy
+topics: ["trees"]
+leetcode: {"frontendId": 108, "title": "Convert Sorted Array to Binary Search Tree", "slug": "convert-sorted-array-to-binary-search-tree", "difficulty": "easy", "tags": ["Array", "Divide and Conquer", "Tree", "Binary Search Tree", "Binary Tree"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "把严格递增的数组转换成一棵高度平衡的二叉搜索树（每个节点左右子树高度差不超过 1）。答案不唯一，任意满足条件的树都算正确。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Convert a strictly increasing array into a height-balanced binary search tree, where no node's subtrees differ in height by more than 1. Any valid tree is accepted. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 10⁴，-10⁴ ≤ nums[i] ≤ 10⁴，严格递增", "en": "1 ≤ n ≤ 10⁴, -10⁴ ≤ nums[i] ≤ 10⁴, strictly increasing"}]
+params: [{"name": "nums", "type": "int[]"}]
+returns: "tree"
+comparator: {"kind": "validator", "name": "balanced-bst-same-inorder"}
+entry: {"python": "sortedArrayToBST", "typescript": "sortedArrayToBST"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "smallMaxLength": 9, "largeLength": 5000, "min": -10000, "max": 10000, "sorted": "asc", "distinct": true}]
+hints: [{"zh": "为了平衡，根应该选哪个元素？", "en": "To stay balanced, which element should be the root?"}, {"zh": "选中间元素作根，左半部分构成左子树，右半部分构成右子树。", "en": "Pick the middle element as the root; the left half forms the left subtree and the right half the right subtree."}, {"zh": "对两半递归同样的过程；用下标区间避免复制数组。", "en": "Recurse on both halves, passing index ranges instead of copying."}]
+solution: {"explanation": {"zh": "分治：中点为根，左右两半递归建树，两侧节点数相差至多 1，高度自然平衡。时间 O(n)，空间 O(log n)。", "en": "Divide and conquer: the middle is the root and both halves recurse; the sides differ by at most one node, so the tree is balanced. O(n) time, O(log n) space."}}
+examples: [{"id": "ex-1", "args": [[-10, -3, 0, 5, 9]], "expected": [0, -10, 5, null, -3, null, 9]}, {"id": "ex-2", "args": [[1, 3]], "expected": [1, null, 3]}]
+boundaryCases: [{"args": [[0]]}, {"args": [[1, 2]]}, {"args": [[-1, 0, 1]]}, {"args": [[-10000, 10000]]}]

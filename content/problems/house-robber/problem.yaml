@@ -1,0 +1,20 @@
+id: "house-robber"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "打家劫舍", "en": "House Robber"}
+difficulty: medium
+topics: ["dynamic-programming"]
+leetcode: {"frontendId": 198, "title": "House Robber", "slug": "house-robber", "difficulty": "medium", "tags": ["Array", "Dynamic Programming"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "沿街的每间房子里有一定的钱，相邻两间房子不能都偷。求最多能偷到多少钱。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Each house on a street holds some money and no two adjacent houses may both be robbed; return the maximum total. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 100，0 ≤ nums[i] ≤ 400", "en": "1 ≤ n ≤ 100, 0 ≤ nums[i] ≤ 400"}]
+params: [{"name": "nums", "type": "int[]"}]
+returns: "int"
+comparator: {"kind": "exact"}
+entry: {"python": "rob", "typescript": "rob"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "maxLength": 100, "smallMaxLength": 9, "largeLength": 100, "min": 0, "max": 400, "smallMin": 0, "smallMax": 9}]
+hints: [{"zh": "对第 i 间房只有两种选择：偷或不偷。", "en": "For house i there are only two choices: rob it or not."}, {"zh": "偷：前 i-2 间的最优 + nums[i]；不偷：前 i-1 间的最优。", "en": "Rob: best of the first i-2 houses + nums[i]; skip: best of the first i-1."}, {"zh": "dp[i] = max(dp[i-1], dp[i-2] + nums[i])，只依赖前两个值，可用两个变量滚动。", "en": "dp[i] = max(dp[i-1], dp[i-2] + nums[i]) depends on two values, so roll two variables."}]
+solution: {"explanation": {"zh": "线性 DP，状态为前 i 间房的最优值。时间 O(n)，空间 O(1)。", "en": "Linear DP over the best value of the first i houses. O(n) time, O(1) space."}}
+examples: [{"id": "ex-1", "args": [[1, 2, 3, 1]], "expected": 4}, {"id": "ex-2", "args": [[2, 7, 9, 3, 1]], "expected": 12}]
+boundaryCases: [{"args": [[0]]}, {"args": [[5]]}, {"args": [[1, 2]]}, {"args": [[2, 1, 1, 2]]}, {"args": [[400, 0, 0, 400]]}]

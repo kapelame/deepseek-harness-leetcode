@@ -1,0 +1,20 @@
+id: "reverse-linked-list"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "反转链表", "en": "Reverse Linked List"}
+difficulty: easy
+topics: ["linked-list"]
+leetcode: {"frontendId": 206, "title": "Reverse Linked List", "slug": "reverse-linked-list", "difficulty": "easy", "tags": ["Linked List", "Recursion"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "反转一个单链表，返回新的头节点。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Reverse a singly linked list and return the new head. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "0 ≤ 节点数 ≤ 5000，-5000 ≤ Node.val ≤ 5000", "en": "0 ≤ nodes ≤ 5000, -5000 ≤ Node.val ≤ 5000"}]
+params: [{"name": "head", "type": "linked-list"}]
+returns: "linked-list"
+comparator: {"kind": "exact"}
+entry: {"python": "reverseList", "typescript": "reverseList"}
+perCaseMs: 1000
+inputs: [{"type": "linked-list", "minLength": 0, "smallMaxLength": 8, "largeLength": 5000, "min": -5000, "max": 5000, "smallMin": -9, "smallMax": 9}]
+hints: [{"zh": "反转后，每个节点的 next 应该指向谁？", "en": "After reversal, where should each node's next point?"}, {"zh": "改写 cur.next 之前，先用变量保存原来的 cur.next，否则后面就丢了。", "en": "Save the old cur.next before overwriting it, or the rest of the list is lost."}, {"zh": "维护 prev 和 cur：nxt = cur.next；cur.next = prev；prev = cur；cur = nxt。", "en": "Keep prev and cur: nxt = cur.next; cur.next = prev; prev = cur; cur = nxt."}]
+solution: {"explanation": {"zh": "迭代地把每个节点的 next 指向前一个节点，prev 最终就是新头。时间 O(n)，空间 O(1)。", "en": "Iteratively point each node's next at the previous node; prev ends as the new head. O(n) time, O(1) space."}}
+examples: [{"id": "ex-1", "args": [[1, 2, 3, 4, 5]], "expected": [5, 4, 3, 2, 1]}, {"id": "ex-2", "args": [[1, 2]], "expected": [2, 1]}, {"id": "ex-3", "args": [[]], "expected": []}]
+boundaryCases: [{"args": [[]]}, {"args": [[1]]}, {"args": [[1, 2]]}, {"args": [[-5000, 5000, 0]]}]

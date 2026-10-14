@@ -1,0 +1,20 @@
+id: "search-a-2d-matrix-ii"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "搜索二维矩阵 II", "en": "Search a 2D Matrix II"}
+difficulty: medium
+topics: ["matrix"]
+leetcode: {"frontendId": 240, "title": "Search a 2D Matrix II", "slug": "search-a-2d-matrix-ii", "difficulty": "medium", "tags": ["Array", "Binary Search", "Divide and Conquer", "Matrix"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "矩阵每行从左到右递增、每列从上到下递增，判断 target 是否在矩阵中。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Each row increases left to right and each column increases top to bottom; report whether target is in the matrix. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ m, n ≤ 300，-10⁹ ≤ 元素, target ≤ 10⁹", "en": "1 ≤ m, n ≤ 300, -10⁹ ≤ values, target ≤ 10⁹"}]
+params: [{"name": "matrix", "type": "int[][]"}, {"name": "target", "type": "int"}]
+returns: "bool"
+comparator: {"kind": "exact"}
+entry: {"python": "searchMatrix", "typescript": "searchMatrix"}
+perCaseMs: 1000
+inputs: [{"type": "int[][]", "minLength": 1, "maxLength": 300, "smallMaxLength": 5, "largeLength": 300, "row": {"minLength": 1, "maxLength": 300, "smallMaxLength": 5, "largeLength": 300}, "cell": {"min": 0, "max": 3}}, {"type": "int", "min": -10, "max": 1000}]
+hints: [{"zh": "从哪个角出发，比较一次就能排除一整行或一整列？", "en": "From which corner does one comparison eliminate a whole row or column?"}, {"zh": "从右上角开始：当前值比 target 大就左移（这一列都更大），比 target 小就下移。", "en": "Start at the top-right: if the value is larger than target move left (the column is larger), if smaller move down."}, {"zh": "每一步排除一行或一列，最多走 m + n 步。", "en": "Each step eliminates a row or a column, so at most m + n steps."}]
+solution: {"explanation": {"zh": "从右上角出发的阶梯搜索：比较结果决定排除当前列还是当前行。时间 O(m + n)，空间 O(1)。", "en": "Staircase search from the top-right corner: each comparison discards the current column or row. O(m + n) time, O(1) space."}}
+examples: [{"id": "ex-1", "args": [[[1, 4, 7, 11, 15], [2, 5, 8, 12, 19], [3, 6, 9, 16, 22], [10, 13, 14, 17, 24], [18, 21, 23, 26, 30]], 5], "expected": true}, {"id": "ex-2", "args": [[[1, 4, 7, 11, 15], [2, 5, 8, 12, 19], [3, 6, 9, 16, 22], [10, 13, 14, 17, 24], [18, 21, 23, 26, 30]], 20], "expected": false}]
+boundaryCases: [{"args": [[[1]], 1]}, {"args": [[[1]], 0]}, {"args": [[[1, 4], [2, 5]], 3]}, {"args": [[[-5]], -5]}]

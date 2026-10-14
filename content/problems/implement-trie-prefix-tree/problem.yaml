@@ -1,0 +1,21 @@
+id: "implement-trie-prefix-tree"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "实现 Trie (前缀树)", "en": "Implement Trie (Prefix Tree)"}
+difficulty: medium
+topics: ["design"]
+leetcode: {"frontendId": 208, "title": "Implement Trie (Prefix Tree)", "slug": "implement-trie-prefix-tree", "difficulty": "medium", "tags": ["Hash Table", "String", "Design", "Trie"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "实现前缀树 Trie：insert 插入单词，search 判断单词是否被插入过，startsWith 判断是否有已插入的单词以给定前缀开头。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Implement a prefix tree: insert adds a word, search reports whether a word was inserted, and startsWith reports whether any inserted word begins with a prefix. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ 单词与前缀长度 ≤ 2000，只含小写字母；调用总次数 ≤ 3×10⁴", "en": "1 ≤ word and prefix length ≤ 2000, lowercase letters; at most 3×10⁴ calls"}]
+params: [{"name": "operations", "type": "string[]"}, {"name": "arguments", "type": "json"}]
+returns: "json"
+shape: {"kind": "design", "className": "Trie", "constructorParams": [], "methods": [{"name": "insert", "params": [{"name": "word", "type": "string"}], "returns": "void"}, {"name": "search", "params": [{"name": "word", "type": "string"}], "returns": "bool"}, {"name": "startsWith", "params": [{"name": "prefix", "type": "string"}], "returns": "bool"}]}
+comparator: {"kind": "exact"}
+entry: {"python": "Trie", "typescript": "Trie"}
+perCaseMs: 1000
+inputs: [{"type": "string[]"}, {"type": "json"}]
+hints: [{"zh": "用集合保存单词能实现 search，但 startsWith 会很慢。", "en": "A set of words handles search, but startsWith would be slow."}, {"zh": "每个节点有最多 26 个孩子（按字母索引）和一个“是否为单词结尾”的标记。", "en": "Each node has up to 26 children indexed by letter and an end-of-word flag."}, {"zh": "search 要求走完单词且结尾标记为真；startsWith 只要求能走完前缀。", "en": "search needs to walk the whole word and find the end flag set; startsWith only needs to walk the prefix."}]
+solution: {"explanation": {"zh": "字典树按字符逐层分支，三种操作都只与字符串长度 L 有关，时间 O(L)，空间与插入字符总数成正比。", "en": "A trie branches one character per level, so every operation costs O(L) for a string of length L; space grows with the total inserted characters."}}
+examples: [{"id": "ex-1", "args": [["Trie", "insert", "search", "search", "startsWith", "insert", "search"], [[], ["apple"], ["apple"], ["app"], ["app"], ["app"], ["app"]]], "expected": [null, null, true, false, true, null, true]}]
+boundaryCases: [{"args": [["Trie", "search"], [[], ["a"]]]}, {"args": [["Trie", "insert", "search", "startsWith"], [[], ["a"], ["a"], ["a"]]]}, {"args": [["Trie", "insert", "search", "search", "startsWith"], [[], ["apple"], ["app"], ["apple"], ["app"]]]}, {"args": [["Trie", "insert", "insert", "search", "startsWith"], [[], ["ab"], ["abc"], ["ab"], ["abcd"]]]}]

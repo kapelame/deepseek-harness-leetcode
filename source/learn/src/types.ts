@@ -18,6 +18,8 @@ export type ReviewItemId = Branded<'LearnReviewItemId'>
 export type TutorThreadId = Branded<'LearnTutorThreadId'>
 /** One queued email job. */
 export type EmailJobId = Branded<'LearnEmailJobId'>
+/** Problem-finder run identifier. */
+export type FinderRunId = Branded<'LearnFinderRunId'>
 
 /** Tutoring and explanation language. Code identifiers stay idiomatic in every locale. */
 export type LearnLocale = 'zh' | 'en'
@@ -37,12 +39,53 @@ export type CodeLanguage = 'python' | 'typescript'
  */
 export type ProblemKind = 'leetcode' | 'original' | 'variant' | 'imported'
 
-/** Parameter and return value encodings understood by both drivers. */
+/**
+ * Parameter and return value encodings understood by both drivers. `json`
+ * passes any JSON value through unchanged; design operation arguments and
+ * harness outputs that may be `null` use it.
+ */
 export type ValueType =
   | 'int' | 'float' | 'bool' | 'string'
   | 'int[]' | 'float[]' | 'bool[]' | 'string[]'
   | 'int[][]' | 'string[][]'
-  | 'tree' | 'linked-list'
+  | 'tree' | 'linked-list' | 'linked-list[]'
+  | 'json'
+
+/**
+ * Fixed argument builders for problems whose inputs are object graphs a JSON
+ * value cannot express directly. The drivers own every builder; content and
+ * models only select one by name.
+ * - `linked-list-cycle`: `(values, pos)` builds a list whose tail links to index `pos` (`-1` for none); the
+ *   solution receives `head`; a returned node is reported as its index (`-1` for `null`).
+ * - `linked-list-intersection`: `(intersectVal, listA, listB, skipA, skipB)` builds two lists sharing nodes
+ *   from `listA[skipA]`; the solution receives `(headA, headB)`; a returned node is reported as its value or `null`.
+ * - `random-list`: `([[val, randomIndex | null], ...])` builds a list with random pointers; the solution
+ *   receives `head` and must return a deep copy, reported in the same encoding.
+ * - `tree-node-refs`: `(tree, p, q)` builds the tree and passes the nodes holding values `p` and `q`;
+ *   a returned node is reported as its value.
+ */
+export type HarnessName = 'linked-list-cycle' | 'linked-list-intersection' | 'random-list' | 'tree-node-refs'
+
+/** One method of a design problem. */
+export interface DesignMethod {
+  readonly name: string
+  readonly params: readonly ParamSpec[]
+  readonly returns: ValueType | 'void'
+}
+
+/**
+ * How the judge calls a submission when it is not a plain function returning its answer.
+ * - `in-place`: the solution returns nothing; the judge compares parameter `param` after the call.
+ * - `harness`: arguments go through a named {@link HarnessName} builder.
+ * - `design`: case arguments are `[operations, arguments]` as on LeetCode; the first operation constructs
+ *   `className`, each later one calls a method, and the result lists every output (`null` for constructors
+ *   and `void` methods).
+ */
+export type ProblemShape =
+  | { readonly kind: 'in-place'; readonly param: number }
+  | { readonly kind: 'harness'; readonly name: HarnessName }
+  | { readonly kind: 'design'; readonly className: string; readonly constructorParams: readonly ParamSpec[];
+    readonly methods: readonly DesignMethod[] }
 
 /**
  * Host-side output comparison. Validators are named functions owned by the
@@ -56,7 +99,7 @@ export type Comparator =
   | { readonly kind: 'validator'; readonly name: ValidatorName }
 
 /** Registered alternative-output validators. */
-export type ValidatorName = 'pair-indices-sum' | 'pair-indices-sum-one-based'
+export type ValidatorName = 'pair-indices-sum' | 'pair-indices-sum-one-based' | 'longest-palindromic-substring' | 'balanced-bst-same-inorder'
 
 /** Verified official metadata for a LeetCode problem; never statement text. */
 export interface LeetCodeReference {
@@ -73,7 +116,8 @@ export interface LeetCodeReference {
 
 /** Content origin recorded in storage and shown in the UI. */
 export interface ContentOrigin {
-  readonly source: 'authored' | 'generated' | 'imported'
+  /** `found` marks LeetCode problems added by the problem finder from a learner's description. */
+  readonly source: 'authored' | 'generated' | 'imported' | 'found'
   /** Human author or `model:<provider>/<model>` for generated content. */
   readonly author: string
   readonly createdAt: string
@@ -113,6 +157,8 @@ export interface ProblemView {
   readonly constraints: readonly Localized[]
   readonly params: readonly ParamSpec[]
   readonly returns: ValueType
+  /** Present when the judge does not call a plain function; see {@link ProblemShape}. */
+  readonly shape?: ProblemShape
   readonly comparator: Comparator
   /** Function or method name used by both languages. */
   readonly entry: { readonly python: string; readonly typescript: string }
@@ -147,6 +193,15 @@ export interface ProblemSummary {
   readonly topics: readonly TopicId[]
   readonly leetcode?: Pick<LeetCodeReference, 'frontendId' | 'url' | 'tags'>
   readonly status: ProblemStatus
+}
+
+/** A curated problem list, such as LeetCode Hot 100, grouped the way its publisher groups it. */
+export interface CollectionView {
+  readonly id: string
+  readonly title: Localized
+  /** Where the list and its grouping were verified. */
+  readonly source: { readonly name: string; readonly url: string; readonly verifiedAt: string }
+  readonly groups: readonly { readonly id: string; readonly title: Localized; readonly problems: readonly ProblemId[] }[]
 }
 
 /** Learner progress on one problem. */
@@ -342,6 +397,40 @@ export type TutorStreamFrame =
   | { readonly type: 'progress'; readonly messageId: string; readonly text: string }
   | { readonly type: 'settled'; readonly message: TutorMessage }
 
+/** One step of a problem-finder run, rendered by the client in the learner's language. */
+export type FinderEvent =
+  | { readonly kind: 'search'; readonly at: string; readonly query: string; readonly results: number }
+  | { readonly kind: 'inspect'; readonly at: string; readonly slug: string; readonly frontendId: number; readonly title: string;
+    readonly supported: boolean; readonly reason?: string | undefined }
+  | { readonly kind: 'validating'; readonly at: string; readonly slug: string; readonly attempt: number }
+  | { readonly kind: 'added'; readonly at: string; readonly slug: string; readonly problemId: ProblemId; readonly frontendId: number;
+    readonly title: Localized }
+  | { readonly kind: 'rejected'; readonly at: string; readonly slug: string; readonly checks: readonly { readonly name: string;
+    readonly ok: boolean; readonly detail: string }[] }
+  | { readonly kind: 'skipped'; readonly at: string; readonly slug: string; readonly reason: string }
+  | { readonly kind: 'message'; readonly at: string; readonly text: string }
+  | { readonly kind: 'error'; readonly at: string; readonly message: string }
+
+/** A problem-finder run: the learner's description, its progress, and the problems it added. */
+export interface FinderRunView {
+  readonly id: FinderRunId
+  readonly description: string
+  /** Problems the learner asked for. */
+  readonly count: number
+  readonly status: 'running' | 'completed' | 'failed' | 'cancelled'
+  readonly events: readonly FinderEvent[]
+  readonly added: readonly ProblemId[]
+  readonly error?: string
+  readonly createdAt: string
+  readonly updatedAt: string
+}
+
+/** Live problem-finder frames. */
+export type FinderStreamFrame =
+  | { readonly type: 'snapshot'; readonly run: FinderRunView }
+  | { readonly type: 'event'; readonly event: FinderEvent }
+  | { readonly type: 'settled'; readonly run: FinderRunView }
+
 /** Learner workspace state for one problem. */
 export interface WorkspaceState {
   readonly problem: ProblemView
@@ -525,6 +614,8 @@ export interface LearnOverview {
   readonly lessons: readonly LessonProgress[]
   readonly mastery: readonly TopicMastery[]
   readonly problems: readonly ProblemSummary[]
+  /** Curated problem lists over the built-in problems. */
+  readonly collections: readonly CollectionView[]
   readonly runner: RunnerStatus
   readonly tutor: TutorStatus
   readonly languages: readonly { readonly language: CodeLanguage; readonly label: string; readonly supported: boolean }[]
@@ -545,6 +636,7 @@ export interface VariantSpec {
   readonly entry: { readonly python: string; readonly typescript: string }
   readonly params: readonly ParamSpec[]
   readonly returns: ValueType
+  readonly shape?: ProblemShape | undefined
   readonly comparator: Comparator
   readonly constraints: readonly Localized[]
   readonly examples: readonly { readonly args: readonly JsonValue[]; readonly expected: JsonValue }[]

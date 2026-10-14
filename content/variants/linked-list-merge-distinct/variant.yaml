@@ -1,0 +1,22 @@
+id: "linked-list-merge-distinct"
+version: 1
+suiteVersion: 1
+parentProblemId: "merge-two-sorted-lists"
+topicId: "linked-list"
+title: {"zh": "合并为不重复的有序链表", "en": "Merge into a Sorted List of Distinct Values"}
+summary: {"zh": "合并两个非递减链表，结果中每个值只出现一次。", "en": "Merge two non-decreasing lists so that each value appears only once in the result."}
+statement: {"zh": "给定两个**非递减**的单链表 `list1` 和 `list2`（各自内部也可能有重复值），把它们合并成一个**严格递增**的链表并返回头节点：所有出现过的值都要保留，但每个值只出现一次。", "en": "Given two **non-decreasing** singly linked lists `list1` and `list2` (each may contain repeated values), merge them into one **strictly increasing** list and return its head: every value that appears must be kept, but only once."}
+difficulty: easy
+skills: ["merging sorted sequences", "deduplication"]
+differences: [{"category": "output", "description": {"zh": "输出要求严格递增，跨两条链表和同一条链表内的重复值都要去掉。", "en": "The output must be strictly increasing, dropping duplicates both across and within the lists."}}, {"category": "reasoning", "description": {"zh": "追加节点前要与结果的最后一个值比较。", "en": "Before appending a node, compare it with the last value in the result."}}]
+transfer: {"zh": "“哑节点 + 每次取较小的头”这一合并框架保持不变；新增的判断是：只有当候选值大于结果尾部的值时才追加。", "en": "The merge frame of a dummy node and taking the smaller head carries over; the new check appends a candidate only when it exceeds the result's last value."}
+entry: {"python": "mergeDistinct", "typescript": "mergeDistinct"}
+params: [{"name": "list1", "type": "linked-list"}, {"name": "list2", "type": "linked-list"}]
+returns: "linked-list"
+comparator: {"kind": "exact"}
+perCaseMs: 1000
+inputs: [{"type": "linked-list", "minLength": 0, "smallMaxLength": 6, "largeLength": 1000, "min": -1000, "max": 1000, "smallMin": -3, "smallMax": 3, "sorted": "asc"}, {"type": "linked-list", "minLength": 0, "smallMaxLength": 6, "largeLength": 1000, "min": -1000, "max": 1000, "smallMin": -3, "smallMax": 3, "sorted": "asc"}]
+constraints: [{"zh": "每个链表 0 ≤ 节点数 ≤ 1000，-1000 ≤ Node.val ≤ 1000", "en": "each list has 0 ≤ nodes ≤ 1000, -1000 ≤ Node.val ≤ 1000"}]
+examples: [{"args": [[1, 2, 4], [1, 3, 4]], "expected": [1, 2, 3, 4]}, {"args": [[1, 1, 1], []], "expected": [1]}, {"args": [[], []], "expected": []}]
+boundaryCases: [{"args": [[], [0]]}, {"args": [[2, 2], [2]]}, {"args": [[-1000], [1000]]}, {"args": [[1, 3, 5], [2, 4, 6]]}]
+hints: [{"zh": "先按普通方式合并，想想重复值会出现在结果的什么位置。", "en": "Merge as usual first and notice where duplicates would land in the result."}, {"zh": "结果是有序的，所以重复值一定紧挨着最后追加的节点。", "en": "The result is sorted, so a duplicate always sits right after the last appended node."}, {"zh": "每次取出较小的头节点后，只有当 tail 是哑节点或 tail.val < 它的值时才接上。", "en": "After taking the smaller head, attach it only when tail is the dummy or tail.val is smaller than its value."}]

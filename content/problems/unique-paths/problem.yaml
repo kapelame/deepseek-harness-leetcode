@@ -1,0 +1,20 @@
+id: "unique-paths"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "不同路径", "en": "Unique Paths"}
+difficulty: medium
+topics: ["dynamic-programming"]
+leetcode: {"frontendId": 62, "title": "Unique Paths", "slug": "unique-paths", "difficulty": "medium", "tags": ["Math", "Dynamic Programming", "Combinatorics"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "机器人在 m×n 网格左上角，每次只能向右或向下走一步，求到达右下角的不同路径数。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "A robot at the top-left of an m×n grid moves only right or down; count the distinct paths to the bottom-right. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ m, n ≤ 100，答案 ≤ 2×10⁹", "en": "1 ≤ m, n ≤ 100, answer ≤ 2×10⁹"}]
+params: [{"name": "m", "type": "int"}, {"name": "n", "type": "int"}]
+returns: "int"
+comparator: {"kind": "exact"}
+entry: {"python": "uniquePaths", "typescript": "uniquePaths"}
+perCaseMs: 1000
+inputs: [{"type": "int", "min": 1, "max": 100, "smallMin": 1, "smallMax": 6}, {"type": "int", "min": 1, "max": 100, "smallMin": 1, "smallMax": 6}]
+hints: [{"zh": "到达格子 (i, j) 的最后一步来自上方或左方。", "en": "The last move into (i, j) comes from above or from the left."}, {"zh": "paths[i][j] = paths[i-1][j] + paths[i][j-1]，第一行和第一列都是 1。", "en": "paths[i][j] = paths[i-1][j] + paths[i][j-1], with the first row and column all 1."}, {"zh": "一维数组即可：row[j] += row[j-1]。也可以直接用组合数 C(m+n-2, m-1)。", "en": "One row suffices: row[j] += row[j-1]. Or use the binomial C(m+n-2, m-1)."}]
+solution: {"explanation": {"zh": "网格 DP，用一维数组滚动。时间 O(mn)，空间 O(n)。", "en": "Grid DP with one rolling row. O(mn) time, O(n) space."}}
+examples: [{"id": "ex-1", "args": [3, 7], "expected": 28}, {"id": "ex-2", "args": [3, 2], "expected": 3}]
+boundaryCases: [{"args": [1, 1]}, {"args": [1, 5]}, {"args": [5, 1]}, {"args": [2, 2]}, {"args": [3, 7]}]

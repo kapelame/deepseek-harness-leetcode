@@ -1,0 +1,20 @@
+id: "binary-tree-right-side-view"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "二叉树的右视图", "en": "Binary Tree Right Side View"}
+difficulty: medium
+topics: ["trees"]
+leetcode: {"frontendId": 199, "title": "Binary Tree Right Side View", "slug": "binary-tree-right-side-view", "difficulty": "medium", "tags": ["Tree", "Depth-First Search", "Breadth-First Search", "Binary Tree"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "站在二叉树右侧，从上到下返回每一层能看到的最右边节点的值。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Standing to the right of the tree, return the value of the rightmost node on each level, top to bottom. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "0 ≤ 节点数 ≤ 100，-100 ≤ Node.val ≤ 100", "en": "0 ≤ nodes ≤ 100, -100 ≤ Node.val ≤ 100"}]
+params: [{"name": "root", "type": "tree"}]
+returns: "int[]"
+comparator: {"kind": "exact"}
+entry: {"python": "rightSideView", "typescript": "rightSideView"}
+perCaseMs: 1000
+inputs: [{"type": "tree", "minLength": 0, "maxLength": 100, "smallMaxLength": 9, "largeLength": 100, "min": -100, "max": 100}]
+hints: [{"zh": "每一层只能看到一个节点，它是该层的哪一个？", "en": "Each level shows one node. Which one?"}, {"zh": "层序遍历时，每一层的最后一个节点就是答案。", "en": "In a level-order traversal, the last node of each level is the answer."}, {"zh": "也可以 DFS：先右后左，每到一个新深度时记录第一个遇到的节点。", "en": "Or DFS right child first, recording the first node seen at each new depth."}]
+solution: {"explanation": {"zh": "BFS 按层处理，记录每层最后一个节点。时间 O(n)，空间 O(w)。", "en": "BFS processes level by level and records each level's last node. O(n) time, O(w) space."}}
+examples: [{"id": "ex-1", "args": [[1, 2, 3, null, 5, null, 4]], "expected": [1, 3, 4]}, {"id": "ex-2", "args": [[1, 2, 3, 4, null, null, null, 5]], "expected": [1, 3, 4, 5]}, {"id": "ex-3", "args": [[1, null, 3]], "expected": [1, 3]}, {"id": "ex-4", "args": [[]], "expected": []}]
+boundaryCases: [{"args": [[]]}, {"args": [[1]]}, {"args": [[1, 2]]}, {"args": [[1, 2, 3, 4]]}, {"args": [[1, null, 3]]}]

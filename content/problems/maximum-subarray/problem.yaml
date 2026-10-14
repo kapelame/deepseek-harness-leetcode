@@ -1,0 +1,20 @@
+id: "maximum-subarray"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "最大子数组和", "en": "Maximum Subarray"}
+difficulty: medium
+topics: ["array-techniques"]
+leetcode: {"frontendId": 53, "title": "Maximum Subarray", "slug": "maximum-subarray", "difficulty": "medium", "tags": ["Array", "Divide and Conquer", "Dynamic Programming"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "求和最大的连续非空子数组，返回这个最大和。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Return the largest sum of any non-empty contiguous subarray. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 10⁵，-10⁴ ≤ nums[i] ≤ 10⁴", "en": "1 ≤ n ≤ 10⁵, -10⁴ ≤ nums[i] ≤ 10⁴"}]
+params: [{"name": "nums", "type": "int[]"}]
+returns: "int"
+comparator: {"kind": "exact"}
+entry: {"python": "maxSubArray", "typescript": "maxSubArray"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "smallMaxLength": 10, "largeLength": 20000, "min": -10000, "max": 10000, "smallMin": -6, "smallMax": 6}]
+hints: [{"zh": "以位置 i 结尾的最大子数组，与以 i-1 结尾的最大子数组有什么关系？", "en": "How does the best subarray ending at i relate to the best one ending at i-1?"}, {"zh": "如果以 i-1 结尾的最大和是负数，把它接上只会更差。", "en": "If the best sum ending at i-1 is negative, extending it only hurts."}, {"zh": "cur = max(nums[i], cur + nums[i])，同时用 best 记录所有 cur 的最大值。", "en": "cur = max(nums[i], cur + nums[i]); track best as the maximum cur seen."}]
+solution: {"explanation": {"zh": "Kadane 算法：以当前位置结尾的最大和要么从当前元素重新开始，要么接上前一个最大和。时间 O(n)，空间 O(1)。", "en": "Kadane's algorithm: the best sum ending here either restarts at this element or extends the previous best. O(n) time, O(1) space."}}
+examples: [{"id": "ex-1", "args": [[-2, 1, -3, 4, -1, 2, 1, -5, 4]], "expected": 6}, {"id": "ex-2", "args": [[1]], "expected": 1}, {"id": "ex-3", "args": [[5, 4, -1, 7, 8]], "expected": 23}]
+boundaryCases: [{"args": [[-1]]}, {"args": [[5]]}, {"args": [[-3, -2, -5]]}, {"args": [[1, -1, 1]]}, {"args": [[10000, -10000, 10000]]}]

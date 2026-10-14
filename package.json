@@ -1,6 +1,6 @@
 {
   "name": "dsh-plugin-learn",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Algorithm learning mode for DeepSeek Harness: lessons, Docker-isolated judging, a tutor with progressive hints, variant reviews, and reminder email",
   "license": "MIT",
   "type": "module",
@@ -9,7 +9,13 @@
     "type": "git",
     "url": "git+https://github.com/kapelame/dsh-plugin-learn.git"
   },
-  "keywords": ["dsh", "deepseek-harness", "dsh-plugin", "leetcode", "algorithms"],
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "dsh-plugin",
+    "leetcode",
+    "algorithms"
+  ],
   "main": "lib/index.js",
   "exports": {
     ".": "./lib/index.js",
@@ -28,6 +34,7 @@
     "lib",
     "content",
     "runtime",
+    "skills",
     "locale",
     "icon.svg",
     "cordis.patch.yml"
@@ -47,7 +54,9 @@
     "@deepseek-ai/dsh-typert-protocol": ">=0.2.0-rc.2 <0.3.0"
   },
   "peerDependenciesMeta": {
-    "@deepseek-ai/dsh-credentials": { "optional": true }
+    "@deepseek-ai/dsh-credentials": {
+      "optional": true
+    }
   },
   "dsh": {
     "bundle": {

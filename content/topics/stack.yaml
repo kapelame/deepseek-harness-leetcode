@@ -5,7 +5,7 @@ summary:
   zh: 当新元素总是与“最近还没配对/还没解决”的元素交互时，用栈保存这些待解决元素，每个元素只入栈、出栈一次。
   en: When each new element interacts with the most recent element still waiting to be matched or resolved, keep those waiting elements on a stack; each is pushed and popped once.
 prerequisites: []
-problems: [valid-parentheses, daily-temperatures, evaluate-reverse-polish-notation]
+problems: [valid-parentheses, daily-temperatures, evaluate-reverse-polish-notation, decode-string, largest-rectangle-in-histogram]
 variants: [stack-first-bracket-error, stack-days-since-warmer]
 lesson:
   motivation:

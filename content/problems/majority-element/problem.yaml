@@ -1,0 +1,20 @@
+id: "majority-element"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "多数元素", "en": "Majority Element"}
+difficulty: easy
+topics: ["tricks"]
+leetcode: {"frontendId": 169, "title": "Majority Element", "slug": "majority-element", "difficulty": "easy", "tags": ["Array", "Hash Table", "Divide and Conquer", "Sorting", "Counting", "Boyer–Moore Majority Vote Algorithm"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "返回数组中出现次数超过 ⌊n/2⌋ 的元素（保证存在）。进阶：O(n) 时间、O(1) 空间。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Return the element that appears more than ⌊n/2⌋ times; it always exists. Follow-up: O(n) time, O(1) space. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 5×10⁴，-10⁹ ≤ nums[i] ≤ 10⁹", "en": "1 ≤ n ≤ 5×10⁴, -10⁹ ≤ nums[i] ≤ 10⁹"}]
+params: [{"name": "nums", "type": "int[]"}]
+returns: "int"
+comparator: {"kind": "exact"}
+entry: {"python": "majorityElement", "typescript": "majorityElement"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "smallMaxLength": 9, "largeLength": 20000, "min": -1000000000, "max": 1000000000, "smallMin": -3, "smallMax": 3}]
+hints: [{"zh": "排序后中间的元素一定是众数，但这需要 O(n log n)。", "en": "After sorting, the middle element is the majority, but that costs O(n log n)."}, {"zh": "想象让不同的数两两“抵消”：众数比其他所有数加起来还多，抵消后一定剩下它。", "en": "Imagine cancelling pairs of different values: the majority outnumbers all others combined, so it survives."}, {"zh": "Boyer–Moore 投票：维护候选和计数，计数为 0 时换候选，相同加一、不同减一。", "en": "Boyer–Moore voting: keep a candidate and a count; switch candidates at count 0, add one for a match, subtract one otherwise."}]
+solution: {"explanation": {"zh": "摩尔投票，一次遍历，时间 O(n)，空间 O(1)。", "en": "Boyer–Moore voting in one pass, O(n) time, O(1) space."}}
+examples: [{"id": "ex-1", "args": [[3, 2, 3]], "expected": 3}, {"id": "ex-2", "args": [[2, 2, 1, 1, 1, 2, 2]], "expected": 2}]
+boundaryCases: [{"args": [[1]]}, {"args": [[2, 2, 1]]}, {"args": [[3, 3, 4]]}, {"args": [[-5, -5, -5, 1, 1]]}]

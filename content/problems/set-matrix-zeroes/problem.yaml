@@ -1,0 +1,21 @@
+id: "set-matrix-zeroes"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "矩阵置零", "en": "Set Matrix Zeroes"}
+difficulty: medium
+topics: ["matrix"]
+leetcode: {"frontendId": 73, "title": "Set Matrix Zeroes", "slug": "set-matrix-zeroes", "difficulty": "medium", "tags": ["Array", "Hash Table", "Matrix"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "如果矩阵中某个元素为 0，就把它所在的整行和整列都置为 0。原地修改。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "If an element is 0, set its whole row and column to 0, modifying the matrix in place. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ m, n ≤ 200，-2³¹ ≤ matrix[i][j] ≤ 2³¹-1", "en": "1 ≤ m, n ≤ 200, -2³¹ ≤ matrix[i][j] ≤ 2³¹-1"}]
+params: [{"name": "matrix", "type": "int[][]"}]
+returns: "int[][]"
+shape: {"kind": "in-place", "param": 0}
+comparator: {"kind": "exact"}
+entry: {"python": "setZeroes", "typescript": "setZeroes"}
+perCaseMs: 1000
+inputs: [{"type": "int[][]", "minLength": 1, "maxLength": 200, "smallMaxLength": 5, "largeLength": 150, "row": {"minLength": 1, "maxLength": 200, "smallMaxLength": 5, "largeLength": 150}, "cell": {"min": 0, "max": 40}}]
+hints: [{"zh": "边扫描边置零会污染后面的判断。需要先记住什么？", "en": "Zeroing while scanning corrupts later checks. What must you remember first?"}, {"zh": "记录哪些行、哪些列需要清零，再统一处理。", "en": "Record which rows and columns must be cleared, then clear them."}, {"zh": "O(1) 空间：用第一行、第一列做标记，另用两个变量记录第一行、第一列自身是否含 0。", "en": "O(1) space: use the first row and column as markers, plus two flags for whether they contain a 0 themselves."}]
+solution: {"explanation": {"zh": "先标记再清零：第一行、第一列充当标记数组，两个布尔变量记录它们本身是否需要清零。时间 O(mn)，额外空间 O(1)。", "en": "Mark, then clear: the first row and column hold the markers and two flags remember whether they must be cleared themselves. O(mn) time, O(1) extra space."}}
+examples: [{"id": "ex-1", "args": [[[1, 1, 1], [1, 0, 1], [1, 1, 1]]], "expected": [[1, 0, 1], [0, 0, 0], [1, 0, 1]]}, {"id": "ex-2", "args": [[[0, 1, 2, 0], [3, 4, 5, 2], [1, 3, 1, 5]]], "expected": [[0, 0, 0, 0], [0, 4, 5, 0], [0, 3, 1, 0]]}]
+boundaryCases: [{"args": [[[0]]]}, {"args": [[[1]]]}, {"args": [[[1, 0], [1, 1]]]}, {"args": [[[0, 1, 2], [3, 4, 5]]]}, {"args": [[[1], [0], [1]]]}]

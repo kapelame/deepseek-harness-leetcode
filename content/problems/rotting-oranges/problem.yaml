@@ -1,0 +1,20 @@
+id: "rotting-oranges"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "腐烂的橘子", "en": "Rotting Oranges"}
+difficulty: medium
+topics: ["graph"]
+leetcode: {"frontendId": 994, "title": "Rotting Oranges", "slug": "rotting-oranges", "difficulty": "medium", "tags": ["Array", "Breadth-First Search", "Matrix"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "网格中 0 为空、1 为新鲜橘子、2 为腐烂橘子。每分钟，腐烂橘子会让上下左右相邻的新鲜橘子腐烂。返回所有橘子都腐烂所需的最少分钟数；不可能则返回 -1。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "In a grid, 0 is empty, 1 a fresh orange, and 2 a rotten one. Each minute, rotten oranges rot their fresh neighbors up, down, left, and right. Return the minutes until no fresh orange remains, or -1 if that never happens. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ m, n ≤ 10，grid[i][j] ∈ {0, 1, 2}", "en": "1 ≤ m, n ≤ 10, grid[i][j] ∈ {0, 1, 2}"}]
+params: [{"name": "grid", "type": "int[][]"}]
+returns: "int"
+comparator: {"kind": "exact"}
+entry: {"python": "orangesRotting", "typescript": "orangesRotting"}
+perCaseMs: 1000
+inputs: [{"type": "int[][]", "minLength": 1, "maxLength": 10, "smallMaxLength": 4, "largeLength": 10, "row": {"minLength": 1, "maxLength": 10, "smallMaxLength": 4, "largeLength": 10}, "cell": {"min": 0, "max": 2}}]
+hints: [{"zh": "所有腐烂橘子同时向外扩散。这是哪种搜索？", "en": "All rotten oranges spread at the same time. Which search is that?"}, {"zh": "多源 BFS：把所有初始腐烂的橘子一起放进队列，按层扩散，层数就是分钟数。", "en": "Multi-source BFS: start with every rotten orange in the queue and spread level by level; the levels are minutes."}, {"zh": "BFS 结束后若仍有新鲜橘子，返回 -1；没有新鲜橘子时答案为 0。", "en": "If a fresh orange remains after the BFS, return -1; with no fresh oranges at all the answer is 0."}]
+solution: {"explanation": {"zh": "多源 BFS 按层推进，层数即时间，最后检查是否还有新鲜橘子。时间 O(mn)，空间 O(mn)。", "en": "Multi-source BFS advances level by level, levels being minutes, then checks for remaining fresh oranges. O(mn) time and space."}}
+examples: [{"id": "ex-1", "args": [[[2, 1, 1], [1, 1, 0], [0, 1, 1]]], "expected": 4}, {"id": "ex-2", "args": [[[2, 1, 1], [0, 1, 1], [1, 0, 1]]], "expected": -1}, {"id": "ex-3", "args": [[[0, 2]]], "expected": 0}]
+boundaryCases: [{"args": [[[0]]]}, {"args": [[[1]]]}, {"args": [[[2]]]}, {"args": [[[2, 1]]]}, {"args": [[[1, 0, 2]]]}, {"args": [[[2, 1, 1], [0, 1, 1], [1, 0, 1]]]}]

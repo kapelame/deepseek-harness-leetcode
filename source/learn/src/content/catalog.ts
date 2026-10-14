@@ -9,12 +9,12 @@ import { join } from 'node:path'
 import yaml from 'js-yaml'
 import { brandString } from '@deepseek-ai/dsh-brand'
 import type {
-  CodeLanguage, Comparator, ContentOrigin, Difficulty, LeetCodeReference, Localized, ParamSpec, ProblemId,
+  CodeLanguage, CollectionView, Comparator, ContentOrigin, Difficulty, LeetCodeReference, Localized, ParamSpec, ProblemId, ProblemShape,
   ProblemKind, ProblemView, TopicId, TopicView, ValueType, VariantDifference, VisibleCase,
 } from '../types.ts'
 import { composeGenerator, deriveStarters, domainMismatch } from './generation.ts'
 import {
-  matchesValueType, problemFileSchema, suiteFileSchema, topicFileSchema, variantFileSchema,
+  collectionFileSchema, matchesValueType, problemFileSchema, suiteFileSchema, topicFileSchema, variantFileSchema,
   type InputDomain, type ProblemFile, type SuiteFile, type VariantFile,
 } from './schema.ts'
 
@@ -61,6 +61,7 @@ export interface ProblemDefinition {
   readonly constraints: readonly Localized[]
   readonly params: readonly ParamSpec[]
   readonly returns: ValueType
+  readonly shape?: ProblemShape
   readonly comparator: Comparator
   readonly entry: { readonly python: string; readonly typescript: string }
   readonly starter: Readonly<Record<CodeLanguage, string>>
@@ -94,6 +95,8 @@ export interface SeedInputs {
 export interface Curriculum {
   readonly topics: readonly TopicView[]
   readonly problems: ReadonlyMap<ProblemId, ProblemDefinition>
+  /** Curated lists over the problems above. */
+  readonly collections: readonly CollectionView[]
   /** Seed variants per topic, in authored order. */
   readonly seedVariants: ReadonlyMap<TopicId, readonly ProblemId[]>
 }
@@ -120,8 +123,8 @@ async function readMutants(directory: string): Promise<string[]> {
 }
 
 async function startersOf(directory: string, entry: Readonly<Record<CodeLanguage, string>>, params: readonly ParamSpec[],
-  returns: ValueType, style: 'method' | 'function'): Promise<Record<CodeLanguage, string>> {
-  const derived = deriveStarters(entry, params, returns, style)
+  returns: ValueType, style: 'method' | 'function', shape: ProblemShape | undefined): Promise<Record<CodeLanguage, string>> {
+  const derived = deriveStarters(entry, params, returns, style, shape)
   return {
     python: await readOptional(join(directory, 'starter.py')) ?? derived.python,
     typescript: await readOptional(join(directory, 'starter.ts')) ?? derived.typescript,
@@ -238,6 +241,7 @@ export function problemView(definition: ProblemDefinition, revealVariant: boolea
     constraints: definition.constraints,
     params: definition.params,
     returns: definition.returns,
+    ...definition.shape === undefined ? {} : { shape: definition.shape },
     comparator: definition.comparator,
     entry: definition.entry,
     starter: definition.starter,
@@ -277,9 +281,10 @@ async function loadProblem(root: string, id: string, requireSuites: boolean): Pr
     constraints: file.constraints,
     params: file.params,
     returns: file.returns,
+    ...file.shape === undefined ? {} : { shape: file.shape },
     comparator: file.comparator,
     entry: file.entry,
-    starter: await startersOf(directory, file.entry, file.params, file.returns, 'method'),
+    starter: await startersOf(directory, file.entry, file.params, file.returns, 'method', file.shape),
     perCaseMs: file.perCaseMs,
     hints: file.hints,
     solution: { explanation: file.solution.explanation, python: await readOptional(join(directory,
@@ -320,9 +325,10 @@ async function loadVariant(root: string, id: string, requireSuites: boolean): Pr
     constraints: file.constraints,
     params: file.params,
     returns: file.returns,
+    ...file.shape === undefined ? {} : { shape: file.shape },
     comparator: file.comparator,
     entry: file.entry,
-    starter: await startersOf(directory, file.entry, file.params, file.returns, 'function'),
+    starter: await startersOf(directory, file.entry, file.params, file.returns, 'function', file.shape),
     perCaseMs: file.perCaseMs,
     hints: file.hints,
     solution: { explanation: file.transfer, python: reference },
@@ -408,5 +414,27 @@ export async function loadCurriculum(root: string, requireSuites = true): Promis
     }
   }
   topics.sort((left, right) => left.order - right.order)
-  return { topics, problems, seedVariants }
+  const collections: CollectionView[] = []
+  const collectionNames = (await readdir(join(root, 'collections')).catch((error: unknown) => {
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') return []
+    throw error
+  })).filter(name => name.endsWith('.yaml')).sort()
+  for (const name of collectionNames) {
+    const path = join(root, 'collections', name)
+    const parsed = collectionFileSchema.safeParse(await readYaml(path))
+    if (!parsed.success) fail(path, parsed.error.message)
+    const file = parsed.data
+    if (`${file.id}.yaml` !== name) fail(path, 'id does not match the file name')
+    const seen = new Set<string>()
+    for (const group of file.groups) {
+      for (const problem of group.problems) {
+        if (!problems.has(brandString<ProblemId>(problem))) fail(path, `problem ${problem} is not in any topic`)
+        if (seen.has(problem)) fail(path, `problem ${problem} is listed twice`)
+        seen.add(problem)
+      }
+    }
+    collections.push({ id: file.id, title: file.title, source: file.source,
+      groups: file.groups.map(group => ({ id: group.id, title: group.title, problems: group.problems.map(item => brandString<ProblemId>(item)) })) })
+  }
+  return { topics, problems, seedVariants, collections }
 }

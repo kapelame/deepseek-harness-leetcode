@@ -1,0 +1,20 @@
+id: "sort-list"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "排序链表", "en": "Sort List"}
+difficulty: medium
+topics: ["linked-list"]
+leetcode: {"frontendId": 148, "title": "Sort List", "slug": "sort-list", "difficulty": "medium", "tags": ["Linked List", "Two Pointers", "Divide and Conquer", "Sorting", "Merge Sort"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "把链表按升序排序，返回排序后的头节点。要求 O(n log n) 时间。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Sort the linked list in ascending order and return its head, in O(n log n) time. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "0 ≤ 节点数 ≤ 5×10⁴，-10⁵ ≤ Node.val ≤ 10⁵", "en": "0 ≤ nodes ≤ 5×10⁴, -10⁵ ≤ Node.val ≤ 10⁵"}]
+params: [{"name": "head", "type": "linked-list"}]
+returns: "linked-list"
+comparator: {"kind": "exact"}
+entry: {"python": "sortList", "typescript": "sortList"}
+perCaseMs: 1000
+inputs: [{"type": "linked-list", "minLength": 0, "smallMaxLength": 10, "largeLength": 20000, "min": -100000, "max": 100000, "smallMin": -9, "smallMax": 9}]
+hints: [{"zh": "哪种 O(n log n) 排序适合链表，不需要随机访问？", "en": "Which O(n log n) sort suits a linked list, since it needs no random access?"}, {"zh": "归并排序：用快慢指针找中点断开，分别排序两半，再合并两个有序链表。", "en": "Merge sort: split at the middle with slow and fast pointers, sort both halves, and merge the two sorted lists."}, {"zh": "自底向上的归并可以做到 O(1) 额外空间：按 1、2、4… 的长度两两合并。", "en": "Bottom-up merge sort reaches O(1) extra space: merge runs of length 1, 2, 4, and so on."}]
+solution: {"explanation": {"zh": "链表归并排序：拆分只需快慢指针，合并复用“合并两个有序链表”。时间 O(n log n)，递归栈 O(log n)。", "en": "Linked-list merge sort: splitting uses slow and fast pointers and merging reuses the two-sorted-lists merge. O(n log n) time, O(log n) recursion."}}
+examples: [{"id": "ex-1", "args": [[4, 2, 1, 3]], "expected": [1, 2, 3, 4]}, {"id": "ex-2", "args": [[-1, 5, 3, 4, 0]], "expected": [-1, 0, 3, 4, 5]}, {"id": "ex-3", "args": [[]], "expected": []}]
+boundaryCases: [{"args": [[]]}, {"args": [[1]]}, {"args": [[2, 1]]}, {"args": [[1, 1, 1]]}, {"args": [[3, -1, 2, -1]]}]

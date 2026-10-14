@@ -2,8 +2,10 @@
 import type { JsonValue } from '@deepseek-ai/dsh-util-values'
 import type { DatabaseSync, SQLInputValue } from 'node:sqlite'
 import { brandString } from '@deepseek-ai/dsh-brand'
+import { z } from 'zod'
 import type {
   AttemptId, AttemptView, CodeLanguage, ContentOrigin, VariantSpec, VariantValidation, EmailJobId, EmailJobView, ExecutionVerdict,
+  FinderRunId, FinderRunView,
   HintLevel, HintView, LearnerId,
   LearnerSettings, LessonProgress, LessonStage, Localized, ProblemId, ReviewEventView, ReviewItemId, SupportLevel, TopicId,
   TutorAssessment, TutorMessage, TutorThreadId,
@@ -11,7 +13,7 @@ import type {
 import type { SuiteCase } from '../content/catalog.ts'
 import { transaction } from './schema.ts'
 import { parseJson } from '../json.ts'
-import { contentOriginSchema, validationSchema, variantSpecSchema } from '../content/schema.ts'
+import { contentOriginSchema, foundProblemSpecSchema, validationSchema, variantSpecSchema, type FoundProblemSpec } from '../content/schema.ts'
 
 type Row = Record<string, SQLInputValue>
 
@@ -104,7 +106,7 @@ export interface StoredProblemRow {
   readonly topicId: TopicId
   readonly status: 'validated' | 'quarantined'
   /** Validated specification; absent for a quarantined candidate that failed the schema. */
-  readonly spec: VariantSpec | undefined
+  readonly spec: VariantSpec | FoundProblemSpec | undefined
   /** Raw candidate kept for quarantined rows whose specification failed the schema. */
   readonly raw?: JsonValue
   readonly validation: VariantValidation
@@ -123,10 +125,27 @@ export interface GradedSubmission {
 }
 
 /** Parse a stored specification; a quarantined raw candidate yields no spec. */
-function storedSpec(value: JsonValue): { spec: VariantSpec | undefined; raw?: JsonValue } {
+function storedSpec(value: JsonValue): { spec: VariantSpec | FoundProblemSpec | undefined; raw?: JsonValue } {
+  const found = foundProblemSpecSchema.safeParse(value)
+  if (found.success) return { spec: found.data }
   const parsed = variantSpecSchema.safeParse(value)
   return parsed.success ? { spec: parsed.data } : { spec: undefined, raw: value }
 }
+
+const localizedSchema = z.object({ zh: z.string(), en: z.string() })
+const finderEventSchema = z.array(z.discriminatedUnion('kind', [
+  z.object({ kind: z.literal('search'), at: z.string(), query: z.string(), results: z.number() }),
+  z.object({ kind: z.literal('inspect'), at: z.string(), slug: z.string(), frontendId: z.number(), title: z.string(), supported: z.boolean(),
+    reason: z.string().optional() }),
+  z.object({ kind: z.literal('validating'), at: z.string(), slug: z.string(), attempt: z.number() }),
+  z.object({ kind: z.literal('added'), at: z.string(), slug: z.string(), problemId: z.string().transform(id => brandString<ProblemId>(id)),
+    frontendId: z.number(), title: localizedSchema }),
+  z.object({ kind: z.literal('rejected'), at: z.string(), slug: z.string(), checks: z.array(z.object({ name: z.string(), ok: z.boolean(),
+    detail: z.string() })) }),
+  z.object({ kind: z.literal('skipped'), at: z.string(), slug: z.string(), reason: z.string() }),
+  z.object({ kind: z.literal('message'), at: z.string(), text: z.string() }),
+  z.object({ kind: z.literal('error'), at: z.string(), message: z.string() }),
+]))
 
 /** SQL row values as JSON: integers stay numbers, blobs become base64 text. */
 function jsonRows(rows: Row[]): Record<string, JsonValue>[] {
@@ -134,6 +153,21 @@ function jsonRows(rows: Row[]): Record<string, JsonValue>[] {
     key, typeof value === 'bigint' ? Number(value) : ArrayBuffer.isView(value) ? Buffer.from(value.buffer, value.byteOffset,
       value.byteLength).toString('base64') : value,
   ])))
+}
+
+function finderRunFromRow(row: Row): FinderRunView {
+  const error = optionalText(row, 'error')
+  return {
+    id: brandString<FinderRunId>(text(row, 'id')),
+    description: text(row, 'description'),
+    count: Number(row['count']),
+    status: text(row, 'status') as FinderRunView['status'],
+    events: finderEventSchema.parse(parseJson(text(row, 'events_json'))),
+    added: (z.array(z.string()).parse(parseJson(text(row, 'added_json')))).map(id => brandString<ProblemId>(id)),
+    ...error === undefined ? {} : { error },
+    createdAt: text(row, 'created_at'),
+    updatedAt: text(row, 'updated_at'),
+  }
 }
 
 function attemptFromRow(row: Row): AttemptView {
@@ -1097,7 +1131,7 @@ export class LearnStore {
    */
   exportRows(learner: LearnerId): Record<string, Record<string, JsonValue>[]> {
     const scoped = ['learners', 'lesson_progress', 'drafts', 'notes', 'attempts', 'hint_events', 'mistake_tags', 'tutor_threads',
-      'problems', 'review_items', 'review_events', 'email_jobs']
+      'problems', 'review_items', 'review_events', 'email_jobs', 'finder_runs']
     const tables: Record<string, Record<string, JsonValue>[]> = {}
     for (const table of scoped) {
       const column = table === 'learners' ? 'id' : 'learner_id'
@@ -1111,6 +1145,45 @@ export class LearnStore {
     tables['email_settings'] = jsonRows(this.all('SELECT learner_id, address, verified_at, opt_in, paused, delivery_hour, updated_at FROM email_settings WHERE learner_id = ?', learner))
     tables['email_deliveries'] = jsonRows(this.all('SELECT d.id, d.job_id, d.transport, d.status, d.recipient, d.subject, d.created_at FROM email_deliveries d JOIN email_jobs j ON j.id = d.job_id WHERE j.learner_id = ?', learner))
     return tables
+  }
+
+  /**
+   * Record a new problem-finder run.
+   * @param learner - learner.
+   * @param run - the run as started.
+   */
+  insertFinderRun(learner: LearnerId, run: FinderRunView): void {
+    this.run(`INSERT INTO finder_runs (id, learner_id, description, count, status, events_json, added_json, error, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, run.id, learner, run.description, run.count, run.status, JSON.stringify(run.events),
+    JSON.stringify(run.added), run.error ?? null, run.createdAt, run.updatedAt)
+  }
+
+  /**
+   * Replace the mutable fields of a problem-finder run.
+   * @param run - current run state.
+   */
+  updateFinderRun(run: FinderRunView): void {
+    this.run('UPDATE finder_runs SET status = ?, events_json = ?, added_json = ?, error = ?, updated_at = ? WHERE id = ?', run.status,
+      JSON.stringify(run.events), JSON.stringify(run.added), run.error ?? null, run.updatedAt, run.id)
+  }
+
+  /**
+   * Recent problem-finder runs, newest first.
+   * @param learner - learner.
+   * @param limit - maximum rows.
+   * @returns the runs.
+   */
+  finderRuns(learner: LearnerId, limit: number): FinderRunView[] {
+    return this.all('SELECT * FROM finder_runs WHERE learner_id = ? ORDER BY created_at DESC LIMIT ?', learner, limit).map(finderRunFromRow)
+  }
+
+  /**
+   * Mark runs left `running` by an interrupted Host as failed.
+   * @param now - ISO timestamp.
+   */
+  interruptFinderRuns(now: string): void {
+    this.run(`UPDATE finder_runs SET status = 'failed', error = 'The Host stopped while this run was in progress.', updated_at = ?
+      WHERE status = 'running'`, now)
   }
 
   /**

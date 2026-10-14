@@ -1,0 +1,20 @@
+id: "letter-combinations-of-a-phone-number"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "电话号码的字母组合", "en": "Letter Combinations of a Phone Number"}
+difficulty: medium
+topics: ["backtracking"]
+leetcode: {"frontendId": 17, "title": "Letter Combinations of a Phone Number", "slug": "letter-combinations-of-a-phone-number", "difficulty": "medium", "tags": ["Hash Table", "String", "Backtracking"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "电话按键 2–9 各对应几个字母（2→abc，3→def，…，7→pqrs，9→wxyz）。给定数字串，返回它能表示的所有字母组合，顺序不限；输入为空时返回空列表。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Phone keys 2–9 map to letters (2→abc, 3→def, …, 7→pqrs, 9→wxyz). Return every letter combination the digits can spell, in any order; an empty input gives an empty list. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "0 ≤ |digits| ≤ 4，digits[i] ∈ ['2', '9']", "en": "0 ≤ |digits| ≤ 4, digits[i] in ['2', '9']"}]
+params: [{"name": "digits", "type": "string"}]
+returns: "string[]"
+comparator: {"kind": "unordered"}
+entry: {"python": "letterCombinations", "typescript": "letterCombinations"}
+perCaseMs: 1000
+inputs: [{"type": "string", "minLength": 0, "maxLength": 4, "smallMaxLength": 3, "largeLength": 4, "alphabet": "23456789"}]
+hints: [{"zh": "每一位数字提供几个候选字母，组合数是它们的乘积。", "en": "Each digit offers a few letters; the count of combinations is their product."}, {"zh": "按位置递归：第 i 层从第 i 个数字的字母中选一个。", "en": "Recurse by position: level i picks one letter of digit i."}, {"zh": "注意空输入要返回 []，而不是 [\"\"]。", "en": "Note that empty input returns [], not [\"\"]."}]
+solution: {"explanation": {"zh": "回溯逐位选择字母，共 ∏(候选数) 个结果，时间 O(4ⁿ·n)。", "en": "Backtracking picks one letter per digit, producing the product of the choices, O(4ⁿ·n) time."}}
+examples: [{"id": "ex-1", "args": ["23"], "expected": ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"]}, {"id": "ex-2", "args": ["2"], "expected": ["a", "b", "c"]}]
+boundaryCases: [{"args": [""]}, {"args": ["2"]}, {"args": ["7"]}, {"args": ["79"]}]

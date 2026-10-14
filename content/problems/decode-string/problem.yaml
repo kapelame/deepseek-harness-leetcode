@@ -1,0 +1,20 @@
+id: "decode-string"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "字符串解码", "en": "Decode String"}
+difficulty: medium
+topics: ["stack"]
+leetcode: {"frontendId": 394, "title": "Decode String", "slug": "decode-string", "difficulty": "medium", "tags": ["String", "Stack", "Recursion"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "解码形如 k[encoded] 的字符串：方括号内的内容重复 k 次，可以嵌套，如 \"3[a2[c]]\" → \"accaccacc\"。输入保证合法。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Decode strings of the form k[encoded], where the bracketed part repeats k times and may nest, for example \"3[a2[c]]\" → \"accaccacc\". Inputs are always valid. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ |s| ≤ 30，1 ≤ k ≤ 300，输出长度 ≤ 10⁵", "en": "1 ≤ |s| ≤ 30, 1 ≤ k ≤ 300, output length ≤ 10⁵"}]
+params: [{"name": "s", "type": "string"}]
+returns: "string"
+comparator: {"kind": "exact"}
+entry: {"python": "decodeString", "typescript": "decodeString"}
+perCaseMs: 1000
+inputs: [{"type": "string"}]
+hints: [{"zh": "遇到 '[' 时，需要暂时搁置“外层已经拼好的内容和重复次数”。", "en": "On '[', you must set aside the outer text built so far and its repeat count."}, {"zh": "用栈保存 (外层字符串, 次数)；遇到 ']' 时弹出，把当前内容重复后接到外层字符串后面。", "en": "Push (outer string, count); on ']' pop it and append the current text repeated count times."}, {"zh": "数字可能有多位，要累积：num = num * 10 + int(ch)。", "en": "Counts can have several digits: num = num * 10 + int(ch)."}]
+solution: {"explanation": {"zh": "栈保存外层上下文，']' 时展开当前层。时间与输出长度成正比。", "en": "A stack keeps the outer context and ']' expands the current level; time is proportional to the output length."}}
+examples: [{"id": "ex-1", "args": ["3[a]2[bc]"], "expected": "aaabcbc"}, {"id": "ex-2", "args": ["3[a2[c]]"], "expected": "accaccacc"}, {"id": "ex-3", "args": ["2[abc]3[cd]ef"], "expected": "abcabccdcdcdef"}]
+boundaryCases: [{"args": ["a"]}, {"args": ["1[a]"]}, {"args": ["2[ab]"]}, {"args": ["3[a2[c]]"]}, {"args": ["2[abc]3[cd]ef"]}, {"args": ["10[a]"]}]

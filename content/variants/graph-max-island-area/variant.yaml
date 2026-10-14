@@ -1,0 +1,22 @@
+id: "graph-max-island-area"
+version: 1
+suiteVersion: 1
+parentProblemId: "number-of-islands"
+topicId: "graph"
+title: {"zh": "最大的岛屿面积", "en": "Largest Island Area"}
+summary: {"zh": "返回网格中面积最大的岛屿包含的陆地格子数。", "en": "Return the number of land cells in the largest island."}
+statement: {"zh": "给定由 `0`（水）和 `1`（陆地）组成的整数网格 `grid`，上下左右相连的陆地组成一座岛屿。返回面积（格子数）最大的岛屿的面积；没有岛屿时返回 `0`。", "en": "Given an integer grid `grid` of `0` (water) and `1` (land), land cells connected up, down, left, or right form an island. Return the area, in cells, of the largest island, or `0` if there is none."}
+difficulty: medium
+skills: ["flood fill", "connected components"]
+differences: [{"category": "output", "description": {"zh": "从“有几个连通块”变成“最大连通块有多大”，搜索时要累计每块的大小。", "en": "From how many components to how big the largest is, so each search must count its cells."}}, {"category": "input-structure", "description": {"zh": "网格元素为整数 0/1 而不是字符。", "en": "Cells are integers 0/1 instead of characters."}}]
+transfer: {"zh": "“遇到未访问陆地就整块淹没”的连通块搜索保持不变；新增的是在淹没过程中计数，并取所有块的最大值。", "en": "The flood fill that sinks a component when an unvisited land cell is met carries over; the addition is counting during the flood and keeping the maximum."}
+entry: {"python": "maxAreaOfIsland", "typescript": "maxAreaOfIsland"}
+params: [{"name": "grid", "type": "int[][]"}]
+returns: "int"
+comparator: {"kind": "exact"}
+perCaseMs: 1000
+inputs: [{"type": "int[][]", "minLength": 1, "maxLength": 50, "smallMaxLength": 5, "largeLength": 50, "row": {"minLength": 1, "maxLength": 50, "smallMaxLength": 5, "largeLength": 50}, "cell": {"min": 0, "max": 1}}]
+constraints: [{"zh": "1 ≤ m, n ≤ 50，grid[i][j] 为 0 或 1", "en": "1 ≤ m, n ≤ 50, grid[i][j] is 0 or 1"}]
+examples: [{"args": [[[1, 1, 0], [0, 1, 0], [1, 0, 1]]], "expected": 3}, {"args": [[[0, 0], [0, 0]]], "expected": 0}]
+boundaryCases: [{"args": [[[0]]]}, {"args": [[[1]]]}, {"args": [[[1, 0, 1]]]}, {"args": [[[1, 1], [1, 1]]]}, {"args": [[[1], [0], [1], [1]]]}]
+hints: [{"zh": "和数岛屿一样遍历，但这次需要知道每座岛有多少格。", "en": "Traverse as when counting islands, but now each island's size matters."}, {"zh": "让搜索函数返回它淹没的格子数。", "en": "Have the search return how many cells it sank."}, {"zh": "用显式栈 BFS/DFS：每弹出一个陆地格子计数加一，最后与全局最大值比较。", "en": "With an explicit stack, add one per popped land cell and compare with the running maximum at the end."}]

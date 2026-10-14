@@ -1,0 +1,20 @@
+id: "merge-two-sorted-lists"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "合并两个有序链表", "en": "Merge Two Sorted Lists"}
+difficulty: easy
+topics: ["linked-list"]
+leetcode: {"frontendId": 21, "title": "Merge Two Sorted Lists", "slug": "merge-two-sorted-lists", "difficulty": "easy", "tags": ["Linked List", "Recursion"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "把两个升序链表合并成一个升序链表，返回合并后的头节点。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Merge two sorted linked lists into one sorted list and return its head. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "每个链表 0 ≤ 节点数 ≤ 50，-100 ≤ Node.val ≤ 100，均为非递减", "en": "each list has 0 ≤ nodes ≤ 50, -100 ≤ Node.val ≤ 100, both non-decreasing"}]
+params: [{"name": "list1", "type": "linked-list"}, {"name": "list2", "type": "linked-list"}]
+returns: "linked-list"
+comparator: {"kind": "exact"}
+entry: {"python": "mergeTwoLists", "typescript": "mergeTwoLists"}
+perCaseMs: 1000
+inputs: [{"type": "linked-list", "minLength": 0, "smallMaxLength": 6, "largeLength": 50, "min": -100, "max": 100, "smallMin": -5, "smallMax": 5, "sorted": "asc"}, {"type": "linked-list", "minLength": 0, "smallMaxLength": 6, "largeLength": 50, "min": -100, "max": 100, "smallMin": -5, "smallMax": 5, "sorted": "asc"}]
+hints: [{"zh": "每一步，结果链表的下一个节点应该来自哪里？", "en": "At each step, where should the next node of the result come from?"}, {"zh": "比较两条链表的当前头节点，取较小的接到结果尾部。", "en": "Compare the two current heads and append the smaller one to the result."}, {"zh": "用一个哑节点（dummy）简化头部处理；一条链表用完后，把另一条剩余部分整体接上。", "en": "A dummy node simplifies the head; when one list runs out, attach the rest of the other."}]
+solution: {"explanation": {"zh": "哑节点 + 双指针：每次接上较小的头节点，最后接上剩余部分。时间 O(m + n)，空间 O(1)。", "en": "Dummy node plus two pointers: append the smaller head each time, then attach the remainder. O(m + n) time, O(1) space."}}
+examples: [{"id": "ex-1", "args": [[1, 2, 4], [1, 3, 4]], "expected": [1, 1, 2, 3, 4, 4]}, {"id": "ex-2", "args": [[], []], "expected": []}, {"id": "ex-3", "args": [[], [0]], "expected": [0]}]
+boundaryCases: [{"args": [[], []]}, {"args": [[], [0]]}, {"args": [[1], []]}, {"args": [[1, 1], [1]]}, {"args": [[-100], [100]]}]

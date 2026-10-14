@@ -1,0 +1,23 @@
+id: "design-min-queue"
+version: 1
+suiteVersion: 1
+parentProblemId: "min-stack"
+topicId: "design"
+title: {"zh": "支持取最小值的队列", "en": "A Queue with Minimum Lookup"}
+summary: {"zh": "设计队列：push 从队尾加入，pop 从队首移除，getMin 返回队列中的最小值，均摊 O(1)。", "en": "Design a queue: push adds at the back, pop removes from the front, and getMin returns the minimum, all amortized O(1)."}
+statement: {"zh": "实现类 `MinQueue`：\n\n- `push(val)`：把 `val` 加到队尾；\n- `pop()`：移除队首元素；\n- `front()`：返回队首元素；\n- `getMin()`：返回队列中当前的最小值。\n\n`pop`、`front`、`getMin` 只会在队列非空时调用。所有操作要求均摊 O(1)。", "en": "Implement the class `MinQueue`:\n\n- `push(val)` adds `val` at the back;\n- `pop()` removes the front element;\n- `front()` returns the front element;\n- `getMin()` returns the current minimum.\n\n`pop`, `front`, and `getMin` are only called on a non-empty queue. Every operation must run in amortized O(1)."}
+difficulty: medium
+skills: ["monotonic deque", "amortized analysis"]
+differences: [{"category": "input-structure", "description": {"zh": "数据从栈（后进先出）变成队列（先进先出），最先离开的是最早加入的元素。", "en": "The container changes from a stack (LIFO) to a queue (FIFO), so the oldest element leaves first."}}, {"category": "reasoning", "description": {"zh": "“入栈时记下当前最小值”不再成立，因为最小值可能从队首离开；需要单调队列或双栈。", "en": "Recording the minimum at push time no longer works because the minimum can leave from the front; a monotonic deque or two stacks are needed."}}]
+transfer: {"zh": "“维护辅助结构，使最小值始终可直接读取”的思路保留；变化在于删除发生在另一端，因此辅助结构要改成单调递增的双端队列。", "en": "The idea of an auxiliary structure that keeps the minimum directly readable carries over; because removal happens at the other end, the auxiliary structure becomes an increasing deque."}
+entry: {"python": "MinQueue", "typescript": "MinQueue"}
+params: [{"name": "operations", "type": "string[]"}, {"name": "arguments", "type": "json"}]
+returns: "json"
+shape: {"kind": "design", "className": "MinQueue", "constructorParams": [], "methods": [{"name": "push", "params": [{"name": "val", "type": "int"}], "returns": "void"}, {"name": "pop", "params": [], "returns": "void"}, {"name": "front", "params": [], "returns": "int"}, {"name": "getMin", "params": [], "returns": "int"}]}
+comparator: {"kind": "exact"}
+perCaseMs: 1000
+inputs: [{"type": "string[]"}, {"type": "json"}]
+constraints: [{"zh": "-10⁹ ≤ val ≤ 10⁹，调用总次数 ≤ 3×10⁴", "en": "-10⁹ ≤ val ≤ 10⁹, at most 3×10⁴ calls"}]
+examples: [{"args": [["MinQueue", "push", "push", "push", "getMin", "pop", "getMin", "front"], [[], [3], [1], [2], [], [], [], []]], "expected": [null, null, null, null, 1, null, 1, 1]}, {"args": [["MinQueue", "push", "push", "getMin", "pop", "getMin"], [[], [1], [5], [], [], []]], "expected": [null, null, null, 1, null, 5]}]
+boundaryCases: [{"args": [["MinQueue", "push", "getMin", "front"], [[], [7], [], []]]}, {"args": [["MinQueue", "push", "push", "pop", "getMin"], [[], [2], [2], [], []]]}, {"args": [["MinQueue", "push", "pop", "push", "getMin"], [[], [1], [], [9], []]]}]
+hints: [{"zh": "最小值在队首被弹出后，下一个最小值是谁？它一定在队首之后。", "en": "When the minimum leaves from the front, who is the next minimum? It must come after it."}, {"zh": "新元素 x 加入时，队列里比 x 大的旧元素会先于 x 离开，所以它们再也不会成为最小值。", "en": "When x arrives, older elements larger than x leave before x, so they can never be the minimum again."}, {"zh": "维护单调递增的双端队列：push 时从尾部弹出所有 > x 的元素再加入 x；pop 时若队首值等于被移除的值则同时弹出。", "en": "Keep an increasing deque: on push pop every tail element > x, then append x; on pop, remove the deque front when it equals the removed value."}]

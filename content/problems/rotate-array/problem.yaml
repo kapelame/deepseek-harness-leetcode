@@ -1,0 +1,21 @@
+id: "rotate-array"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "轮转数组", "en": "Rotate Array"}
+difficulty: medium
+topics: ["array-techniques"]
+leetcode: {"frontendId": 189, "title": "Rotate Array", "slug": "rotate-array", "difficulty": "medium", "tags": ["Array", "Math", "Two Pointers"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "把数组原地向右轮转 k 步（最后一个元素移到最前面，重复 k 次）。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Rotate the array to the right by k steps in place (the last element moves to the front, k times). (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 10⁵，-2³¹ ≤ nums[i] ≤ 2³¹-1，0 ≤ k ≤ 10⁵", "en": "1 ≤ n ≤ 10⁵, -2³¹ ≤ nums[i] ≤ 2³¹-1, 0 ≤ k ≤ 10⁵"}]
+params: [{"name": "nums", "type": "int[]"}, {"name": "k", "type": "int"}]
+returns: "int[]"
+shape: {"kind": "in-place", "param": 0}
+comparator: {"kind": "exact"}
+entry: {"python": "rotate", "typescript": "rotate"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "smallMaxLength": 8, "largeLength": 20000, "min": -1000, "max": 1000, "smallMin": -9, "smallMax": 9}, {"type": "int", "min": 0, "max": 100000, "smallMin": 0, "smallMax": 12}]
+hints: [{"zh": "k 可能大于数组长度。轮转 n 步之后数组会怎样？", "en": "k may exceed the length. What does rotating by n steps do?"}, {"zh": "轮转后，原来的最后 k 个元素到了最前面。能否用“翻转”做到？", "en": "After rotation, the last k elements come first. Can reversals achieve that?"}, {"zh": "先整体翻转，再分别翻转前 k 个和后 n-k 个，k 先对 n 取模。", "en": "Reverse the whole array, then reverse the first k and the last n-k, with k taken modulo n."}]
+solution: {"explanation": {"zh": "三次翻转：整体翻转后，前 k 个与后 n-k 个各自翻转回正确顺序。时间 O(n)，额外空间 O(1)。", "en": "Three reversals: reverse everything, then reverse the first k and the remaining n-k back into order. O(n) time, O(1) extra space."}}
+examples: [{"id": "ex-1", "args": [[1, 2, 3, 4, 5, 6, 7], 3], "expected": [5, 6, 7, 1, 2, 3, 4]}, {"id": "ex-2", "args": [[-1, -100, 3, 99], 2], "expected": [3, 99, -1, -100]}]
+boundaryCases: [{"args": [[1], 0]}, {"args": [[1], 5]}, {"args": [[1, 2], 3]}, {"args": [[1, 2, 3], 3]}, {"args": [[-1, -100, 3, 99], 2]}]

@@ -1,6 +1,6 @@
 /** Execution request and outcome vocabulary shared by runner backends and the judge. */
 import type { JsonValue } from '@deepseek-ai/dsh-util-values'
-import type { CodeLanguage, ValueType } from '../types.ts'
+import type { CodeLanguage, ProblemShape, ValueType } from '../types.ts'
 
 /** Encodings accepted by the drivers; `json` is reserved for internal generator runs. */
 export type DriverValueType = ValueType | 'json'
@@ -19,6 +19,8 @@ export interface ExecutionRequest {
   readonly entry: string
   readonly params: readonly DriverValueType[]
   readonly returns: DriverValueType
+  /** Calling convention for in-place, harness, and design problems; absent for plain functions. */
+  readonly shape?: ProblemShape
   readonly cases: readonly ExecutionCase[]
   /** Per-case wall-clock limit enforced in the driver (Python) and by the Host deadline. */
   readonly perCaseMs: number

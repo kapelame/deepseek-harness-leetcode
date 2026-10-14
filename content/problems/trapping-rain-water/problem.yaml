@@ -1,0 +1,20 @@
+id: "trapping-rain-water"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "接雨水", "en": "Trapping Rain Water"}
+difficulty: hard
+topics: ["two-pointers"]
+leetcode: {"frontendId": 42, "title": "Trapping Rain Water", "slug": "trapping-rain-water", "difficulty": "hard", "tags": ["Array", "Two Pointers", "Dynamic Programming", "Stack", "Monotonic Stack"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "给定宽度为 1 的柱子高度，计算下雨后柱子之间能接住多少单位的雨水。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Given the heights of bars of width 1, compute how many units of rain water are trapped between them. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 2×10⁴，0 ≤ height[i] ≤ 10⁵", "en": "1 ≤ n ≤ 2×10⁴, 0 ≤ height[i] ≤ 10⁵"}]
+params: [{"name": "height", "type": "int[]"}]
+returns: "int"
+comparator: {"kind": "exact"}
+entry: {"python": "trap", "typescript": "trap"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "smallMaxLength": 10, "largeLength": 20000, "min": 0, "max": 100000, "smallMin": 0, "smallMax": 6}]
+hints: [{"zh": "位置 i 上方的水有多高？它由左右两侧的什么决定？", "en": "How high does water stand above position i? What on its left and right decides that?"}, {"zh": "水位 = min(左侧最高, 右侧最高)，水量 = 水位 - height[i]。可以预先算出前缀最大和后缀最大。", "en": "Level = min(highest on the left, highest on the right); water = level - height[i]. Precompute prefix and suffix maxima."}, {"zh": "双指针优化：维护 leftMax 和 rightMax，较小的一侧可以直接结算，空间降到 O(1)。", "en": "Two-pointer version: keep leftMax and rightMax; the smaller side can be settled immediately, giving O(1) space."}]
+solution: {"explanation": {"zh": "每个位置的水位由两侧最高柱子中较矮者决定。双指针从两端向内，较低一侧的最大值已经确定水位，逐格结算。时间 O(n)，空间 O(1)。", "en": "Each position's level is the lower of the tallest bars on its two sides. Moving two pointers inward, the lower side's maximum already fixes the level, so it is settled cell by cell. O(n) time, O(1) space."}}
+examples: [{"id": "ex-1", "args": [[0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]], "expected": 6}, {"id": "ex-2", "args": [[4, 2, 0, 3, 2, 5]], "expected": 9}]
+boundaryCases: [{"args": [[0]]}, {"args": [[5]]}, {"args": [[2, 0, 2]]}, {"args": [[1, 2, 3, 4]]}, {"args": [[4, 3, 2, 1]]}, {"args": [[3, 0, 0, 0, 3]]}]

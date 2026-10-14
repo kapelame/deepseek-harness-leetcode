@@ -56,9 +56,58 @@ function validPairIndices(actual: unknown, args: readonly unknown[], base: 0 | 1
   return (nums[left] as number) + (nums[right] as number) === target
 }
 
-const VALIDATORS: Readonly<Record<ValidatorName, (actual: unknown, args: readonly unknown[]) => boolean>> = {
+function longestPalindrome(actual: unknown, expected: unknown, args: readonly unknown[]): boolean {
+  const [text] = args
+  if (typeof text !== 'string' || typeof actual !== 'string' || typeof expected !== 'string') return false
+  return actual.length === expected.length && text.includes(actual) && [...actual].reverse().join('') === actual
+}
+
+interface TreeShape { readonly value: unknown; left: TreeShape | null; right: TreeShape | null }
+
+/** Rebuild a level-order tree encoding; `undefined` when the encoding is malformed. */
+function levelOrderTree(values: unknown): TreeShape | null | undefined {
+  if (!Array.isArray(values)) return undefined
+  if (values.length === 0) return null
+  if (values[0] === null) return values.length === 1 ? null : undefined
+  const root: TreeShape = { value: values[0], left: null, right: null }
+  const queue: TreeShape[] = [root]
+  let index = 1
+  for (let head = 0; head < queue.length && index < values.length; head++) {
+    const node = queue[head]
+    if (node === undefined) break
+    for (const side of ['left', 'right'] as const) {
+      if (index >= values.length) break
+      const value: unknown = values[index++]
+      if (value === null) continue
+      const child: TreeShape = { value, left: null, right: null }
+      node[side] = child
+      queue.push(child)
+    }
+  }
+  return index === values.length ? root : undefined
+}
+
+function balancedBstOf(actual: unknown, args: readonly unknown[]): boolean {
+  const [nums] = args
+  const root = levelOrderTree(actual)
+  if (root === undefined || !Array.isArray(nums)) return false
+  const order: unknown[] = []
+  const height = (node: TreeShape | null): number => {
+    if (node === null) return 0
+    const left = height(node.left)
+    order.push(node.value)
+    const right = height(node.right)
+    if (left < 0 || right < 0 || Math.abs(left - right) > 1) return -1
+    return Math.max(left, right) + 1
+  }
+  return height(root) >= 0 && canonical(order) === canonical(nums)
+}
+
+const VALIDATORS: Readonly<Record<ValidatorName, (actual: unknown, args: readonly unknown[], expected: unknown) => boolean>> = {
   'pair-indices-sum': (actual, args) => validPairIndices(actual, args, 0),
   'pair-indices-sum-one-based': (actual, args) => validPairIndices(actual, args, 1),
+  'longest-palindromic-substring': (actual, args, expected) => longestPalindrome(actual, expected, args),
+  'balanced-bst-same-inorder': (actual, args) => balancedBstOf(actual, args),
 }
 
 /**
@@ -77,7 +126,7 @@ export function outputsMatch(comparator: Comparator, actual: unknown, expected: 
     case 'unordered-nested':
       return Array.isArray(actual) && Array.isArray(expected) && sameMultiset(actual, expected, sortedInner)
     case 'float': return closeEnough(actual, expected, comparator.tolerance)
-    case 'validator': return VALIDATORS[comparator.name](actual, args)
+    case 'validator': return VALIDATORS[comparator.name](actual, args, expected)
     default: {
       const unreachable: never = comparator
       return unreachable

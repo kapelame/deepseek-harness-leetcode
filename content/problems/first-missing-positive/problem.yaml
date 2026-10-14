@@ -1,0 +1,20 @@
+id: "first-missing-positive"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "缺失的第一个正数", "en": "First Missing Positive"}
+difficulty: hard
+topics: ["array-techniques"]
+leetcode: {"frontendId": 41, "title": "First Missing Positive", "slug": "first-missing-positive", "difficulty": "hard", "tags": ["Array", "Hash Table"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "找出数组中没有出现的最小正整数。要求 O(n) 时间、O(1) 额外空间。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Return the smallest positive integer missing from the array, in O(n) time and O(1) extra space. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 10⁵，-2³¹ ≤ nums[i] ≤ 2³¹-1", "en": "1 ≤ n ≤ 10⁵, -2³¹ ≤ nums[i] ≤ 2³¹-1"}]
+params: [{"name": "nums", "type": "int[]"}]
+returns: "int"
+comparator: {"kind": "exact"}
+entry: {"python": "firstMissingPositive", "typescript": "firstMissingPositive"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "smallMaxLength": 10, "largeLength": 20000, "min": -5, "max": 20000, "smallMin": -2, "smallMax": 10}]
+hints: [{"zh": "答案一定在 1..n+1 之间。为什么？", "en": "The answer is always in 1..n+1. Why?"}, {"zh": "能否把数组本身当作哈希表，让值 v 放到下标 v-1 上？", "en": "Can the array itself act as a hash table, putting value v at index v-1?"}, {"zh": "不断交换，直到 nums[i] 不在 1..n 或已经在正确位置；最后第一个 nums[i] ≠ i+1 的位置给出答案。", "en": "Keep swapping until nums[i] is outside 1..n or already in place; the first i with nums[i] ≠ i+1 gives the answer."}]
+solution: {"explanation": {"zh": "原地哈希：把每个 1..n 范围内的值交换到它对应的下标，再扫描找到第一个不匹配的位置。每次交换都把一个值放到最终位置，时间 O(n)，额外空间 O(1)。", "en": "In-place hashing: swap each value in 1..n to its own index, then scan for the first mismatch. Every swap settles one value, O(n) time, O(1) extra space."}}
+examples: [{"id": "ex-1", "args": [[1, 2, 0]], "expected": 3}, {"id": "ex-2", "args": [[3, 4, -1, 1]], "expected": 2}, {"id": "ex-3", "args": [[7, 8, 9, 11, 12]], "expected": 1}]
+boundaryCases: [{"args": [[1]]}, {"args": [[2]]}, {"args": [[-1]]}, {"args": [[1, 1]]}, {"args": [[3, 4, -1, 1]]}, {"args": [[1, 2, 3]]}]

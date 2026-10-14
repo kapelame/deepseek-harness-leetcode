@@ -1,0 +1,22 @@
+id: "backtracking-combination-sum-once"
+version: 1
+suiteVersion: 1
+parentProblemId: "combination-sum"
+topicId: "backtracking"
+title: {"zh": "每个数只用一次的组合总和", "en": "Combination Sum Using Each Number Once"}
+summary: {"zh": "候选数可能重复，每个位置的数最多用一次，求所有和为 target 的不重复组合。", "en": "Candidates may repeat and each position may be used once; return every distinct combination summing to target."}
+statement: {"zh": "给定可能包含重复值的正整数数组 `candidates` 和正整数 `target`，找出所有和为 `target` 的组合。`candidates` 中的**每个位置**在一个组合里最多使用一次。\n\n结果中不能有重复的组合（各值出现次数相同即视为重复），组合之间与组合内部的顺序都不限。", "en": "Given positive integers `candidates`, which may contain repeated values, and a positive `target`, find every combination that sums to `target`. Each **position** in `candidates` may be used at most once per combination.\n\nThe result must not contain duplicate combinations (equal counts of every value); neither the combinations nor their contents need any particular order."}
+difficulty: medium
+skills: ["backtracking", "pruning", "deduplication by sorting"]
+differences: [{"category": "constraints", "description": {"zh": "每个元素最多用一次，递归时要从 i + 1 开始，而不是 i。", "en": "Each element may be used once, so recursion continues from i + 1 instead of i."}}, {"category": "input-structure", "description": {"zh": "候选数可能有重复值，需要同层去重。", "en": "Candidates may repeat, which needs same-level deduplication."}}]
+transfer: {"zh": "组合总和的回溯框架与“剩余目标为负就剪枝”保持不变；变化在于递归起点改为 i + 1，并加入排序后的同层去重。", "en": "The combination-sum backtracking frame and its negative-remainder pruning carry over; the recursion starts at i + 1 and sorted same-level deduplication is added."}
+entry: {"python": "combinationSum2", "typescript": "combinationSum2"}
+params: [{"name": "candidates", "type": "int[]"}, {"name": "target", "type": "int"}]
+returns: "int[][]"
+comparator: {"kind": "unordered-nested"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "maxLength": 100, "smallMaxLength": 8, "largeLength": 40, "min": 1, "max": 50, "smallMin": 1, "smallMax": 5}, {"type": "int", "min": 1, "max": 30, "smallMin": 1, "smallMax": 9}]
+constraints: [{"zh": "1 ≤ n ≤ 100，1 ≤ candidates[i] ≤ 50，1 ≤ target ≤ 30", "en": "1 ≤ n ≤ 100, 1 ≤ candidates[i] ≤ 50, 1 ≤ target ≤ 30"}]
+examples: [{"args": [[10, 1, 2, 7, 6, 1, 5], 8], "expected": [[1, 1, 6], [1, 2, 5], [1, 7], [2, 6]]}, {"args": [[2, 5, 2, 1, 2], 5], "expected": [[1, 2, 2], [5]]}]
+boundaryCases: [{"args": [[1], 1]}, {"args": [[1], 2]}, {"args": [[2, 2], 2]}, {"args": [[1, 1, 1], 2]}, {"args": [[50], 30]}]
+hints: [{"zh": "和“组合总和”比，哪里需要改动才能保证每个位置只用一次？", "en": "Compared with combination sum, what changes so each position is used once?"}, {"zh": "递归调用传 i + 1；为了不产生重复组合，先排序，同一层跳过与前一个相同的值。", "en": "Recurse with i + 1; to avoid duplicate combinations, sort and skip a value equal to the previous one within a level."}, {"zh": "排序后，候选数大于剩余目标时可以直接 break。", "en": "After sorting, break as soon as a candidate exceeds the remaining target."}]

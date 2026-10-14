@@ -1,0 +1,20 @@
+id: "coin-change"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "零钱兑换", "en": "Coin Change"}
+difficulty: medium
+topics: ["dynamic-programming"]
+leetcode: {"frontendId": 322, "title": "Coin Change", "slug": "coin-change", "difficulty": "medium", "tags": ["Array", "Dynamic Programming", "Breadth-First Search", "Knapsack Problem", "Complete Knapsack"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "给定若干种面额的硬币（每种数量不限），求凑出 amount 所需的最少硬币数；凑不出返回 -1。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Given coin denominations with unlimited supply, return the fewest coins that make amount, or -1 if impossible. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ coins.length ≤ 12，1 ≤ coins[i] ≤ 2³¹-1，0 ≤ amount ≤ 10⁴", "en": "1 ≤ coins.length ≤ 12, 1 ≤ coins[i] ≤ 2³¹-1, 0 ≤ amount ≤ 10⁴"}]
+params: [{"name": "coins", "type": "int[]"}, {"name": "amount", "type": "int"}]
+returns: "int"
+comparator: {"kind": "exact"}
+entry: {"python": "coinChange", "typescript": "coinChange"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "maxLength": 12, "smallMaxLength": 3, "largeLength": 12, "min": 1, "max": 1000000000, "smallMin": 1, "smallMax": 9, "distinct": true}, {"type": "int", "min": 0, "max": 10000, "smallMin": 0, "smallMax": 25}]
+hints: [{"zh": "贪心（每次用最大面额）对 coins = [1, 3, 4]、amount = 6 会出错吗？", "en": "Does greedy (largest coin first) fail for coins = [1, 3, 4], amount = 6?"}, {"zh": "会：贪心得到 4+1+1，最优是 3+3。需要考虑所有“最后一枚硬币”的可能。", "en": "Yes: greedy gives 4+1+1, the best is 3+3. Consider every possible last coin."}, {"zh": "dp[x] = 1 + min(dp[x - coin])，dp[0] = 0，无法凑出用 ∞ 表示。", "en": "dp[x] = 1 + min(dp[x - coin]), dp[0] = 0, with ∞ for unreachable amounts."}]
+solution: {"explanation": {"zh": "完全背包求最小值，时间 O(amount × 面额数)，空间 O(amount)。", "en": "Unbounded knapsack minimizing the count, O(amount × denominations) time and O(amount) space."}}
+examples: [{"id": "ex-1", "args": [[1, 2, 5], 11], "expected": 3}, {"id": "ex-2", "args": [[2], 3], "expected": -1}, {"id": "ex-3", "args": [[1], 0], "expected": 0}]
+boundaryCases: [{"args": [[1], 0]}, {"args": [[2], 3]}, {"args": [[1], 1]}, {"args": [[2, 5], 6]}, {"args": [[2147483647], 2]}]

@@ -1,0 +1,22 @@
+id: "tricks-majority-third"
+version: 1
+suiteVersion: 1
+parentProblemId: "majority-element"
+topicId: "tricks"
+title: {"zh": "出现超过 n/3 次的元素", "en": "Elements Appearing More Than n/3 Times"}
+summary: {"zh": "返回所有出现次数严格大于 ⌊n/3⌋ 的元素，按升序排列。", "en": "Return every element appearing strictly more than ⌊n/3⌋ times, in ascending order."}
+statement: {"zh": "给定长度为 `n` 的整数数组 `nums`，返回所有出现次数**严格大于** `⌊n/3⌋` 的元素，按**升序**排列（可能为空）。\n\n要求 O(n) 时间、O(1) 额外空间。", "en": "Given an integer array `nums` of length `n`, return every element that appears **strictly more than** `⌊n/3⌋` times, in **ascending** order; the result may be empty.\n\nUse O(n) time and O(1) extra space."}
+difficulty: medium
+skills: ["Boyer–Moore voting", "verification pass"]
+differences: [{"category": "constraints", "description": {"zh": "阈值从 n/2 降到 n/3，最多可能有两个答案，也可能没有。", "en": "The threshold drops from n/2 to n/3, so there may be up to two answers, or none."}}, {"category": "reasoning", "description": {"zh": "需要同时维护两个候选，并在最后计数验证，因为答案不保证存在。", "en": "Two candidates must be kept and verified by counting at the end, since an answer is not guaranteed."}}]
+transfer: {"zh": "“不同元素互相抵消”的投票思想保留；推广为每次用三个不同元素一起抵消，因此保留两个候选，并补上验证步骤。", "en": "The idea of cancelling different elements carries over, generalized to cancelling three distinct values at a time, which leaves two candidates and adds a verification pass."}
+entry: {"python": "majorityThird", "typescript": "majorityThird"}
+params: [{"name": "nums", "type": "int[]"}]
+returns: "int[]"
+comparator: {"kind": "exact"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "smallMaxLength": 9, "largeLength": 20000, "min": -1000000000, "max": 1000000000, "smallMin": 0, "smallMax": 3}]
+constraints: [{"zh": "1 ≤ n ≤ 5×10⁴，-10⁹ ≤ nums[i] ≤ 10⁹", "en": "1 ≤ n ≤ 5×10⁴, -10⁹ ≤ nums[i] ≤ 10⁹"}]
+examples: [{"args": [[3, 2, 3]], "expected": [3]}, {"args": [[1]], "expected": [1]}, {"args": [[1, 2]], "expected": [1, 2]}, {"args": [[1, 2, 3]], "expected": []}]
+boundaryCases: [{"args": [[5, 5]]}, {"args": [[1, 1, 2, 2, 3]]}, {"args": [[1, 2, 3, 4]]}, {"args": [[2, 2, 1, 1, 1, 2, 2]]}]
+hints: [{"zh": "出现次数 > n/3 的元素最多有几个？", "en": "How many elements can appear more than n/3 times?"}, {"zh": "最多两个。维护两个候选及其计数：遇到候选之一加一；遇到计数为 0 的空位就占用；否则两个计数都减一。", "en": "At most two. Keep two candidates with counts: a match increments, an empty slot (count 0) is taken, otherwise both counts decrement."}, {"zh": "投票结束后，再遍历一次统计两个候选的真实次数，只保留超过 ⌊n/3⌋ 的，并排序返回。", "en": "After voting, count both candidates again, keep those above ⌊n/3⌋, and return them sorted."}]

@@ -1,0 +1,20 @@
+id: "minimum-window-substring"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "最小覆盖子串", "en": "Minimum Window Substring"}
+difficulty: hard
+topics: ["sliding-window"]
+leetcode: {"frontendId": 76, "title": "Minimum Window Substring", "slug": "minimum-window-substring", "difficulty": "hard", "tags": ["Hash Table", "String", "Sliding Window"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "在 s 中找出包含 t 全部字符（包括重复次数）的最短子串；不存在则返回空字符串。测试数据保证答案唯一。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Find the shortest substring of s that contains every character of t, counting duplicates; return an empty string if none exists. Tests guarantee the answer is unique. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ |s|, |t| ≤ 10⁵，由大小写英文字母组成", "en": "1 ≤ |s|, |t| ≤ 10⁵, upper- and lowercase English letters"}]
+params: [{"name": "s", "type": "string"}, {"name": "t", "type": "string"}]
+returns: "string"
+comparator: {"kind": "exact"}
+entry: {"python": "minWindow", "typescript": "minWindow"}
+perCaseMs: 1000
+inputs: [{"type": "string", "minLength": 1, "smallMaxLength": 12, "largeLength": 60000, "alphabet": "abcdefgh", "smallAlphabet": "abcA"}, {"type": "string", "minLength": 1, "smallMaxLength": 3, "largeLength": 3, "alphabet": "abcdefgh", "smallAlphabet": "abcA"}]
+hints: [{"zh": "先找到一个包含 t 的窗口，再想办法让它变短。", "en": "First find any window that contains t, then try to shrink it."}, {"zh": "右指针扩张直到窗口满足条件，然后左指针尽量收缩，并记录最短的满足窗口。", "en": "Grow the right end until the window qualifies, then shrink from the left as far as possible, recording the shortest qualifying window."}, {"zh": "用计数表和一个“还缺几个字符”的变量，在 O(1) 内判断窗口是否满足条件。", "en": "Use a count table plus a 'characters still missing' counter to test the window in O(1)."}]
+solution: {"explanation": {"zh": "可变长滑动窗口：右扩满足覆盖条件后左缩到不能再缩，用缺失计数在 O(1) 判断是否覆盖。每个字符进出窗口各一次，时间 O(|s|+|t|)。", "en": "A variable sliding window: extend right until t is covered, then shrink left as far as possible; a missing-count makes the coverage test O(1). Each character enters and leaves once, O(|s|+|t|) time."}}
+examples: [{"id": "ex-1", "args": ["ADOBECODEBANC", "ABC"], "expected": "BANC"}, {"id": "ex-2", "args": ["a", "a"], "expected": "a"}, {"id": "ex-3", "args": ["a", "aa"], "expected": ""}]
+boundaryCases: [{"args": ["a", "a"]}, {"args": ["a", "aa"]}, {"args": ["a", "b"]}, {"args": ["ab", "b"]}, {"args": ["aA", "A"]}]

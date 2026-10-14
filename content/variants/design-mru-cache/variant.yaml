@@ -1,0 +1,23 @@
+id: "design-mru-cache"
+version: 1
+suiteVersion: 1
+parentProblemId: "lru-cache"
+topicId: "design"
+title: {"zh": "最近最常使用淘汰缓存", "en": "Most-Recently-Used Eviction Cache"}
+summary: {"zh": "实现固定容量的缓存，超出容量时淘汰最近一次被访问的键（MRU）。", "en": "Implement a fixed-capacity cache that, when over capacity, evicts the key used most recently before the new insertion (MRU)."}
+statement: {"zh": "实现类 `MRUCache(capacity)`：\n\n- `get(key)`：键存在则返回值并把它标记为“最近使用”，否则返回 `-1`；\n- `put(key, value)`：键存在则更新值并标记为最近使用；键不存在时，如果缓存已满，先淘汰**当前最近使用**的键，再插入新键（新键成为最近使用）。\n\n两个操作都要求 O(1)。", "en": "Implement the class `MRUCache(capacity)`:\n\n- `get(key)` returns the value and marks the key most recently used, or returns `-1`;\n- `put(key, value)` updates an existing key and marks it most recently used; for a new key, if the cache is full, first evict the **current most recently used** key, then insert the new key, which becomes the most recently used.\n\nBoth operations must be O(1)."}
+difficulty: medium
+skills: ["hash map + linked list", "usage ordering"]
+differences: [{"category": "reasoning", "description": {"zh": "淘汰对象从“最久未用”变成“最近使用”，即从使用顺序的另一端淘汰。", "en": "The victim changes from least recently used to most recently used, so eviction happens at the other end of the usage order."}}, {"category": "constraints", "description": {"zh": "淘汰发生在插入新键之前，否则会把刚插入的键淘汰掉。", "en": "Eviction must happen before inserting the new key, otherwise the newcomer would be evicted."}}]
+transfer: {"zh": "哈希表 + 按使用顺序排列的链表这一组合完全保留；需要重新思考的是淘汰哪一端，以及淘汰与插入的先后顺序。", "en": "The hash map plus usage-ordered list stays as is; what must be rethought is which end to evict and whether eviction precedes insertion."}
+entry: {"python": "MRUCache", "typescript": "MRUCache"}
+params: [{"name": "operations", "type": "string[]"}, {"name": "arguments", "type": "json"}]
+returns: "json"
+shape: {"kind": "design", "className": "MRUCache", "constructorParams": [{"name": "capacity", "type": "int"}], "methods": [{"name": "get", "params": [{"name": "key", "type": "int"}], "returns": "int"}, {"name": "put", "params": [{"name": "key", "type": "int"}, {"name": "value", "type": "int"}], "returns": "void"}]}
+comparator: {"kind": "exact"}
+perCaseMs: 1000
+inputs: [{"type": "string[]"}, {"type": "json"}]
+constraints: [{"zh": "1 ≤ capacity ≤ 1000，0 ≤ key ≤ 10⁴，0 ≤ value ≤ 10⁵，调用总次数 ≤ 2×10⁴", "en": "1 ≤ capacity ≤ 1000, 0 ≤ key ≤ 10⁴, 0 ≤ value ≤ 10⁵, at most 2×10⁴ calls"}]
+examples: [{"args": [["MRUCache", "put", "put", "get", "put", "get", "get"], [[2], [1, 1], [2, 2], [1], [3, 3], [1], [2]]], "expected": [null, null, null, 1, null, -1, 2]}, {"args": [["MRUCache", "put", "put", "put", "get", "get"], [[2], [1, 1], [2, 2], [3, 3], [1], [2]]], "expected": [null, null, null, null, 1, -1]}]
+boundaryCases: [{"args": [["MRUCache", "put", "put", "get"], [[1], [1, 1], [2, 2], [1]]]}, {"args": [["MRUCache", "get"], [[1], [5]]]}, {"args": [["MRUCache", "put", "put", "put", "get"], [[1], [1, 1], [1, 2], [2, 3], [1]]]}]
+hints: [{"zh": "与 LRU 相比，按使用顺序排列的结构还需要吗？", "en": "Compared with LRU, do you still need the usage-ordered structure?"}, {"zh": "需要：最近使用的键位于顺序的一端，淘汰就从这一端进行。", "en": "Yes: the most recently used key sits at one end of the order, and eviction happens at that end."}, {"zh": "插入新键前若已满，先弹出“最近”一端的键，再插入新键并标记为最近使用；Python 中可用 OrderedDict 的 popitem(last=True)。", "en": "When full, pop the key at the recent end before inserting the newcomer and marking it recent; in Python, OrderedDict.popitem(last=True) does it."}]

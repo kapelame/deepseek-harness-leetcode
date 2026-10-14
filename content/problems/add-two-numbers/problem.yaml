@@ -1,0 +1,20 @@
+id: "add-two-numbers"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "两数相加", "en": "Add Two Numbers"}
+difficulty: medium
+topics: ["linked-list"]
+leetcode: {"frontendId": 2, "title": "Add Two Numbers", "slug": "add-two-numbers", "difficulty": "medium", "tags": ["Linked List", "Math", "Recursion"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "两个非负整数以逆序存放在链表中（个位在头部，每个节点一位数字）。返回它们的和，同样以逆序链表表示。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Two non-negative integers are stored in reverse order, one digit per node with the ones digit first. Return their sum as a list in the same format. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "每个链表 1 ≤ 节点数 ≤ 100，0 ≤ Node.val ≤ 9，除 0 本身外没有前导零", "en": "each list has 1 ≤ nodes ≤ 100, 0 ≤ Node.val ≤ 9, no leading zeros except the number 0"}]
+params: [{"name": "l1", "type": "linked-list"}, {"name": "l2", "type": "linked-list"}]
+returns: "linked-list"
+comparator: {"kind": "exact"}
+entry: {"python": "addTwoNumbers", "typescript": "addTwoNumbers"}
+perCaseMs: 1000
+inputs: [{"type": "linked-list", "minLength": 1, "smallMaxLength": 6, "largeLength": 100, "min": 0, "max": 9}, {"type": "linked-list", "minLength": 1, "smallMaxLength": 6, "largeLength": 100, "min": 0, "max": 9}]
+hints: [{"zh": "逆序存放有什么好处？想想手算加法从哪一位开始。", "en": "Why is reverse order convenient? Think about where hand addition starts."}, {"zh": "同时遍历两条链表，逐位相加并维护进位。", "en": "Walk both lists together, adding digit by digit with a carry."}, {"zh": "某条链表先结束时把它的数字当作 0；循环结束后若进位为 1，还要追加一个节点。", "en": "Treat a finished list's digit as 0; if a carry of 1 remains at the end, append one more node."}]
+solution: {"explanation": {"zh": "模拟竖式加法：逐位相加 (d1 + d2 + carry)，节点值为和的个位，进位为十位。时间 O(max(m, n))，空间 O(1)（不计输出）。", "en": "Simulate column addition: add d1 + d2 + carry digit by digit, store the ones digit, and carry the tens. O(max(m, n)) time, O(1) extra space besides the output."}}
+examples: [{"id": "ex-1", "args": [[2, 4, 3], [5, 6, 4]], "expected": [7, 0, 8]}, {"id": "ex-2", "args": [[0], [0]], "expected": [0]}, {"id": "ex-3", "args": [[9, 9, 9, 9, 9, 9, 9], [9, 9, 9, 9]], "expected": [8, 9, 9, 9, 0, 0, 0, 1]}]
+boundaryCases: [{"args": [[0], [0]]}, {"args": [[9], [1]]}, {"args": [[9, 9, 9], [1]]}, {"args": [[1], [9, 9]]}, {"args": [[5], [5]]}]

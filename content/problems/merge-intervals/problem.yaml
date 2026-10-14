@@ -1,0 +1,20 @@
+id: "merge-intervals"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "合并区间", "en": "Merge Intervals"}
+difficulty: medium
+topics: ["array-techniques"]
+leetcode: {"frontendId": 56, "title": "Merge Intervals", "slug": "merge-intervals", "difficulty": "medium", "tags": ["Array", "Sorting", "Quicksort"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "合并所有重叠（包括端点相接）的区间，返回互不重叠且覆盖全部输入的区间，顺序不限。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Merge all overlapping intervals, including ones that only touch at an endpoint, and return non-overlapping intervals that cover the input, in any order. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 10⁴，0 ≤ start ≤ end ≤ 10⁴", "en": "1 ≤ n ≤ 10⁴, 0 ≤ start ≤ end ≤ 10⁴"}]
+params: [{"name": "intervals", "type": "int[][]"}]
+returns: "int[][]"
+comparator: {"kind": "unordered"}
+entry: {"python": "merge", "typescript": "merge"}
+perCaseMs: 1000
+inputs: [{"type": "int[][]", "minLength": 1, "smallMaxLength": 6, "largeLength": 8000, "row": {"minLength": 2, "maxLength": 2, "smallMaxLength": 2, "largeLength": 2}, "cell": {"min": 0, "max": 10000}}]
+hints: [{"zh": "如果区间按起点排好序，哪些区间可能会重叠？", "en": "If intervals are sorted by start, which ones can overlap?"}, {"zh": "排序后，新区间只可能和结果中的最后一个区间重叠。", "en": "After sorting, a new interval can only overlap the last interval in the result."}, {"zh": "起点 ≤ 上一个终点就合并（终点取较大值），否则追加新区间。", "en": "Merge when its start ≤ the last end (keep the larger end); otherwise append it."}]
+solution: {"explanation": {"zh": "按起点排序后线性扫描，每个区间要么扩展结果中最后一个区间，要么开启新区间。时间 O(n log n)，空间 O(n)。", "en": "Sort by start and scan once; each interval either extends the last merged interval or starts a new one. O(n log n) time, O(n) space."}}
+examples: [{"id": "ex-1", "args": [[[1, 3], [2, 6], [8, 10], [15, 18]]], "expected": [[1, 6], [8, 10], [15, 18]]}, {"id": "ex-2", "args": [[[1, 4], [4, 5]]], "expected": [[1, 5]]}, {"id": "ex-3", "args": [[[4, 7], [1, 4]]], "expected": [[1, 7]]}]
+boundaryCases: [{"args": [[[1, 1]]]}, {"args": [[[1, 4], [4, 5]]]}, {"args": [[[1, 4], [2, 3]]]}, {"args": [[[5, 6], [1, 2]]]}, {"args": [[[0, 0], [0, 0]]]}]

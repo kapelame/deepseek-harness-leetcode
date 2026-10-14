@@ -1,0 +1,20 @@
+id: "search-in-rotated-sorted-array"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "搜索旋转排序数组", "en": "Search in Rotated Sorted Array"}
+difficulty: medium
+topics: ["binary-search"]
+leetcode: {"frontendId": 33, "title": "Search in Rotated Sorted Array", "slug": "search-in-rotated-sorted-array", "difficulty": "medium", "tags": ["Array", "Binary Search"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "一个元素互不相同的升序数组在某个位置被旋转过（如 [4,5,6,7,0,1,2]）。在其中查找 target，返回下标，不存在返回 -1。要求 O(log n)。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "A sorted array of distinct values was rotated at some pivot (such as [4,5,6,7,0,1,2]). Return the index of target or -1, in O(log n). (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 5000，-10⁴ ≤ nums[i], target ≤ 10⁴，元素互不相同", "en": "1 ≤ n ≤ 5000, -10⁴ ≤ nums[i], target ≤ 10⁴, distinct values"}]
+params: [{"name": "nums", "type": "int[]"}, {"name": "target", "type": "int"}]
+returns: "int"
+comparator: {"kind": "exact"}
+entry: {"python": "search", "typescript": "search"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "maxLength": 5000, "smallMaxLength": 8, "largeLength": 5000, "min": -10000, "max": 10000, "smallMin": -8, "smallMax": 8, "distinct": true, "sorted": "asc"}, {"type": "int", "min": -10000, "max": 10000, "smallMin": -9, "smallMax": 9}]
+hints: [{"zh": "从中点切开后，左右两半中至少有一半是有序的。", "en": "After splitting at the middle, at least one half is sorted."}, {"zh": "比较 nums[lo] 与 nums[mid] 判断哪一半有序。", "en": "Compare nums[lo] with nums[mid] to tell which half is sorted."}, {"zh": "若 target 落在有序那一半的范围内，就去那一半；否则去另一半。", "en": "If target lies within the sorted half's range, search there; otherwise search the other half."}]
+solution: {"explanation": {"zh": "二分时先判断哪一侧有序，再根据 target 是否落在该侧范围决定方向。时间 O(log n)，空间 O(1)。", "en": "At each step determine the sorted side and go there only if target falls within its range. O(log n) time, O(1) space."}}
+examples: [{"id": "ex-1", "args": [[4, 5, 6, 7, 0, 1, 2], 0], "expected": 4}, {"id": "ex-2", "args": [[4, 5, 6, 7, 0, 1, 2], 3], "expected": -1}, {"id": "ex-3", "args": [[1], 0], "expected": -1}]
+boundaryCases: [{"args": [[1], 1]}, {"args": [[1], 0]}, {"args": [[3, 1], 1]}, {"args": [[1, 3], 3]}, {"args": [[5, 1, 3], 5]}]

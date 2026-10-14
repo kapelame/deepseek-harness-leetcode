@@ -1,0 +1,20 @@
+id: "word-search"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "单词搜索", "en": "Word Search"}
+difficulty: medium
+topics: ["backtracking"]
+leetcode: {"frontendId": 79, "title": "Word Search", "slug": "word-search", "difficulty": "medium", "tags": ["Array", "String", "Backtracking", "Depth-First Search", "Matrix"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "在字符网格中判断能否找到单词：单词由上下左右相邻的格子按顺序组成，同一个格子不能重复使用。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Decide whether the word appears in the grid as a path of horizontally or vertically adjacent cells, using each cell at most once. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ m, n ≤ 6，1 ≤ |word| ≤ 15，由大小写英文字母组成", "en": "1 ≤ m, n ≤ 6, 1 ≤ |word| ≤ 15, upper- and lowercase letters"}]
+params: [{"name": "board", "type": "string[][]"}, {"name": "word", "type": "string"}]
+returns: "bool"
+comparator: {"kind": "exact"}
+entry: {"python": "exist", "typescript": "exist"}
+perCaseMs: 3000
+inputs: [{"type": "string[][]", "minLength": 1, "maxLength": 6, "smallMaxLength": 3, "largeLength": 6, "row": {"minLength": 1, "maxLength": 6, "smallMaxLength": 3, "largeLength": 6}, "cell": {"alphabet": "ab", "maxLength": 1}}, {"type": "string", "minLength": 1, "maxLength": 15, "smallMaxLength": 4, "largeLength": 10, "alphabet": "ab"}]
+hints: [{"zh": "从每个与首字母相同的格子出发尝试。", "en": "Try every cell that matches the first letter."}, {"zh": "DFS 匹配第 k 个字母时，向四个方向找第 k+1 个；当前格子在路径中时不能再用。", "en": "When matching letter k, look in four directions for letter k+1; a cell on the current path cannot be reused."}, {"zh": "进入格子时临时标记（例如改成 '#'），返回时恢复，这就是回溯。", "en": "Mark a cell when entering (for example as '#') and restore it on return: that is the backtracking."}]
+solution: {"explanation": {"zh": "对每个起点做 DFS 回溯，访问时临时标记格子。最坏 O(mn·3^L)，L 为单词长度。", "en": "DFS backtracking from every start, temporarily marking visited cells. Worst case O(mn·3^L) for word length L."}}
+examples: [{"id": "ex-1", "args": [[["A", "B", "C", "E"], ["S", "F", "C", "S"], ["A", "D", "E", "E"]], "ABCCED"], "expected": true}, {"id": "ex-2", "args": [[["A", "B", "C", "E"], ["S", "F", "C", "S"], ["A", "D", "E", "E"]], "SEE"], "expected": true}, {"id": "ex-3", "args": [[["A", "B", "C", "E"], ["S", "F", "C", "S"], ["A", "D", "E", "E"]], "ABCB"], "expected": false}]
+boundaryCases: [{"args": [[["a"]], "a"]}, {"args": [[["a"]], "b"]}, {"args": [[["a", "b"]], "ba"]}, {"args": [[["a", "a"]], "aaa"]}, {"args": [[["A", "B"], ["C", "D"]], "ABDC"]}]

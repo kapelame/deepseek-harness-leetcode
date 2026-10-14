@@ -15,6 +15,7 @@ export function suiteInputOf(definition: ProblemDefinition, parent: ProblemDefin
   return {
     params: definition.params,
     returns: definition.returns,
+    ...definition.shape === undefined ? {} : { shape: definition.shape },
     comparator: definition.comparator,
     entry: definition.entry.python,
     reference: definition.reference,
@@ -27,6 +28,6 @@ export function suiteInputOf(definition: ProblemDefinition, parent: ProblemDefin
     largeSeeds: SUITE_SEEDS.large,
     ...seed.mutants === undefined ? {} : { mutants: seed.mutants },
     ...parent === undefined ? {} : { parent: { reference: parent.reference, entry: parent.entry.python, params: parent.params,
-      returns: parent.returns } },
+      returns: parent.returns, ...parent.shape === undefined ? {} : { shape: parent.shape } } },
   }
 }

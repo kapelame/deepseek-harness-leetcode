@@ -10,10 +10,10 @@ import { defineTool } from '@deepseek-ai/dsh-tools'
 import type { JsonValue } from '@deepseek-ai/dsh-util-values'
 import type { ContentOrigin, LearnerId, ProblemId, TopicId, VariantRecord, VariantSpec, VariantValidation } from './types.ts'
 import type { ProblemDefinition } from './content/catalog.ts'
-import { hasInputSource, variantSpecSchema } from './content/schema.ts'
+import { hasInputSource, shapeProblem, variantSpecSchema } from './content/schema.ts'
 import { composeGenerator, deriveStarters, domainMismatch } from './content/generation.ts'
 import { buildSuite, SUITE_SEEDS, type SuiteCheck } from './judge/suite-builder.ts'
-import { variantSystemPrompt } from './agents/prompts.ts'
+import { signatureLine, variantSystemPrompt } from './agents/prompts.ts'
 import { runLearnAgent } from './agents/runtime.ts'
 import { LearnError } from './judging.ts'
 import { toJson } from './json.ts'
@@ -62,11 +62,12 @@ export class Variants {
       return { validation: { ok: false, checks: [{ name: 'schema', ok: false,
         detail: 'declare inputs (one domain per parameter) or a generator override' }] } }
     }
-    const mismatch = data.inputs === undefined ? undefined : domainMismatch(data.params, data.inputs)
+    const mismatch = shapeProblem(data.params, data.returns, data.shape)
+      ?? (data.inputs === undefined ? undefined : domainMismatch(data.params, data.inputs))
     if (mismatch !== undefined) return { validation: { ok: false, checks: [{ name: 'schema', ok: false, detail: mismatch }] } }
     const spec: VariantSpec = {
       ...data,
-      starter: data.starter ?? deriveStarters(data.entry, data.params, data.returns, 'function'),
+      starter: data.starter ?? deriveStarters(data.entry, data.params, data.returns, 'function', data.shape),
       parentProblemId: data.parentProblemId ?? parent?.id ?? '',
       differences: data.differences ?? [],
       transfer: data.transfer ?? { zh: '这是导入的练习题。', en: 'This is an imported exercise.' },
@@ -89,7 +90,8 @@ export class Variants {
         detail: `${String(spec.differences.length)} declared differences: ${spec.differences.map(item => item.category).join(', ')}` })
     }
     const built = await buildSuite(this.runtime.runner, {
-      params: spec.params, returns: spec.returns, comparator: spec.comparator, entry: spec.entry.python,
+      params: spec.params, returns: spec.returns, ...spec.shape === undefined ? {} : { shape: spec.shape },
+      comparator: spec.comparator, entry: spec.entry.python,
       reference: spec.reference, oracle: spec.oracle,
       generator: data.generator ?? composeGenerator(this.runtime.generatorLibrary, data.inputs ?? [], data.hooks),
       examples: spec.examples.map((item, index) => ({ id: `ex-${String(index + 1)}`, args: item.args, expected: item.expected })),
@@ -97,7 +99,7 @@ export class Variants {
       perCaseMs: this.runtime.config.generatedPerCaseMs,
       smallSeeds: SUITE_SEEDS.small, largeSeeds: SUITE_SEEDS.large, mutants: spec.mutants,
       ...parent === undefined || kind !== 'variant' ? {} : { parent: { reference: parent.reference, entry: parent.entry.python,
-        params: parent.params, returns: parent.returns } },
+        params: parent.params, returns: parent.returns, ...parent.shape === undefined ? {} : { shape: parent.shape } } },
     }, signal)
     return { validation: { ok: built.ok, checks: [...checks, ...built.checks] }, spec,
       ...built.cases === undefined ? {} : { cases: built.cases } }
@@ -181,7 +183,7 @@ export class Variants {
     const prompt = [
       `Parent problem (${parent.kind}${parent.leetcode === undefined ? '' : `, LeetCode #${String(parent.leetcode.frontendId)}`}): ${parent.title.en}`,
       `Parent summary: ${parent.summary.en}`,
-      `Parent signature: ${parent.entry.python}(${parent.params.map(item => `${item.name}: ${item.type}`).join(', ')}) -> ${parent.returns}`,
+      `Parent signature: ${signatureLine(parent)}`,
       `Topic: ${topic}. Learner's recent mistake tags on this topic: ${this.runtime.recentMistakeTags(learner, topic).join(', ') || 'none'}.`,
       `Variation seed ${String(seed)}: use it to choose which dimension to change, so repeated requests explore different variants.`,
       `Existing variants of this parent (do not repeat them): ${existing.join('; ') || 'none'}.`,
@@ -208,7 +210,8 @@ export class Variants {
       id: definition.id, parentProblemId: definition.variant.parentProblemId, topicId: topic, title: definition.title,
       statement: definition.statement ?? definition.summary, summary: definition.summary, difficulty: definition.difficulty,
       skills: definition.variant.skills, differences: definition.variant.differences, transfer: definition.variant.transfer,
-      entry: definition.entry, params: definition.params, returns: definition.returns, comparator: definition.comparator,
+      entry: definition.entry, params: definition.params, returns: definition.returns,
+      ...definition.shape === undefined ? {} : { shape: definition.shape }, comparator: definition.comparator,
       constraints: definition.constraints, examples: seed.examples.map(item => ({ args: item.args, expected: item.expected })),
       starter: definition.starter, reference: definition.reference, oracle: definition.oracle ?? '',
       ...seed.inputs === undefined ? { generator: seed.generator } : { inputs: seed.inputs,

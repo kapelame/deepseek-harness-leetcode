@@ -1,0 +1,20 @@
+id: "spiral-matrix"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "螺旋矩阵", "en": "Spiral Matrix"}
+difficulty: medium
+topics: ["matrix"]
+leetcode: {"frontendId": 54, "title": "Spiral Matrix", "slug": "spiral-matrix", "difficulty": "medium", "tags": ["Array", "Matrix", "Simulation"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "按顺时针螺旋顺序（从左上角开始，向右、向下、向左、向上循环）返回矩阵中的所有元素。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Return all elements of the matrix in clockwise spiral order, starting at the top-left and turning right, down, left, up. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ m, n ≤ 10，-100 ≤ matrix[i][j] ≤ 100", "en": "1 ≤ m, n ≤ 10, -100 ≤ matrix[i][j] ≤ 100"}]
+params: [{"name": "matrix", "type": "int[][]"}]
+returns: "int[]"
+comparator: {"kind": "exact"}
+entry: {"python": "spiralOrder", "typescript": "spiralOrder"}
+perCaseMs: 1000
+inputs: [{"type": "int[][]", "minLength": 1, "maxLength": 10, "smallMaxLength": 5, "largeLength": 10, "row": {"minLength": 1, "maxLength": 10, "smallMaxLength": 5, "largeLength": 10}, "cell": {"min": -100, "max": 100}}]
+hints: [{"zh": "把螺旋看成一层一层剥开的边框。", "en": "Think of the spiral as peeling off one border layer at a time."}, {"zh": "维护上、下、左、右四条边界，每走完一条边就收缩对应边界。", "en": "Keep top, bottom, left, and right bounds; shrink the matching bound after each side."}, {"zh": "只剩一行或一列时，注意不要重复访问。", "en": "When a single row or column remains, avoid visiting it twice."}]
+solution: {"explanation": {"zh": "模拟四条边界：依次输出上边、右边、下边、左边并收缩边界，直到边界交错。时间 O(mn)，额外空间 O(1)。", "en": "Simulate four bounds: emit the top, right, bottom, and left sides and shrink the bounds until they cross. O(mn) time, O(1) extra space."}}
+examples: [{"id": "ex-1", "args": [[[1, 2, 3], [4, 5, 6], [7, 8, 9]]], "expected": [1, 2, 3, 6, 9, 8, 7, 4, 5]}, {"id": "ex-2", "args": [[[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]]], "expected": [1, 2, 3, 4, 8, 12, 11, 10, 9, 5, 6, 7]}]
+boundaryCases: [{"args": [[[1]]]}, {"args": [[[1, 2, 3]]]}, {"args": [[[1], [2], [3]]]}, {"args": [[[1, 2], [3, 4]]]}, {"args": [[[1, 2, 3], [4, 5, 6]]]}]

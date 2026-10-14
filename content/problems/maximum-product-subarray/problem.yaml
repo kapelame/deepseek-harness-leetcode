@@ -1,0 +1,20 @@
+id: "maximum-product-subarray"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "乘积最大子数组", "en": "Maximum Product Subarray"}
+difficulty: medium
+topics: ["dynamic-programming"]
+leetcode: {"frontendId": 152, "title": "Maximum Product Subarray", "slug": "maximum-product-subarray", "difficulty": "medium", "tags": ["Array", "Dynamic Programming"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "求乘积最大的非空连续子数组，返回这个乘积。保证任何子数组的乘积都在 32 位整数范围内。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Return the largest product of a non-empty contiguous subarray; every subarray product fits in a 32-bit integer. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 2×10⁴，-10 ≤ nums[i] ≤ 10", "en": "1 ≤ n ≤ 2×10⁴, -10 ≤ nums[i] ≤ 10"}]
+params: [{"name": "nums", "type": "int[]"}]
+returns: "int"
+comparator: {"kind": "exact"}
+entry: {"python": "maxProduct", "typescript": "maxProduct"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "smallMaxLength": 8, "largeLength": 20000, "min": -3, "max": 3, "smallMin": -3, "smallMax": 3}]
+hints: [{"zh": "和最大子数组和不同：负数乘负数会变成正数。", "en": "Unlike the maximum sum, a negative times a negative is positive."}, {"zh": "以 i 结尾时，同时记录最大乘积和最小乘积。", "en": "For subarrays ending at i, track both the largest and the smallest product."}, {"zh": "新的最大值 = max(x, x·prevMax, x·prevMin)，最小值同理；遇到 0 会自然重置。", "en": "New max = max(x, x·prevMax, x·prevMin), and likewise the minimum; a 0 resets both naturally."}]
+solution: {"explanation": {"zh": "同时维护以当前位置结尾的最大和最小乘积。时间 O(n)，空间 O(1)。", "en": "Track the largest and smallest product ending at each position. O(n) time, O(1) space."}}
+examples: [{"id": "ex-1", "args": [[2, 3, -2, 4]], "expected": 6}, {"id": "ex-2", "args": [[-2, 0, -1]], "expected": 0}]
+boundaryCases: [{"args": [[-2]]}, {"args": [[0]]}, {"args": [[-2, 0, -1]]}, {"args": [[2, 3, -2, 4]]}, {"args": [[-2, -3, -4]]}]

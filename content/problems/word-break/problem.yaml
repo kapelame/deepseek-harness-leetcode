@@ -1,0 +1,20 @@
+id: "word-break"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "单词拆分", "en": "Word Break"}
+difficulty: medium
+topics: ["dynamic-programming"]
+leetcode: {"frontendId": 139, "title": "Word Break", "slug": "word-break", "difficulty": "medium", "tags": ["Array", "Hash Table", "String", "Dynamic Programming", "Trie", "Memoization", "Brute-Force Search"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "判断字符串 s 能否被拆分成一个或多个字典中的单词（单词可重复使用）。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Decide whether s can be split into one or more dictionary words, reusing words freely. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ |s| ≤ 300，1 ≤ 字典大小 ≤ 1000，1 ≤ 单词长度 ≤ 20，均为小写字母，单词互不相同", "en": "1 ≤ |s| ≤ 300, 1 ≤ dictionary size ≤ 1000, 1 ≤ word length ≤ 20, lowercase, distinct words"}]
+params: [{"name": "s", "type": "string"}, {"name": "wordDict", "type": "string[]"}]
+returns: "bool"
+comparator: {"kind": "exact"}
+entry: {"python": "wordBreak", "typescript": "wordBreak"}
+perCaseMs: 1000
+inputs: [{"type": "string", "minLength": 1, "maxLength": 300, "smallMaxLength": 10, "largeLength": 300, "alphabet": "ab"}, {"type": "string[]", "minLength": 1, "maxLength": 1000, "smallMaxLength": 4, "largeLength": 20, "word": {"minLength": 1, "maxLength": 20, "smallMaxLength": 3, "alphabet": "ab"}}]
+hints: [{"zh": "dp[i] 表示前 i 个字符能否被拆分。", "en": "Let dp[i] say whether the first i characters can be split."}, {"zh": "dp[i] 为真，当存在 j < i 使 dp[j] 为真且 s[j:i] 在字典中。", "en": "dp[i] is true when some j < i has dp[j] true and s[j:i] in the dictionary."}, {"zh": "把字典放进集合；只需检查长度不超过最长单词的 s[j:i]。", "en": "Put the dictionary in a set and only check s[j:i] no longer than the longest word."}]
+solution: {"explanation": {"zh": "前缀 DP，时间 O(n × L)（L 为最长单词长度），空间 O(n)。", "en": "Prefix DP in O(n × L) time for longest word length L, O(n) space."}}
+examples: [{"id": "ex-1", "args": ["leetcode", ["leet", "code"]], "expected": true}, {"id": "ex-2", "args": ["applepenapple", ["apple", "pen"]], "expected": true}, {"id": "ex-3", "args": ["catsandog", ["cats", "dog", "sand", "and", "cat"]], "expected": false}]
+boundaryCases: [{"args": ["a", ["a"]]}, {"args": ["a", ["b"]]}, {"args": ["aaaa", ["aa"]]}, {"args": ["aaa", ["aa"]]}, {"args": ["catsandog", ["cats", "dog", "sand", "and", "cat"]]}]

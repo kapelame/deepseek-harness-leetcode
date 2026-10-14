@@ -26,6 +26,8 @@ export interface LearnRuntime {
   readonly runner: RunnerBackend
   /** Shared Python input-generation library (`runtime/gen_lib.py`). */
   readonly generatorLibrary: string
+  /** Body of the bundled problem-authoring skill, without frontmatter. */
+  readonly finderSkill: string
   /** @returns the current instant. */
   now(): Date
   /** @returns the current instant as ISO text. */

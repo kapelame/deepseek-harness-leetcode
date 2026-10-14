@@ -1,0 +1,22 @@
+id: "linked-list-reverse-between"
+version: 1
+suiteVersion: 1
+parentProblemId: "reverse-linked-list"
+topicId: "linked-list"
+title: {"zh": "反转链表的一段", "en": "Reverse One Segment of a List"}
+summary: {"zh": "只反转第 left 到第 right 个节点（从 1 开始计数），其余部分保持不变。", "en": "Reverse only nodes left through right (1-indexed) and keep the rest unchanged."}
+statement: {"zh": "给定单链表头节点 `head` 和两个整数 `left ≤ right`，把链表中从第 `left` 个到第 `right` 个节点（位置从 1 开始）这一段反转，返回新的头节点。\n\n要求只遍历一次，并通过重连节点完成，而不是修改节点的值。", "en": "Given the head of a singly linked list and integers `left ≤ right`, reverse the nodes from position `left` to position `right` (1-indexed) and return the head.\n\nTraverse the list once and relink nodes rather than changing their values."}
+difficulty: medium
+skills: ["in-place reversal", "dummy node", "splicing"]
+differences: [{"category": "input-structure", "description": {"zh": "多了 left、right 两个参数，只处理链表的中间一段。", "en": "Two more parameters, left and right, restrict the work to a middle segment."}}, {"category": "reasoning", "description": {"zh": "反转后的子段必须重新接回前驱和后继，left = 1 时还涉及头节点。", "en": "The reversed segment must be spliced back to its predecessor and successor, which involves the head when left = 1."}}]
+transfer: {"zh": "“先存后改”的反转三步保持不变；新增的是定位段前驱、在段内反转固定次数，以及把段两端接回去。", "en": "The save-then-relink reversal stays; new are locating the segment's predecessor, reversing a fixed number of steps, and splicing both ends back."}
+entry: {"python": "reverseBetween", "typescript": "reverseBetween"}
+params: [{"name": "head", "type": "linked-list"}, {"name": "left", "type": "int"}, {"name": "right", "type": "int"}]
+returns: "linked-list"
+comparator: {"kind": "exact"}
+perCaseMs: 1000
+inputs: [{"type": "linked-list", "minLength": 1, "maxLength": 500, "smallMaxLength": 8, "largeLength": 500, "min": -500, "max": 500, "smallMin": -9, "smallMax": 9}, {"type": "int", "min": 1, "max": 1}, {"type": "int", "min": 1, "max": 1}]
+constraints: [{"zh": "1 ≤ n ≤ 500，-500 ≤ Node.val ≤ 500，1 ≤ left ≤ right ≤ n", "en": "1 ≤ n ≤ 500, -500 ≤ Node.val ≤ 500, 1 ≤ left ≤ right ≤ n"}]
+examples: [{"args": [[1, 2, 3, 4, 5], 2, 4], "expected": [1, 4, 3, 2, 5]}, {"args": [[5], 1, 1], "expected": [5]}]
+boundaryCases: [{"args": [[1, 2], 1, 2]}, {"args": [[1, 2, 3], 1, 1]}, {"args": [[1, 2, 3], 3, 3]}, {"args": [[1, 2, 3], 1, 3]}, {"args": [[1, 2, 3, 4], 2, 3]}]
+hints: [{"zh": "先找到第 left-1 个节点（段的前驱），哑节点让 left = 1 的情况也有前驱。", "en": "First find node left-1, the segment's predecessor; a dummy node gives left = 1 one too."}, {"zh": "在段内做 right-left 次“头插”：把 cur 后面的节点摘下来插到前驱后面。", "en": "Inside the segment, perform right-left head insertions: unhook the node after cur and insert it right after the predecessor."}, {"zh": "或者正常反转这一段，再把前驱指向新段头、原段头指向段后的第一个节点。", "en": "Or reverse the segment normally, then point the predecessor at the new segment head and the old head at the node after the segment."}]

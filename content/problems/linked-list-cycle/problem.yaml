@@ -1,0 +1,21 @@
+id: "linked-list-cycle"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "环形链表", "en": "Linked List Cycle"}
+difficulty: easy
+topics: ["linked-list"]
+leetcode: {"frontendId": 141, "title": "Linked List Cycle", "slug": "linked-list-cycle", "difficulty": "easy", "tags": ["Hash Table", "Linked List", "Two Pointers", "Floyd's Cycle Finding Algorithm"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "判断链表中是否有环（沿 next 走会回到之前访问过的节点）。测试输入用 pos 表示尾节点连回的位置（-1 表示无环），你的函数只接收头节点。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Report whether the list has a cycle, meaning following next revisits a node. Test inputs use pos for where the tail links back (-1 for none); your function receives only the head. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "0 ≤ 节点数 ≤ 10⁴，-10⁵ ≤ Node.val ≤ 10⁵；进阶：O(1) 额外空间", "en": "0 ≤ nodes ≤ 10⁴, -10⁵ ≤ Node.val ≤ 10⁵; follow-up: O(1) extra space"}]
+params: [{"name": "head", "type": "linked-list"}, {"name": "pos", "type": "int"}]
+returns: "bool"
+shape: {"kind": "harness", "name": "linked-list-cycle"}
+comparator: {"kind": "exact"}
+entry: {"python": "hasCycle", "typescript": "hasCycle"}
+perCaseMs: 1000
+inputs: [{"type": "linked-list", "minLength": 0, "smallMaxLength": 8, "largeLength": 10000, "min": -100000, "max": 100000, "smallMin": -9, "smallMax": 9}, {"type": "int", "min": -1, "max": -1}]
+hints: [{"zh": "用集合记录访问过的节点可以做，但需要 O(n) 空间。", "en": "A set of visited nodes works but costs O(n) space."}, {"zh": "两个人在环形跑道上跑，速度不同，会发生什么？", "en": "Two runners on a circular track at different speeds: what happens?"}, {"zh": "慢指针每次走一步、快指针每次走两步；有环必相遇，无环快指针先到 null。", "en": "Slow moves one step, fast moves two; with a cycle they meet, without one fast reaches null first."}]
+solution: {"explanation": {"zh": "Floyd 判圈：快指针每步比慢指针多走一个节点，进入环后距离每步缩小 1，必然相遇。时间 O(n)，空间 O(1)。", "en": "Floyd's cycle detection: inside a cycle the fast pointer closes the gap by one node per step, so they must meet. O(n) time, O(1) space."}}
+examples: [{"id": "ex-1", "args": [[3, 2, 0, -4], 1], "expected": true}, {"id": "ex-2", "args": [[1, 2], 0], "expected": true}, {"id": "ex-3", "args": [[1], -1], "expected": false}]
+boundaryCases: [{"args": [[], -1]}, {"args": [[1], -1]}, {"args": [[1], 0]}, {"args": [[1, 2], 0]}, {"args": [[1, 2], -1]}, {"args": [[1, 2, 3], 2]}]

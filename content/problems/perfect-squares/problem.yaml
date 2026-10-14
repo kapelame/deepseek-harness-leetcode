@@ -1,0 +1,20 @@
+id: "perfect-squares"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "完全平方数", "en": "Perfect Squares"}
+difficulty: medium
+topics: ["dynamic-programming"]
+leetcode: {"frontendId": 279, "title": "Perfect Squares", "slug": "perfect-squares", "difficulty": "medium", "tags": ["Math", "Dynamic Programming", "Breadth-First Search", "Knapsack Problem", "Complete Knapsack"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "返回和为 n 的完全平方数（1, 4, 9, 16, …）的最少个数。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Return the fewest perfect squares (1, 4, 9, 16, …) that sum to n. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 10⁴", "en": "1 ≤ n ≤ 10⁴"}]
+params: [{"name": "n", "type": "int"}]
+returns: "int"
+comparator: {"kind": "exact"}
+entry: {"python": "numSquares", "typescript": "numSquares"}
+perCaseMs: 3000
+inputs: [{"type": "int", "min": 1, "max": 10000, "smallMin": 1, "smallMax": 40}]
+hints: [{"zh": "最后加上的那个平方数是 j²，那么剩下的部分是 n - j²。", "en": "If the last square added is j², the rest is n - j²."}, {"zh": "dp[x] = 1 + min(dp[x - j²])，对所有 j² ≤ x。", "en": "dp[x] = 1 + min(dp[x - j²]) over every j² ≤ x."}, {"zh": "dp[0] = 0，从小到大填表；这是一个完全背包。", "en": "dp[0] = 0; fill from small to large. It is an unbounded knapsack."}]
+solution: {"explanation": {"zh": "完全背包式 DP，时间 O(n√n)，空间 O(n)。", "en": "Unbounded-knapsack DP in O(n√n) time and O(n) space."}}
+examples: [{"id": "ex-1", "args": [12], "expected": 3}, {"id": "ex-2", "args": [13], "expected": 2}]
+boundaryCases: [{"args": [1]}, {"args": [2]}, {"args": [4]}, {"args": [12]}, {"args": [13]}]

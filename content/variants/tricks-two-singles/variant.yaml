@@ -1,0 +1,22 @@
+id: "tricks-two-singles"
+version: 1
+suiteVersion: 1
+parentProblemId: "single-number"
+topicId: "tricks"
+title: {"zh": "两个只出现一次的数", "en": "Two Numbers That Appear Once"}
+summary: {"zh": "除了两个数各出现一次外，其余数都恰好出现两次。按升序返回这两个数。", "en": "Every number appears twice except two that appear once; return those two in ascending order."}
+statement: {"zh": "整数数组 `nums` 中恰有两个元素只出现一次，其余所有元素都恰好出现两次。找出这两个只出现一次的元素，按**升序**返回。\n\n要求 O(n) 时间、O(1) 额外空间。", "en": "In the integer array `nums`, exactly two elements appear once and every other element appears exactly twice. Return those two elements in **ascending** order.\n\nUse O(n) time and O(1) extra space."}
+difficulty: medium
+skills: ["XOR", "bit partitioning"]
+differences: [{"category": "output", "description": {"zh": "要找两个数，而不是一个。", "en": "Two numbers must be found instead of one."}}, {"category": "reasoning", "description": {"zh": "全部异或得到的是两个答案的异或值，需要用其中一个为 1 的二进制位把所有数分成两组。", "en": "XORing everything yields the XOR of the two answers; a set bit of it splits all numbers into two groups."}}]
+transfer: {"zh": "“异或抵消成对元素”的性质保持不变；新的步骤是分组：两个答案在某一位上不同，按该位分组后，每组恰好包含一个答案和若干成对元素。", "en": "The pair-cancelling property of XOR carries over; the new step splits by a bit where the two answers differ, so each group holds one answer plus pairs."}
+entry: {"python": "singleNumbers", "typescript": "singleNumbers"}
+params: [{"name": "nums", "type": "int[]"}]
+returns: "int[]"
+comparator: {"kind": "exact"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 2, "smallMaxLength": 5, "largeLength": 10000, "min": -1000000000, "max": 1000000000, "smallMin": -6, "smallMax": 6, "distinct": true}]
+constraints: [{"zh": "2 ≤ n ≤ 3×10⁴，-2³¹ ≤ nums[i] ≤ 2³¹-1", "en": "2 ≤ n ≤ 3×10⁴, -2³¹ ≤ nums[i] ≤ 2³¹-1"}]
+examples: [{"args": [[1, 2, 1, 3, 2, 5]], "expected": [3, 5]}, {"args": [[-1, 0]], "expected": [-1, 0]}, {"args": [[0, 1]], "expected": [0, 1]}]
+boundaryCases: [{"args": [[1, 2]]}, {"args": [[-2147483648, 2147483647]]}, {"args": [[4, 4, 7, 9]]}, {"args": [[0, -1, 0, 5]]}]
+hints: [{"zh": "全部异或后得到 x = a ⊕ b。x 一定不为 0，为什么？", "en": "XOR everything to get x = a ⊕ b. Why is x never 0?"}, {"zh": "取 x 的最低位 1：lowbit = x & -x。a 和 b 在这一位上一定不同。", "en": "Take the lowest set bit, lowbit = x & -x; a and b differ in that bit."}, {"zh": "按 (num & lowbit) 是否为 0 把所有数分成两组，各自异或得到 a 和 b，排序后返回。", "en": "Split all numbers by whether num & lowbit is zero, XOR each group to get a and b, then sort them."}]

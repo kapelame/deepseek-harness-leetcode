@@ -4,9 +4,10 @@
  * imported code is untrusted. The same pipeline freezes authored suites.
  */
 import type { JsonValue } from '@deepseek-ai/dsh-util-values'
-import type { Comparator, ParamSpec, ValueType } from '../types.ts'
+import type { Comparator, ParamSpec, ProblemShape, ValueType } from '../types.ts'
 import type { SuiteCase } from '../content/catalog.ts'
 import { matchesValueType } from '../content/schema.ts'
+import { executionSignature } from '../content/signature.ts'
 import type { CaseOutcome, ExecutionOutcome, RunnerBackend } from '../runner/types.ts'
 import { canonical, outputsMatch } from './compare.ts'
 
@@ -17,6 +18,7 @@ export const SUITE_SEEDS = { small: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], lar
 export interface SuiteBuildInput {
   readonly params: readonly ParamSpec[]
   readonly returns: ValueType
+  readonly shape?: ProblemShape | undefined
   readonly comparator: Comparator
   /** Python entry name shared by reference, oracle, and mutants. */
   readonly entry: string
@@ -36,6 +38,7 @@ export interface SuiteBuildInput {
     readonly entry: string
     readonly params: readonly ParamSpec[]
     readonly returns: ValueType
+    readonly shape?: ProblemShape | undefined
   }
 }
 
@@ -142,7 +145,7 @@ export async function buildSuite(runner: RunnerBackend, input: SuiteBuildInput, 
   for (const item of generatedCases) add({ ...item, visibility: 'hidden' })
 
   const reference = await runner.execute({
-    language: 'python', code: input.reference, entry: input.entry, params: input.params.map(item => item.type), returns: input.returns,
+    language: 'python', code: input.reference, entry: input.entry, ...executionSignature(input),
     cases: ordered.map(item => ({ id: item.id, args: item.args })), perCaseMs: input.perCaseMs,
   }, signal)
   const referenceProblem = outcomeProblem(reference)
@@ -166,7 +169,7 @@ export async function buildSuite(runner: RunnerBackend, input: SuiteBuildInput, 
   if (input.oracle !== undefined) {
     const small = cases.filter(item => item.label !== 'adversarial')
     const oracle = await runner.execute({
-      language: 'python', code: input.oracle, entry: input.entry, params: input.params.map(item => item.type), returns: input.returns,
+      language: 'python', code: input.oracle, entry: input.entry, ...executionSignature(input),
       cases: small.map(item => ({ id: item.id, args: item.args })), perCaseMs: Math.min(10_000, input.perCaseMs * 3),
     }, signal)
     const oracleProblem = outcomeProblem(oracle)
@@ -186,7 +189,7 @@ export async function buildSuite(runner: RunnerBackend, input: SuiteBuildInput, 
     let killed = 0
     for (const [index, mutant] of input.mutants.entries()) {
       const outcome = await runner.execute({
-        language: 'python', code: mutant, entry: input.entry, params: input.params.map(item => item.type), returns: input.returns,
+        language: 'python', code: mutant, entry: input.entry, ...executionSignature(input),
         cases: cases.map(item => ({ id: item.id, args: item.args })), perCaseMs: input.perCaseMs,
       }, signal)
       if (outcome.status === 'unavailable' || outcome.status === 'runner-error' || outcome.status === 'cancelled') return fail('mutants',
@@ -206,11 +209,12 @@ export async function buildSuite(runner: RunnerBackend, input: SuiteBuildInput, 
     const parent = input.parent
     const compatible = parent.returns === input.returns && parent.params.length === input.params.length
       && parent.params.every((item, index) => item.type === input.params[index]?.type)
+      && JSON.stringify(parent.shape ?? null) === JSON.stringify(input.shape ?? null)
     if (!compatible) {
       pass('transfer', 'the parent signature differs, so its solution cannot be replayed unchanged')
     } else {
       const outcome = await runner.execute({
-        language: 'python', code: parent.reference, entry: parent.entry, params: parent.params.map(item => item.type), returns: parent.returns,
+        language: 'python', code: parent.reference, entry: parent.entry, ...executionSignature(parent),
         cases: cases.map(item => ({ id: item.id, args: item.args })), perCaseMs: input.perCaseMs,
       }, signal)
       const values = valuesById(outcome)

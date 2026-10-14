@@ -1,0 +1,21 @@
+id: "find-median-from-data-stream"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "数据流的中位数", "en": "Find Median from Data Stream"}
+difficulty: hard
+topics: ["design"]
+leetcode: {"frontendId": 295, "title": "Find Median from Data Stream", "slug": "find-median-from-data-stream", "difficulty": "hard", "tags": ["Two Pointers", "Design", "Sorting", "Heap (Priority Queue)", "Data Stream"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "设计数据结构，支持不断加入整数（addNum）并随时返回当前所有数的中位数（findMedian；偶数个时取中间两数的平均值）。findMedian 只在至少加入一个数之后调用。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Design a structure that keeps accepting integers (addNum) and returns the median of everything so far at any time (findMedian; the mean of the middle two for an even count). findMedian is only called after at least one addNum. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "-10⁵ ≤ num ≤ 10⁵，调用总次数 ≤ 5×10⁴；答案误差不超过 10⁻⁵", "en": "-10⁵ ≤ num ≤ 10⁵, at most 5×10⁴ calls; answers within 10⁻⁵ are accepted"}]
+params: [{"name": "operations", "type": "string[]"}, {"name": "arguments", "type": "json"}]
+returns: "json"
+shape: {"kind": "design", "className": "MedianFinder", "constructorParams": [], "methods": [{"name": "addNum", "params": [{"name": "num", "type": "int"}], "returns": "void"}, {"name": "findMedian", "params": [], "returns": "float"}]}
+comparator: {"kind": "float", "tolerance": 1e-05}
+entry: {"python": "MedianFinder", "typescript": "MedianFinder"}
+perCaseMs: 1000
+inputs: [{"type": "string[]"}, {"type": "json"}]
+hints: [{"zh": "每次查询都排序太慢。中位数只关心“中间”的位置。", "en": "Sorting on every query is too slow. The median only cares about the middle."}, {"zh": "把数分成较小的一半和较大的一半：较小一半用大顶堆，较大一半用小顶堆。", "en": "Split the numbers into a smaller half in a max-heap and a larger half in a min-heap."}, {"zh": "保持两个堆大小相差不超过 1，且小半边的最大值 ≤ 大半边的最小值；中位数由两个堆顶决定。", "en": "Keep their sizes within one and the smaller half's maximum ≤ the larger half's minimum; the heap tops give the median."}]
+solution: {"explanation": {"zh": "双堆维护两半：addNum O(log n)，findMedian O(1)。", "en": "Two heaps keep the halves: addNum is O(log n) and findMedian O(1)."}}
+examples: [{"id": "ex-1", "args": [["MedianFinder", "addNum", "addNum", "findMedian", "addNum", "findMedian"], [[], [1], [2], [], [3], []]], "expected": [null, null, null, 1.5, null, 2.0]}]
+boundaryCases: [{"args": [["MedianFinder", "addNum", "findMedian"], [[], [1], []]]}, {"args": [["MedianFinder", "addNum", "addNum", "findMedian"], [[], [1], [2], []]]}, {"args": [["MedianFinder", "addNum", "addNum", "findMedian", "addNum", "findMedian"], [[], [1], [2], [], [3], []]]}, {"args": [["MedianFinder", "addNum", "addNum", "findMedian"], [[], [-100000], [100000], []]]}]

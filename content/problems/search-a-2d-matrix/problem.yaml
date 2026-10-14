@@ -1,0 +1,20 @@
+id: "search-a-2d-matrix"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "搜索二维矩阵", "en": "Search a 2D Matrix"}
+difficulty: medium
+topics: ["binary-search"]
+leetcode: {"frontendId": 74, "title": "Search a 2D Matrix", "slug": "search-a-2d-matrix", "difficulty": "medium", "tags": ["Array", "Binary Search", "Matrix"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "矩阵每行递增，且每行第一个数大于上一行最后一个数。判断 target 是否在矩阵中，要求 O(log(mn))。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Rows are increasing and each row starts above the previous row's end; report whether target is present in O(log(mn)). (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ m, n ≤ 100，-10⁴ ≤ 元素, target ≤ 10⁴", "en": "1 ≤ m, n ≤ 100, -10⁴ ≤ values, target ≤ 10⁴"}]
+params: [{"name": "matrix", "type": "int[][]"}, {"name": "target", "type": "int"}]
+returns: "bool"
+comparator: {"kind": "exact"}
+entry: {"python": "searchMatrix", "typescript": "searchMatrix"}
+perCaseMs: 1000
+inputs: [{"type": "int[][]", "minLength": 1, "maxLength": 100, "smallMaxLength": 4, "largeLength": 100, "row": {"minLength": 1, "maxLength": 100, "smallMaxLength": 4, "largeLength": 100}, "cell": {"min": 0, "max": 0}}, {"type": "int", "min": -10000, "max": 10000}]
+hints: [{"zh": "把整个矩阵按行拼起来，会得到什么样的一维数组？", "en": "If you concatenate the rows, what kind of 1-D array do you get?"}, {"zh": "一个有序数组，长度 m·n。下标 k 对应 matrix[k // n][k % n]。", "en": "A sorted array of length m·n, where index k maps to matrix[k // n][k % n]."}, {"zh": "在 [0, mn-1] 上做普通二分查找。", "en": "Run an ordinary binary search over [0, mn-1]."}]
+solution: {"explanation": {"zh": "把矩阵视为有序一维数组做二分，下标换算为行列。时间 O(log(mn))，空间 O(1)。", "en": "Binary search over the matrix viewed as one sorted array, converting indices to row and column. O(log(mn)) time, O(1) space."}}
+examples: [{"id": "ex-1", "args": [[[1, 3, 5, 7], [10, 11, 16, 20], [23, 30, 34, 60]], 3], "expected": true}, {"id": "ex-2", "args": [[[1, 3, 5, 7], [10, 11, 16, 20], [23, 30, 34, 60]], 13], "expected": false}]
+boundaryCases: [{"args": [[[1]], 1]}, {"args": [[[1]], 2]}, {"args": [[[1, 3]], 3]}, {"args": [[[1], [3]], 2]}, {"args": [[[-10000, 10000]], 10000]}]

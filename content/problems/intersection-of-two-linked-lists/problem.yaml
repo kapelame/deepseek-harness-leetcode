@@ -1,0 +1,21 @@
+id: "intersection-of-two-linked-lists"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "相交链表", "en": "Intersection of Two Linked Lists"}
+difficulty: easy
+topics: ["linked-list"]
+leetcode: {"frontendId": 160, "title": "Intersection of Two Linked Lists", "slug": "intersection-of-two-linked-lists", "difficulty": "easy", "tags": ["Hash Table", "Linked List", "Two Pointers"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "两个单链表可能从某个节点开始共用后半段。返回它们相交的第一个节点；不相交则返回 null。测试输入给出链表内容和相交位置，你的函数只接收两个头节点。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Two singly linked lists may share a common tail. Return the first shared node, or null if they never meet. Test inputs describe both lists and the meeting point; your function receives only the two heads. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ m, n ≤ 3×10⁴，1 ≤ Node.val ≤ 10⁵；不能修改链表结构", "en": "1 ≤ m, n ≤ 3×10⁴, 1 ≤ Node.val ≤ 10⁵; do not modify the lists"}]
+params: [{"name": "intersectVal", "type": "int"}, {"name": "listA", "type": "linked-list"}, {"name": "listB", "type": "linked-list"}, {"name": "skipA", "type": "int"}, {"name": "skipB", "type": "int"}]
+returns: "json"
+shape: {"kind": "harness", "name": "linked-list-intersection"}
+comparator: {"kind": "exact"}
+entry: {"python": "getIntersectionNode", "typescript": "getIntersectionNode"}
+perCaseMs: 1000
+inputs: [{"type": "int", "min": 0, "max": 0}, {"type": "linked-list", "minLength": 1, "smallMaxLength": 6, "largeLength": 20000, "min": 1, "max": 100000, "smallMin": 1, "smallMax": 9}, {"type": "linked-list", "minLength": 1, "smallMaxLength": 6, "largeLength": 20000, "min": 1, "max": 100000, "smallMin": 1, "smallMax": 9}, {"type": "int", "min": 0, "max": 0}, {"type": "int", "min": 0, "max": 0}]
+hints: [{"zh": "相交指的是同一个节点对象，不只是值相等。", "en": "Intersection means the same node object, not just an equal value."}, {"zh": "如果两条链表长度相同，同步前进就会在交点相遇。长度不同时怎么办？", "en": "If both lists had equal length, walking in lockstep would meet at the junction. What if they differ?"}, {"zh": "指针 a 走完 A 后转到 B 的头，指针 b 走完 B 后转到 A 的头；两者走过的总长度相同，会在交点（或同时为 null）相遇。", "en": "Pointer a walks A then B, pointer b walks B then A; both cover the same total length and meet at the junction, or at null together."}]
+solution: {"explanation": {"zh": "双指针换道：两个指针各自走完自己的链表后切到对方的头部，走过的总步数相同，因此同时到达交点或同时到达末尾。时间 O(m + n)，空间 O(1)。", "en": "Switch-track pointers: each pointer finishes its own list and then starts on the other's head, so both cover the same distance and reach the junction, or the end, together. O(m + n) time, O(1) space."}}
+examples: [{"id": "ex-1", "args": [8, [4, 1, 8, 4, 5], [5, 6, 1, 8, 4, 5], 2, 3], "expected": 8}, {"id": "ex-2", "args": [2, [1, 9, 1, 2, 4], [3, 2, 4], 3, 1], "expected": 2}, {"id": "ex-3", "args": [0, [2, 6, 4], [1, 5], 3, 2], "expected": null}]
+boundaryCases: [{"args": [1, [1], [1], 0, 0]}, {"args": [0, [1], [2], 1, 1]}, {"args": [3, [1, 2, 3], [3], 2, 0]}, {"args": [0, [5, 6], [7], 2, 1]}]

@@ -1,0 +1,20 @@
+id: "single-number"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "只出现一次的数字", "en": "Single Number"}
+difficulty: easy
+topics: ["tricks"]
+leetcode: {"frontendId": 136, "title": "Single Number", "slug": "single-number", "difficulty": "easy", "tags": ["Array", "Bit Manipulation"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "数组中除了一个元素只出现一次外，其余元素都恰好出现两次。找出那个只出现一次的元素，要求 O(n) 时间、O(1) 额外空间。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Every element appears twice except one that appears once; find it in O(n) time and O(1) extra space. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 3×10⁴，-3×10⁴ ≤ nums[i] ≤ 3×10⁴", "en": "1 ≤ n ≤ 3×10⁴, -3×10⁴ ≤ nums[i] ≤ 3×10⁴"}]
+params: [{"name": "nums", "type": "int[]"}]
+returns: "int"
+comparator: {"kind": "exact"}
+entry: {"python": "singleNumber", "typescript": "singleNumber"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "smallMaxLength": 4, "largeLength": 10000, "min": -30000, "max": 30000, "smallMin": -5, "smallMax": 5, "distinct": true}]
+hints: [{"zh": "哈希表计数可以做，但需要 O(n) 空间。", "en": "Counting with a hash map works but takes O(n) space."}, {"zh": "有没有一种运算，满足 a ⊕ a = 0 且 a ⊕ 0 = a？", "en": "Is there an operation with a ⊕ a = 0 and a ⊕ 0 = a?"}, {"zh": "异或满足交换律和结合律：把所有数异或起来，成对的数互相抵消。", "en": "XOR is commutative and associative: XOR everything and the pairs cancel."}]
+solution: {"explanation": {"zh": "所有元素异或，成对元素抵消，剩下的就是答案。时间 O(n)，空间 O(1)。", "en": "XOR all elements; pairs cancel and the single value remains. O(n) time, O(1) space."}}
+examples: [{"id": "ex-1", "args": [[2, 2, 1]], "expected": 1}, {"id": "ex-2", "args": [[4, 1, 2, 1, 2]], "expected": 4}, {"id": "ex-3", "args": [[1]], "expected": 1}]
+boundaryCases: [{"args": [[1]]}, {"args": [[2, 2, 1]]}, {"args": [[-1, 5, -1]]}, {"args": [[0, 7, 7]]}]

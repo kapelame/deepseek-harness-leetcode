@@ -1,0 +1,20 @@
+id: "generate-parentheses"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "括号生成", "en": "Generate Parentheses"}
+difficulty: medium
+topics: ["backtracking"]
+leetcode: {"frontendId": 22, "title": "Generate Parentheses", "slug": "generate-parentheses", "difficulty": "medium", "tags": ["String", "Dynamic Programming", "Backtracking", "Bracket Sequences"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "生成所有由 n 对括号组成的合法括号串，顺序不限。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Generate every well-formed string of n pairs of parentheses, in any order. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 8", "en": "1 ≤ n ≤ 8"}]
+params: [{"name": "n", "type": "int"}]
+returns: "string[]"
+comparator: {"kind": "unordered"}
+entry: {"python": "generateParenthesis", "typescript": "generateParenthesis"}
+perCaseMs: 1000
+inputs: [{"type": "int", "min": 1, "max": 8, "smallMin": 1, "smallMax": 4}]
+hints: [{"zh": "在构造过程中，什么时候可以放一个左括号？什么时候可以放右括号？", "en": "While building, when may you add an opening parenthesis, and when a closing one?"}, {"zh": "左括号用了不到 n 个就能放左括号；右括号数少于左括号数才能放右括号。", "en": "Add '(' while fewer than n are used; add ')' only while there are fewer ')' than '('."}, {"zh": "满足这两个条件的回溯只会生成合法串，不需要事后检查。", "en": "Backtracking under these two rules only produces valid strings, so no final check is needed."}]
+solution: {"explanation": {"zh": "带约束的回溯：维护已用左、右括号数，只在合法前提下扩展。结果数为卡特兰数。", "en": "Constrained backtracking: count opens and closes and extend only while the prefix stays valid. The result count is a Catalan number."}}
+examples: [{"id": "ex-1", "args": [3], "expected": ["((()))", "(()())", "(())()", "()(())", "()()()"]}, {"id": "ex-2", "args": [1], "expected": ["()"]}]
+boundaryCases: [{"args": [1]}, {"args": [2]}, {"args": [3]}]

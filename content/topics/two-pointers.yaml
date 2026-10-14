@@ -5,7 +5,7 @@ summary:
   zh: 在有序数组或对称结构上，从两端（或同向）移动两个下标，每一步都能安全地排除一整批不可能的答案。
   en: On sorted arrays or symmetric structures, move two indices from both ends (or in the same direction) so every step safely discards a whole batch of impossible answers.
 prerequisites: [hashing]
-problems: [valid-palindrome, two-sum-ii-input-array-is-sorted, 3sum]
+problems: [valid-palindrome, two-sum-ii-input-array-is-sorted, 3sum, move-zeroes, container-with-most-water, trapping-rain-water]
 variants: [two-pointers-closest-pair, two-pointers-count-smaller-pairs]
 lesson:
   motivation:

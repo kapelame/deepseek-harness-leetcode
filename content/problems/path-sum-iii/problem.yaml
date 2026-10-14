@@ -1,0 +1,20 @@
+id: "path-sum-iii"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "路径总和 III", "en": "Path Sum III"}
+difficulty: medium
+topics: ["trees"]
+leetcode: {"frontendId": 437, "title": "Path Sum III", "slug": "path-sum-iii", "difficulty": "medium", "tags": ["Tree", "Depth-First Search", "Binary Tree"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "统计和为 targetSum 的路径条数。路径必须向下（从父到子），但不必从根开始、也不必在叶子结束。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Count downward paths (parent to child) whose values sum to targetSum; a path need not start at the root or end at a leaf. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "0 ≤ 节点数 ≤ 1000，-10⁹ ≤ Node.val ≤ 10⁹，-1000 ≤ targetSum ≤ 1000", "en": "0 ≤ nodes ≤ 1000, -10⁹ ≤ Node.val ≤ 10⁹, -1000 ≤ targetSum ≤ 1000"}]
+params: [{"name": "root", "type": "tree"}, {"name": "targetSum", "type": "int"}]
+returns: "int"
+comparator: {"kind": "exact"}
+entry: {"python": "pathSum", "typescript": "pathSum"}
+perCaseMs: 1000
+inputs: [{"type": "tree", "minLength": 0, "maxLength": 1000, "smallMaxLength": 9, "largeLength": 1000, "min": -5, "max": 5}, {"type": "int", "min": -10, "max": 10, "smallMin": -3, "smallMax": 3}]
+hints: [{"zh": "从根到当前节点的路径上，任意一段向下路径的和能用前缀和表示吗？", "en": "On the root-to-node path, can any downward segment's sum be written with prefix sums?"}, {"zh": "与“和为 K 的子数组”相同：路径和 = 当前前缀和 − 某个祖先处的前缀和。", "en": "Exactly like subarray sum equals k: segment sum = current prefix − some ancestor's prefix."}, {"zh": "DFS 时用哈希表记录根到当前路径上各前缀和的次数；回溯离开节点时要把它的计数减回去。", "en": "During DFS keep counts of prefix sums along the current root path; decrement a node's count when backtracking out of it."}]
+solution: {"explanation": {"zh": "树上的前缀和 + 哈希计数，回溯时撤销当前节点的贡献。时间 O(n)，空间 O(h)。", "en": "Prefix sums along tree paths with hash counts, undoing the current node's contribution on the way back. O(n) time, O(h) space."}}
+examples: [{"id": "ex-1", "args": [[10, 5, -3, 3, 2, null, 11, 3, -2, null, 1], 8], "expected": 3}, {"id": "ex-2", "args": [[5, 4, 8, 11, null, 13, 4, 7, 2, null, null, 5, 1], 22], "expected": 3}]
+boundaryCases: [{"args": [[], 0]}, {"args": [[1], 1]}, {"args": [[1], 0]}, {"args": [[0, 0, 0], 0]}, {"args": [[1, -1, 1], 0]}]

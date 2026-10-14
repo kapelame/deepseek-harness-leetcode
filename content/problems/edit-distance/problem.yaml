@@ -1,0 +1,20 @@
+id: "edit-distance"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "编辑距离", "en": "Edit Distance"}
+difficulty: medium
+topics: ["dynamic-programming"]
+leetcode: {"frontendId": 72, "title": "Edit Distance", "slug": "edit-distance", "difficulty": "medium", "tags": ["String", "Dynamic Programming"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "把 word1 变成 word2 所需的最少操作数，每次操作可以插入、删除或替换一个字符。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Return the fewest single-character insertions, deletions, or replacements that turn word1 into word2. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "0 ≤ |word1|, |word2| ≤ 500，只含小写字母", "en": "0 ≤ |word1|, |word2| ≤ 500, lowercase letters"}]
+params: [{"name": "word1", "type": "string"}, {"name": "word2", "type": "string"}]
+returns: "int"
+comparator: {"kind": "exact"}
+entry: {"python": "minDistance", "typescript": "minDistance"}
+perCaseMs: 3000
+inputs: [{"type": "string", "minLength": 0, "maxLength": 500, "smallMaxLength": 6, "largeLength": 500, "alphabet": "abcd", "smallAlphabet": "abc"}, {"type": "string", "minLength": 0, "maxLength": 500, "smallMaxLength": 6, "largeLength": 500, "alphabet": "abcd", "smallAlphabet": "abc"}]
+hints: [{"zh": "dp[i][j] = 把 word1 前 i 个字符变成 word2 前 j 个字符的最少操作数。", "en": "dp[i][j] = fewest operations turning the first i characters of word1 into the first j of word2."}, {"zh": "末尾相同时 dp[i][j] = dp[i-1][j-1]；否则 1 + min(删除 dp[i-1][j]，插入 dp[i][j-1]，替换 dp[i-1][j-1])。", "en": "With equal last characters dp[i][j] = dp[i-1][j-1]; otherwise 1 + min(delete dp[i-1][j], insert dp[i][j-1], replace dp[i-1][j-1])."}, {"zh": "边界：dp[i][0] = i（全部删除），dp[0][j] = j（全部插入）。", "en": "Bases: dp[i][0] = i (delete everything) and dp[0][j] = j (insert everything)."}]
+solution: {"explanation": {"zh": "双序列 DP，时间 O(mn)，空间可降到 O(n)。", "en": "Two-sequence DP in O(mn) time, reducible to O(n) space."}}
+examples: [{"id": "ex-1", "args": ["horse", "ros"], "expected": 3}, {"id": "ex-2", "args": ["intention", "execution"], "expected": 5}]
+boundaryCases: [{"args": ["", ""]}, {"args": ["a", ""]}, {"args": ["", "abc"]}, {"args": ["a", "a"]}, {"args": ["horse", "ros"]}, {"args": ["intention", "execution"]}]

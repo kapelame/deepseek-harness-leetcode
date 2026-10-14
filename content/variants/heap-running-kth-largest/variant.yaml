@@ -1,0 +1,22 @@
+id: "heap-running-kth-largest"
+version: 1
+suiteVersion: 1
+parentProblemId: "kth-largest-element-in-an-array"
+topicId: "heap"
+title: {"zh": "前缀中的第 k 大", "en": "k-th Largest of Every Prefix"}
+summary: {"zh": "对每个长度至少为 k 的前缀，求其中第 k 大的元素。", "en": "For every prefix of length at least k, report its k-th largest element."}
+statement: {"zh": "给定整数数组 `nums` 和整数 `k`。对每个 `i ≥ k - 1`，求前缀 `nums[0..i]` 中第 `k` 大的元素（按排序后的位置计，重复值分别计数）。\n\n按 `i` 递增的顺序返回这些答案组成的数组，长度为 `n - k + 1`。", "en": "Given an integer array `nums` and an integer `k`, for each `i ≥ k - 1` find the `k`-th largest element of the prefix `nums[0..i]`, counting repeated values separately.\n\nReturn these answers in increasing order of `i`, an array of length `n - k + 1`."}
+difficulty: medium
+skills: ["min-heap of size k", "streaming"]
+differences: [{"category": "output", "description": {"zh": "从一个答案变成每个前缀一个答案，数据像流一样到来。", "en": "From one answer to one per prefix, as if the data arrived as a stream."}}, {"category": "reasoning", "description": {"zh": "不能每次重新计算；需要在线维护大小为 k 的堆，并在每一步读出堆顶。", "en": "Recomputing each time is too slow; maintain a size-k heap online and read its top at each step."}}]
+transfer: {"zh": "“大小为 k 的最小堆，堆顶就是第 k 大”这一不变量不变；新增的是在每次插入后立即输出堆顶。", "en": "The invariant that a size-k min-heap's top is the k-th largest carries over; the addition is emitting the top after every insertion."}
+entry: {"python": "kthLargestPrefixes", "typescript": "kthLargestPrefixes"}
+params: [{"name": "nums", "type": "int[]"}, {"name": "k", "type": "int"}]
+returns: "int[]"
+comparator: {"kind": "exact"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "smallMaxLength": 9, "largeLength": 20000, "min": -10000, "max": 10000, "smallMin": -4, "smallMax": 4}, {"type": "int", "min": 1, "max": 1}]
+constraints: [{"zh": "1 ≤ k ≤ n ≤ 2×10⁴，-10⁴ ≤ nums[i] ≤ 10⁴", "en": "1 ≤ k ≤ n ≤ 2×10⁴, -10⁴ ≤ nums[i] ≤ 10⁴"}]
+examples: [{"args": [[4, 5, 8, 2, 3, 10], 3], "expected": [4, 4, 4, 5]}, {"args": [[1, 1, 1], 1], "expected": [1, 1, 1]}]
+boundaryCases: [{"args": [[5], 1]}, {"args": [[3, 1], 2]}, {"args": [[1, 2, 3], 3]}, {"args": [[-10000, 10000], 1]}]
+hints: [{"zh": "对单个数组，第 k 大可以用大小为 k 的最小堆求出。数据一个个到来时还成立吗？", "en": "For one array, a size-k min-heap gives the k-th largest. Does that still work when data arrives one value at a time?"}, {"zh": "成立：每来一个数，若堆不满就放入，否则与堆顶比较、更大时替换。", "en": "Yes: push while the heap holds fewer than k, otherwise replace the top when the newcomer is larger."}, {"zh": "当堆中恰有 k 个元素后，每一步的堆顶就是该前缀的答案。", "en": "Once the heap holds k elements, its top after each step is that prefix's answer."}]

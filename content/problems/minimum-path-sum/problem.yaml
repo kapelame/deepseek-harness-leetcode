@@ -1,0 +1,20 @@
+id: "minimum-path-sum"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "最小路径和", "en": "Minimum Path Sum"}
+difficulty: medium
+topics: ["dynamic-programming"]
+leetcode: {"frontendId": 64, "title": "Minimum Path Sum", "slug": "minimum-path-sum", "difficulty": "medium", "tags": ["Array", "Dynamic Programming", "Matrix"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "在非负整数网格中，从左上角走到右下角，每次只能向右或向下，求路径上数字之和的最小值。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "In a grid of non-negative integers, walk from the top-left to the bottom-right moving only right or down; return the smallest path sum. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ m, n ≤ 200，0 ≤ grid[i][j] ≤ 200", "en": "1 ≤ m, n ≤ 200, 0 ≤ grid[i][j] ≤ 200"}]
+params: [{"name": "grid", "type": "int[][]"}]
+returns: "int"
+comparator: {"kind": "exact"}
+entry: {"python": "minPathSum", "typescript": "minPathSum"}
+perCaseMs: 1000
+inputs: [{"type": "int[][]", "minLength": 1, "maxLength": 200, "smallMaxLength": 4, "largeLength": 150, "row": {"minLength": 1, "maxLength": 200, "smallMaxLength": 4, "largeLength": 150}, "cell": {"min": 0, "max": 200}}]
+hints: [{"zh": "到达 (i, j) 的最小路径和，取决于从上方和从左方到达的最小值。", "en": "The best sum into (i, j) depends on the best from above and from the left."}, {"zh": "best[i][j] = grid[i][j] + min(best[i-1][j], best[i][j-1])；第一行、第一列只能单向累加。", "en": "best[i][j] = grid[i][j] + min(best[i-1][j], best[i][j-1]); the first row and column accumulate in one direction."}, {"zh": "可以只用一行数组滚动。", "en": "One rolling row is enough."}]
+solution: {"explanation": {"zh": "网格 DP，O(mn) 时间，O(n) 空间。", "en": "Grid DP in O(mn) time and O(n) space."}}
+examples: [{"id": "ex-1", "args": [[[1, 3, 1], [1, 5, 1], [4, 2, 1]]], "expected": 7}, {"id": "ex-2", "args": [[[1, 2, 3], [4, 5, 6]]], "expected": 12}]
+boundaryCases: [{"args": [[[0]]]}, {"args": [[[5]]]}, {"args": [[[1, 2, 3]]]}, {"args": [[[1], [2], [3]]]}, {"args": [[[1, 3, 1], [1, 5, 1], [4, 2, 1]]]}]

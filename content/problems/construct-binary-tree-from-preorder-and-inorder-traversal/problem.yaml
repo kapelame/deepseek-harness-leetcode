@@ -1,0 +1,20 @@
+id: "construct-binary-tree-from-preorder-and-inorder-traversal"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "从前序与中序遍历序列构造二叉树", "en": "Construct Binary Tree from Preorder and Inorder Traversal"}
+difficulty: medium
+topics: ["trees"]
+leetcode: {"frontendId": 105, "title": "Construct Binary Tree from Preorder and Inorder Traversal", "slug": "construct-binary-tree-from-preorder-and-inorder-traversal", "difficulty": "medium", "tags": ["Array", "Hash Table", "Divide and Conquer", "Tree", "Binary Tree"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "给定一棵（节点值互不相同的）二叉树的先序遍历和中序遍历，重建并返回这棵树。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Given the preorder and inorder traversals of a tree with distinct values, rebuild and return the tree. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 3000，-3000 ≤ 值 ≤ 3000，值互不相同", "en": "1 ≤ n ≤ 3000, -3000 ≤ values ≤ 3000, all distinct"}]
+params: [{"name": "preorder", "type": "int[]"}, {"name": "inorder", "type": "int[]"}]
+returns: "tree"
+comparator: {"kind": "exact"}
+entry: {"python": "buildTree", "typescript": "buildTree"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1}, {"type": "int[]", "minLength": 1}]
+hints: [{"zh": "先序遍历的第一个元素是什么？", "en": "What is the first element of the preorder traversal?"}, {"zh": "它是根。在中序遍历中找到根的位置，左边是左子树，右边是右子树，由此知道左子树的大小。", "en": "It is the root. Its position in the inorder sequence splits the left and right subtrees and tells you the left subtree's size."}, {"zh": "用哈希表记录中序中每个值的下标，递归时传下标区间，O(n) 完成。", "en": "Store each value's inorder index in a hash map and recurse on index ranges for O(n) total."}]
+solution: {"explanation": {"zh": "先序首元素为根，用哈希表在中序中定位根以划分左右子树并递归。时间 O(n)，空间 O(n)。", "en": "The first preorder element is the root; a hash map locates it in the inorder sequence to split the subtrees, then recurse. O(n) time and space."}}
+examples: [{"id": "ex-1", "args": [[3, 9, 20, 15, 7], [9, 3, 15, 20, 7]], "expected": [3, 9, 20, null, null, 15, 7]}, {"id": "ex-2", "args": [[-1], [-1]], "expected": [-1]}]
+boundaryCases: [{"args": [[1], [1]]}, {"args": [[1, 2], [2, 1]]}, {"args": [[1, 2], [1, 2]]}, {"args": [[3, 9, 20, 15, 7], [9, 3, 15, 20, 7]]}]

@@ -1,0 +1,20 @@
+id: "partition-equal-subset-sum"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "分割等和子集", "en": "Partition Equal Subset Sum"}
+difficulty: medium
+topics: ["dynamic-programming"]
+leetcode: {"frontendId": 416, "title": "Partition Equal Subset Sum", "slug": "partition-equal-subset-sum", "difficulty": "medium", "tags": ["Array", "Dynamic Programming", "Knapsack Problem", "0-1 Knapsack"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "判断能否把正整数数组分成两个和相等的子集。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Decide whether the positive integers can be split into two subsets with equal sums. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 200，1 ≤ nums[i] ≤ 100", "en": "1 ≤ n ≤ 200, 1 ≤ nums[i] ≤ 100"}]
+params: [{"name": "nums", "type": "int[]"}]
+returns: "bool"
+comparator: {"kind": "exact"}
+entry: {"python": "canPartition", "typescript": "canPartition"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "maxLength": 200, "smallMaxLength": 8, "largeLength": 200, "min": 1, "max": 100, "smallMin": 1, "smallMax": 9}]
+hints: [{"zh": "总和为奇数时直接不可能。否则问题变成：能否选出一些数，和为总和的一半？", "en": "An odd total is impossible. Otherwise: can some numbers sum to half the total?"}, {"zh": "这是 0-1 背包：每个数最多用一次，dp[t] 表示能否凑出和 t。", "en": "That is a 0-1 knapsack: each number is used at most once, and dp[t] says whether t is reachable."}, {"zh": "对每个数，t 从大到小更新 dp[t] |= dp[t - num]，倒序保证每个数只用一次。", "en": "For each number update dp[t] |= dp[t - num] with t decreasing, so each number is used once."}]
+solution: {"explanation": {"zh": "0-1 背包可行性 DP，倒序更新一维数组。时间 O(n × sum)，空间 O(sum)。", "en": "A 0-1 knapsack feasibility DP updating one array backwards. O(n × sum) time, O(sum) space."}}
+examples: [{"id": "ex-1", "args": [[1, 5, 11, 5]], "expected": true}, {"id": "ex-2", "args": [[1, 2, 3, 5]], "expected": false}]
+boundaryCases: [{"args": [[1]]}, {"args": [[1, 1]]}, {"args": [[1, 2]]}, {"args": [[2, 2, 3, 5]]}, {"args": [[100, 100]]}]

@@ -1,0 +1,20 @@
+id: "n-queens"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "N 皇后", "en": "N-Queens"}
+difficulty: hard
+topics: ["backtracking"]
+leetcode: {"frontendId": 51, "title": "N-Queens", "slug": "n-queens", "difficulty": "hard", "tags": ["Array", "Backtracking", "Algorithm X"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "在 n×n 棋盘上放置 n 个皇后，使它们互不攻击（不同行、不同列、不在同一斜线上）。返回所有方案，每个方案用 n 个字符串表示棋盘，'Q' 为皇后、'.' 为空位。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Place n queens on an n×n board so no two attack each other (no shared row, column, or diagonal). Return every solution as n strings with 'Q' for a queen and '.' for an empty square. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 9", "en": "1 ≤ n ≤ 9"}]
+params: [{"name": "n", "type": "int"}]
+returns: "string[][]"
+comparator: {"kind": "unordered"}
+entry: {"python": "solveNQueens", "typescript": "solveNQueens"}
+perCaseMs: 1000
+inputs: [{"type": "int", "min": 1, "max": 9, "smallMin": 1, "smallMax": 6}]
+hints: [{"zh": "每行恰好放一个皇后，所以可以逐行决定它在哪一列。", "en": "Each row holds exactly one queen, so decide its column row by row."}, {"zh": "记录已占用的列、主对角线（r - c）和副对角线（r + c）。", "en": "Track occupied columns, main diagonals (r - c), and anti-diagonals (r + c)."}, {"zh": "放下皇后后递归下一行，返回时把三个集合恢复。", "en": "After placing a queen, recurse to the next row and restore the three sets on return."}]
+solution: {"explanation": {"zh": "逐行回溯，用三个集合 O(1) 判断冲突。搜索量远小于 nⁿ。", "en": "Row-by-row backtracking with three sets for O(1) conflict checks; the search is far smaller than nⁿ."}}
+examples: [{"id": "ex-1", "args": [4], "expected": [[".Q..", "...Q", "Q...", "..Q."], ["..Q.", "Q...", "...Q", ".Q.."]]}, {"id": "ex-2", "args": [1], "expected": [["Q"]]}]
+boundaryCases: [{"args": [1]}, {"args": [2]}, {"args": [3]}, {"args": [4]}]

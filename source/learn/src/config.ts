@@ -82,6 +82,28 @@ export interface AgentsConfig {
   maxDiagnosticRuns: number
 }
 
+/** Problem finder: adds LeetCode problems to a learner's bank from a description. */
+export interface FinderConfig {
+  /** Offer the finder; disabled leaves only curated and generated problems. */
+  enabled: boolean
+  /** LeetCode GraphQL endpoint for search and verified metadata. */
+  leetcodeEndpoint: string
+  /** LeetCode China GraphQL endpoint for official Chinese titles; empty skips it. */
+  leetcodeCnEndpoint: string
+  /** Minimum delay between LeetCode requests. */
+  requestIntervalMs: number
+  /** Deadline of one LeetCode request. */
+  requestTimeoutMs: number
+  /** Largest accepted LeetCode response body. */
+  maxResponseBytes: number
+  /** LeetCode requests one run may make. */
+  maxLeetcodeRequests: number
+  /** Problems one run may add. */
+  maxProblems: number
+  /** Specifications the agent may submit per problem before it is skipped. */
+  maxSubmissionsPerProblem: number
+}
+
 /** Complete Learn configuration. */
 export interface Config {
   /** Directory holding the database, captured email, and agent working directory. */
@@ -102,6 +124,8 @@ export interface Config {
   agents: AgentsConfig
   /** Reminder email. */
   email: EmailConfig
+  /** Problem finder for description-based additions. */
+  finder: FinderConfig
 }
 
 type Defaulted<T> = { [K in keyof T]?: T[K] extends readonly number[] ? T[K] : T[K] extends object ? Defaulted<T[K]> : T[K] }
@@ -158,5 +182,16 @@ export const ConfigSchema: z<ConfigInput, Config> = z.object({
     maxAttempts: z.natural().min(1).max(20).default(5),
     retryBaseMs: z.natural().min(1000).default(60_000),
     verificationTtlMinutes: z.natural().min(5).max(1440).default(30),
+  }).default({}),
+  finder: z.object({
+    enabled: z.boolean().default(true),
+    leetcodeEndpoint: z.string().min(1).default('https://leetcode.com/graphql'),
+    leetcodeCnEndpoint: z.string().default('https://leetcode.cn/graphql/'),
+    requestIntervalMs: z.natural().min(200).max(10_000).default(1000),
+    requestTimeoutMs: z.natural().min(1000).max(60_000).default(15_000),
+    maxResponseBytes: z.natural().min(65_536).max(16 * 1024 * 1024).default(2 * 1024 * 1024),
+    maxLeetcodeRequests: z.natural().min(1).max(200).default(40),
+    maxProblems: z.natural().min(1).max(10).default(5),
+    maxSubmissionsPerProblem: z.natural().min(1).max(6).default(3),
   }).default({}),
 })

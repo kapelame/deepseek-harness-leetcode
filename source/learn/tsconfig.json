@@ -12,6 +12,9 @@
       "path": "../../util/brand"
     },
     {
+      "path": "../../skill/skill"
+    },
+    {
       "path": "../../util/values"
     },
     {

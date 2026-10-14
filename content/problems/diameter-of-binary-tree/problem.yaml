@@ -1,0 +1,20 @@
+id: "diameter-of-binary-tree"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "二叉树的直径", "en": "Diameter of Binary Tree"}
+difficulty: easy
+topics: ["trees"]
+leetcode: {"frontendId": 543, "title": "Diameter of Binary Tree", "slug": "diameter-of-binary-tree", "difficulty": "easy", "tags": ["Tree", "Depth-First Search", "Binary Tree", "DP on Trees"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "求二叉树的直径：任意两个节点之间最长路径上的边数（路径不一定经过根）。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Return the tree's diameter: the number of edges on the longest path between any two nodes, which need not pass through the root. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ 节点数 ≤ 10⁴，-100 ≤ Node.val ≤ 100", "en": "1 ≤ nodes ≤ 10⁴, -100 ≤ Node.val ≤ 100"}]
+params: [{"name": "root", "type": "tree"}]
+returns: "int"
+comparator: {"kind": "exact"}
+entry: {"python": "diameterOfBinaryTree", "typescript": "diameterOfBinaryTree"}
+perCaseMs: 1000
+inputs: [{"type": "tree", "minLength": 1, "maxLength": 10000, "smallMaxLength": 9, "largeLength": 3000, "min": -100, "max": 100}]
+hints: [{"zh": "一条最长路径一定在某个节点“拐弯”。经过节点 x 拐弯的最长路径有多长？", "en": "Every longest path turns at some node. How long is the longest path turning at node x?"}, {"zh": "它等于 x 左子树的高度 + 右子树的高度。", "en": "It equals the height of x's left subtree plus the height of its right subtree."}, {"zh": "后序遍历计算每个节点的高度，同时用全局变量更新 左高 + 右高 的最大值。", "en": "Compute heights in post-order and update a running maximum of left height + right height."}]
+solution: {"explanation": {"zh": "一次后序遍历：返回子树高度，同时在每个节点处更新经过它的最长路径。时间 O(n)，空间 O(h)。", "en": "One post-order pass returns subtree heights while updating the longest path through each node. O(n) time, O(h) space."}}
+examples: [{"id": "ex-1", "args": [[1, 2, 3, 4, 5]], "expected": 3}, {"id": "ex-2", "args": [[1, 2]], "expected": 1}]
+boundaryCases: [{"args": [[1]]}, {"args": [[1, 2]]}, {"args": [[1, 2, 3]]}, {"args": [[1, 2, null, 3, null, 4]]}]

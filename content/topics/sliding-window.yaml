@@ -5,7 +5,7 @@ summary:
   zh: 当答案是一段连续子数组或子串时，让窗口两端只向右移动，增量更新窗口状态，而不是每次从头重算。
   en: When the answer is a contiguous subarray or substring, move both window ends only rightwards and update the window state incrementally instead of recomputing it.
 prerequisites: [hashing, two-pointers]
-problems: [maximum-average-subarray-i, longest-substring-without-repeating-characters, minimum-size-subarray-sum]
+problems: [maximum-average-subarray-i, longest-substring-without-repeating-characters, minimum-size-subarray-sum, find-all-anagrams-in-a-string, sliding-window-maximum, minimum-window-substring]
 variants: [sliding-window-at-most-twice, sliding-window-distinct-window-sum]
 lesson:
   motivation:

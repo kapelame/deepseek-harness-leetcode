@@ -5,7 +5,7 @@ summary:
   zh: 只要能把问题写成“某个条件从假变真只翻转一次”，就能每次检查中点、丢掉一半搜索空间，在 O(log n) 次检查内找到分界点。
   en: Whenever a condition flips from false to true exactly once, checking the midpoint discards half of the search space, so the boundary is found in O(log n) checks.
 prerequisites: []
-problems: [binary-search, search-insert-position, koko-eating-bananas]
+problems: [binary-search, search-insert-position, koko-eating-bananas, search-a-2d-matrix, find-first-and-last-position-of-element-in-sorted-array, search-in-rotated-sorted-array, find-minimum-in-rotated-sorted-array, median-of-two-sorted-arrays]
 variants: [binary-search-count-occurrences, binary-search-koko-rest]
 lesson:
   motivation:

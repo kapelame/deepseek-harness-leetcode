@@ -1,0 +1,20 @@
+id: "number-of-islands"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "岛屿数量", "en": "Number of Islands"}
+difficulty: medium
+topics: ["graph"]
+leetcode: {"frontendId": 200, "title": "Number of Islands", "slug": "number-of-islands", "difficulty": "medium", "tags": ["Array", "Depth-First Search", "Breadth-First Search", "Union-Find", "Matrix"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "网格中 \"1\" 表示陆地、\"0\" 表示水。上下左右相连的陆地组成一个岛屿，统计岛屿数量。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "In a grid, \"1\" is land and \"0\" is water. Land cells connected up, down, left, or right form an island; count the islands. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ m, n ≤ 300，grid[i][j] 为 \"0\" 或 \"1\"", "en": "1 ≤ m, n ≤ 300, grid[i][j] is \"0\" or \"1\""}]
+params: [{"name": "grid", "type": "string[][]"}]
+returns: "int"
+comparator: {"kind": "exact"}
+entry: {"python": "numIslands", "typescript": "numIslands"}
+perCaseMs: 1000
+inputs: [{"type": "string[][]", "minLength": 1, "maxLength": 300, "smallMaxLength": 5, "largeLength": 200, "row": {"minLength": 1, "maxLength": 300, "smallMaxLength": 5, "largeLength": 200}, "cell": {"alphabet": "01", "maxLength": 1}}]
+hints: [{"zh": "每遇到一块还没访问过的陆地，就发现了一个新岛屿。", "en": "Every unvisited land cell you meet starts a new island."}, {"zh": "从它出发用 DFS 或 BFS 把整个岛屿标记为已访问。", "en": "From it, mark the whole island visited with DFS or BFS."}, {"zh": "可以直接把访问过的 \"1\" 改成 \"0\"，省去 visited 数组；用显式栈避免深递归。", "en": "You can overwrite visited \"1\" cells with \"0\" instead of a visited array, and use an explicit stack to avoid deep recursion."}]
+solution: {"explanation": {"zh": "扫描网格，遇到陆地就计数并用 BFS/DFS 淹没整个连通块。每个格子访问常数次，时间 O(mn)，空间 O(mn)。", "en": "Scan the grid; each land cell found increments the count and a BFS/DFS sinks its whole component. Every cell is touched a constant number of times, O(mn) time and space."}}
+examples: [{"id": "ex-1", "args": [[["1", "1", "1", "1", "0"], ["1", "1", "0", "1", "0"], ["1", "1", "0", "0", "0"], ["0", "0", "0", "0", "0"]]], "expected": 1}, {"id": "ex-2", "args": [[["1", "1", "0", "0", "0"], ["1", "1", "0", "0", "0"], ["0", "0", "1", "0", "0"], ["0", "0", "0", "1", "1"]]], "expected": 3}]
+boundaryCases: [{"args": [[["0"]]]}, {"args": [[["1"]]]}, {"args": [[["1", "0", "1"]]]}, {"args": [[["1"], ["1"], ["0"], ["1"]]]}, {"args": [[["1", "1"], ["1", "1"]]]}]

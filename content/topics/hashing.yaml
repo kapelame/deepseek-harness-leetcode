@@ -7,7 +7,7 @@ summary:
   zh: 当问题反复问“我之前见过某个值吗？”时，用哈希表把每次查找从 O(n) 降到期望 O(1)。
   en: When a problem keeps asking "have I seen this value before?", a hash table turns each O(n) search into an expected O(1) lookup.
 prerequisites: []
-problems: [two-sum, contains-duplicate, group-anagrams]
+problems: [two-sum, contains-duplicate, group-anagrams, longest-consecutive-sequence]
 variants: [hashing-distinct-pair-sums, hashing-count-index-pairs]
 lesson:
   motivation:

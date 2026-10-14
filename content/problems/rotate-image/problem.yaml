@@ -1,0 +1,21 @@
+id: "rotate-image"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "旋转图像", "en": "Rotate Image"}
+difficulty: medium
+topics: ["matrix"]
+leetcode: {"frontendId": 48, "title": "Rotate Image", "slug": "rotate-image", "difficulty": "medium", "tags": ["Array", "Math", "Matrix"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "把 n×n 矩阵原地顺时针旋转 90 度，不要另开一个矩阵。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Rotate an n×n matrix 90 degrees clockwise in place, without allocating another matrix. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 20，-1000 ≤ matrix[i][j] ≤ 1000", "en": "1 ≤ n ≤ 20, -1000 ≤ matrix[i][j] ≤ 1000"}]
+params: [{"name": "matrix", "type": "int[][]"}]
+returns: "int[][]"
+shape: {"kind": "in-place", "param": 0}
+comparator: {"kind": "exact"}
+entry: {"python": "rotate", "typescript": "rotate"}
+perCaseMs: 1000
+inputs: [{"type": "int[][]", "minLength": 1, "maxLength": 20, "smallMaxLength": 5, "largeLength": 20, "row": {"minLength": 1, "maxLength": 20}, "cell": {"min": -1000, "max": 1000}}]
+hints: [{"zh": "顺时针旋转后，元素 (i, j) 去了哪里？", "en": "After a clockwise rotation, where does element (i, j) go?"}, {"zh": "旋转 = 转置（沿主对角线翻转）+ 每行左右翻转。", "en": "Rotation = transpose (flip across the main diagonal) + reverse each row."}, {"zh": "也可以按层，每次把四个对应位置循环交换。", "en": "Alternatively, rotate layer by layer, cycling four matching cells at a time."}]
+solution: {"explanation": {"zh": "先转置再翻转每一行，两步都是原地交换。时间 O(n²)，额外空间 O(1)。", "en": "Transpose, then reverse every row; both steps swap in place. O(n²) time, O(1) extra space."}}
+examples: [{"id": "ex-1", "args": [[[1, 2, 3], [4, 5, 6], [7, 8, 9]]], "expected": [[7, 4, 1], [8, 5, 2], [9, 6, 3]]}, {"id": "ex-2", "args": [[[5, 1, 9, 11], [2, 4, 8, 10], [13, 3, 6, 7], [15, 14, 12, 16]]], "expected": [[15, 13, 2, 5], [14, 3, 4, 1], [12, 6, 8, 9], [16, 7, 10, 11]]}]
+boundaryCases: [{"args": [[[1]]]}, {"args": [[[1, 2], [3, 4]]]}, {"args": [[[1, 2, 3], [4, 5, 6], [7, 8, 9]]]}]

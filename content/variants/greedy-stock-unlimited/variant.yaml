@@ -1,0 +1,22 @@
+id: "greedy-stock-unlimited"
+version: 1
+suiteVersion: 1
+parentProblemId: "best-time-to-buy-and-sell-stock"
+topicId: "greedy"
+title: {"zh": "可多次交易的买卖股票", "en": "Stock Trading with Unlimited Transactions"}
+summary: {"zh": "可以进行任意多次买卖（同一时间最多持有一股），求最大总利润。", "en": "Make as many trades as you like, holding at most one share at a time, and return the maximum total profit."}
+statement: {"zh": "给定数组 `prices`，`prices[i]` 是第 `i` 天的股价。你可以进行**任意多次**交易，但任何时候最多持有一股（必须先卖出才能再买入），同一天可以先卖后买。\n\n返回能获得的最大总利润。", "en": "Given `prices`, where `prices[i]` is the price on day `i`, you may trade **any number of times** but hold at most one share at a time, so you must sell before buying again; selling and buying on the same day is allowed.\n\nReturn the maximum total profit."}
+difficulty: medium
+skills: ["greedy", "decomposing profit into daily gains"]
+differences: [{"category": "constraints", "description": {"zh": "交易次数从一次变为不限次数。", "en": "The number of trades goes from one to unlimited."}}, {"category": "reasoning", "description": {"zh": "最优策略变成“把每一段上涨都吃下”，答案是所有正的相邻差之和。", "en": "The best strategy captures every rise, so the answer is the sum of all positive day-to-day differences."}}]
+transfer: {"zh": "“一次扫描、只看当前与过去的价格”的贪心思路保留；新的论证是：任何一次长交易的利润都等于其中每天涨幅之和，所以收集每个正涨幅不会更差。", "en": "The one-scan greedy over current and past prices carries over; the new argument is that a long trade's profit equals the sum of its daily changes, so collecting every positive change is never worse."}
+entry: {"python": "maxProfitUnlimited", "typescript": "maxProfitUnlimited"}
+params: [{"name": "prices", "type": "int[]"}]
+returns: "int"
+comparator: {"kind": "exact"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "smallMaxLength": 8, "largeLength": 20000, "min": 0, "max": 10000, "smallMin": 0, "smallMax": 9}]
+constraints: [{"zh": "1 ≤ n ≤ 3×10⁴，0 ≤ prices[i] ≤ 10⁴", "en": "1 ≤ n ≤ 3×10⁴, 0 ≤ prices[i] ≤ 10⁴"}]
+examples: [{"args": [[7, 1, 5, 3, 6, 4]], "expected": 7}, {"args": [[1, 2, 3, 4, 5]], "expected": 4}, {"args": [[7, 6, 4, 3, 1]], "expected": 0}]
+boundaryCases: [{"args": [[5]]}, {"args": [[1, 2]]}, {"args": [[2, 1]]}, {"args": [[1, 5, 1, 5]]}, {"args": [[3, 3, 3]]}]
+hints: [{"zh": "把一次从第 i 天到第 j 天的交易利润写成每天涨跌的和。", "en": "Write the profit of a trade from day i to day j as the sum of daily changes."}, {"zh": "既然可以无限次交易，任何正的单日涨幅都可以单独赚到。", "en": "With unlimited trades, every positive one-day rise can be captured on its own."}, {"zh": "答案 = Σ max(0, prices[i] - prices[i-1])。", "en": "Answer = Σ max(0, prices[i] - prices[i-1])."}]

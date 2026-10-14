@@ -1,0 +1,20 @@
+id: "course-schedule"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "课程表", "en": "Course Schedule"}
+difficulty: medium
+topics: ["graph"]
+leetcode: {"frontendId": 207, "title": "Course Schedule", "slug": "course-schedule", "difficulty": "medium", "tags": ["Depth-First Search", "Breadth-First Search", "Graph Theory", "Topological Sort", "Directed Acyclic Graph"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "共有 numCourses 门课，[a, b] 表示学 a 之前必须先学完 b。判断能否学完所有课程。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "There are numCourses courses; [a, b] means b must be finished before a. Report whether all courses can be finished. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ numCourses ≤ 2000，0 ≤ 先修关系数 ≤ 5000，关系互不重复", "en": "1 ≤ numCourses ≤ 2000, 0 ≤ prerequisite pairs ≤ 5000, all pairs distinct"}]
+params: [{"name": "numCourses", "type": "int"}, {"name": "prerequisites", "type": "int[][]"}]
+returns: "bool"
+comparator: {"kind": "exact"}
+entry: {"python": "canFinish", "typescript": "canFinish"}
+perCaseMs: 1000
+inputs: [{"type": "int", "min": 1, "max": 2000}, {"type": "int[][]"}]
+hints: [{"zh": "把课程看成有向图的节点、先修关系看成边。什么情况下学不完？", "en": "Treat courses as nodes and prerequisites as directed edges. When is finishing impossible?"}, {"zh": "当且仅当图中有环。", "en": "Exactly when the graph has a cycle."}, {"zh": "拓扑排序（Kahn 算法）：不断取出入度为 0 的课程并删去它的出边，最后看取出的课程数是否等于总数。", "en": "Topological sort (Kahn): repeatedly take a course with in-degree 0 and remove its edges; check whether every course was taken."}]
+solution: {"explanation": {"zh": "Kahn 拓扑排序：入度为 0 的节点入队，出队时减少后继的入度；能全部出队说明无环。时间 O(V + E)，空间 O(V + E)。", "en": "Kahn's topological sort: enqueue in-degree-0 nodes and decrement successors on dequeue; dequeuing all nodes means no cycle. O(V + E) time and space."}}
+examples: [{"id": "ex-1", "args": [2, [[1, 0]]], "expected": true}, {"id": "ex-2", "args": [2, [[1, 0], [0, 1]]], "expected": false}]
+boundaryCases: [{"args": [1, []]}, {"args": [2, [[1, 0]]]}, {"args": [2, [[1, 0], [0, 1]]]}, {"args": [3, [[0, 0]]]}, {"args": [3, [[1, 0], [2, 1], [0, 2]]]}]

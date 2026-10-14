@@ -10,6 +10,7 @@ import { brandString } from '@deepseek-ai/dsh-brand'
 import type {} from '@deepseek-ai/dsh-agent'
 import type {} from '@deepseek-ai/dsh-agent-default-model'
 import type {} from '@deepseek-ai/dsh-system-prompt'
+import type {} from '@deepseek-ai/dsh-skill'
 import type { ToolDefinition } from '@deepseek-ai/dsh-tools'
 import { createUserMessage } from '@deepseek-ai/dsh-llm'
 import type { SessionId } from '@deepseek-ai/dsh-session'
@@ -29,7 +30,7 @@ declare module '@deepseek-ai/dsh-llm' {
 }
 
 /** Why a Learn agent runs; recorded in the message source and Session id. */
-export type LearnAgentPurpose = 'tutor' | 'judge' | 'variant' | 'reflection'
+export type LearnAgentPurpose = 'tutor' | 'judge' | 'variant' | 'reflection' | 'finder'
 
 /** One agent run request. */
 export interface LearnAgentRun {
@@ -43,6 +44,11 @@ export interface LearnAgentRun {
   readonly signal: AbortSignal
   /** Live text deltas for streaming UIs. */
   readonly onText?: (delta: string) => void
+  /**
+   * A skill only this agent can load through the global `skill` tool. Without
+   * a skills service or that tool, its instructions are appended to the system prompt.
+   */
+  readonly skill?: { readonly name: string; readonly description: string; readonly content: string }
 }
 
 /** Settled agent run. Only `completed` carries trustworthy model text. */
@@ -110,9 +116,21 @@ export async function runLearnAgent(ctx: Context, run: LearnAgentRun): Promise<L
         ...selection.reasoningEffort === undefined ? {} : { reasoningEffort: selection.reasoningEffort },
       },
       setup: (agentCtx) => {
-        agentCtx.tools.restrict({ allow: [] })
+        const skills = run.skill === undefined ? undefined : agentCtx.get('skills')
+        const skillTool = skills !== undefined && agentCtx.tools.get('skill') !== undefined
+        agentCtx.tools.restrict({ allow: skillTool ? ['skill'] : [] })
         for (const tool of run.tools) agentCtx.tools.register(tool)
-        agentCtx.systemPrompt.section({ name: `learn:${run.purpose}`, order: 0, text: run.system, interpolate: false, complete: true })
+        let system = run.system
+        if (run.skill !== undefined) {
+          if (skillTool && skills !== undefined) {
+            skills.register({ name: run.skill.name, description: run.skill.description, content: run.skill.content, source: 'runtime',
+              invocation: { modelInvocable: true, userInvocable: false } })
+            system += `\n\nBefore anything else, load the skill \`${run.skill.name}\` with the \`skill\` tool and follow it.`
+          } else {
+            system += `\n\n# Skill: ${run.skill.name}\n\n${run.skill.content}`
+          }
+        }
+        agentCtx.systemPrompt.section({ name: `learn:${run.purpose}`, order: 0, text: system, interpolate: false, complete: true })
         agentCtx.on('agent/assistant-stream', ({ frame }) => {
           if (frame.type === 'start') streamed = ''
           if (frame.type === 'chunk' && frame.chunk.type === 'text-delta') {

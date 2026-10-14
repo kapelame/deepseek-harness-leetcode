@@ -18,10 +18,13 @@ import type {
   AttemptId, AttemptView, CodeLanguage, EmailJobId, EmailJobView, EmailPreview, EmailSettingsView, HintLevel, HintView, LearnerId,
   LearnerSettings, LearnExport, LearnOverview, LessonProgress, LessonStage, ProblemId, ProblemSummary, ProgressView, RecallRating,
   ReviewCompletion, ReviewItemId, ReviewQueue, RunnerStatus, TodayView, TopicId, TutorStatus, TutorStreamFrame, TutorThreadId,
+  FinderRunId, FinderRunView, FinderStreamFrame,
   VariantRecord, WorkspaceState,
 } from './types.ts'
 import { ConfigSchema, type Config } from './config.ts'
 import { loadCurriculum, problemView, readGeneratorLibrary, type ProblemDefinition } from './content/catalog.ts'
+import { FINDER_SKILL, ProblemFinder } from './finder/index.ts'
+import { executionSignature } from './content/signature.ts'
 import { openLearnDatabase } from './store/schema.ts'
 import { LearnStore } from './store/store.ts'
 import { ProblemRegistry } from './problems.ts'
@@ -62,6 +65,7 @@ export default class LearnService extends Service implements LearnRuntime {
 
   private readonly runnerCwd: string
   generatorLibrary: string = ''
+  finderSkill: string = ''
   /** Host context exposed to Learn feature modules. */
   readonly host: Context
   private database: DatabaseSync | undefined
@@ -72,6 +76,7 @@ export default class LearnService extends Service implements LearnRuntime {
   private readonly tutoring: Tutoring
   private readonly reviews: Reviews
   private readonly variants: Variants
+  private readonly finder: ProblemFinder
   private readonly progress: Progress
   private readonly reminders: Reminders
   private lastAgentFailure: string | undefined
@@ -89,6 +94,7 @@ export default class LearnService extends Service implements LearnRuntime {
     this.judging = new Judging(this)
     this.tutoring = new Tutoring(this)
     this.variants = new Variants(this)
+    this.finder = new ProblemFinder(this)
     this.reviews = new Reviews(this, (learner, parent) => { this.requestVariant(learner, parent) })
     this.progress = new Progress(this)
     this.reminders = new Reminders(this, this.reviews, () => this.transportChoice(), () => this.baseUrl())
@@ -96,6 +102,7 @@ export default class LearnService extends Service implements LearnRuntime {
       this.lifetime.abort(new Error('Learn service disposed'))
       await this.tutoring.dispose()
       await this.variants.dispose()
+      await this.finder.dispose()
       await Promise.allSettled([...this.background])
       this.database?.close()
     }, 'learn: lifetime')
@@ -108,6 +115,7 @@ export default class LearnService extends Service implements LearnRuntime {
     this.storeValue = new LearnStore(this.database)
     this.problemsValue = new ProblemRegistry(curriculum, this.storeValue, () => this.config.generatedPerCaseMs)
     this.generatorLibrary = await readGeneratorLibrary(join(PACKAGE_ROOT, 'content'))
+    this.finderSkill = (await readFile(join(PACKAGE_ROOT, 'skills', FINDER_SKILL, 'SKILL.md'), 'utf8')).replace(/^---\n[\s\S]*?\n---\n/, '').trim()
     const drivers = {
       python: await readFile(join(PACKAGE_ROOT, 'runtime', 'python_driver.py'), 'utf8'),
       typescript: await readFile(join(PACKAGE_ROOT, 'runtime', 'typescript_driver.mjs'), 'utf8'),
@@ -115,6 +123,7 @@ export default class LearnService extends Service implements LearnRuntime {
     this.runnerValue = new DockerRunner(this.ctx, { ...this.config.runner, cwd: this.runnerCwd }, drivers)
     this.storeValue.ensureLearner(OWNER_LEARNER, this.defaultSettings(), this.iso())
     this.storeValue.interruptStreamingMessages()
+    this.finder.recoverInterrupted()
     this.track(this.judging.recoverInterrupted(this.lifetime.signal))
     this.ctx.effect(() => {
       const timer = setInterval(() => { this.track(this.reminders.tick()) }, this.config.email.workerIntervalMs)
@@ -276,8 +285,8 @@ export default class LearnService extends Service implements LearnRuntime {
       return { status: 'rejected', reason: 'The input does not match the signature.' }
     }
     const outcome = await this.runner.execute({
-      language: 'python', code: definition.reference, entry: definition.entry.python, params: definition.params.map(item => item.type),
-      returns: definition.returns, cases: [{ id: 'proposal', args }], perCaseMs: definition.perCaseMs,
+      language: 'python', code: definition.reference, entry: definition.entry.python, ...executionSignature(definition),
+      cases: [{ id: 'proposal', args }], perCaseMs: definition.perCaseMs,
     }, signal)
     const reported = 'cases' in outcome ? outcome.cases[0] : undefined
     if (outcome.status !== 'completed' || reported?.ok !== true) {
@@ -400,6 +409,7 @@ export default class LearnService extends Service implements LearnRuntime {
       learnerId: learner,
       settings: this.settings(learner),
       topics: this.problems.curriculum.topics,
+      collections: this.problems.curriculum.collections,
       lessons: this.store.lessons(learner),
       mastery: this.progress.mastery(learner),
       problems,
@@ -707,6 +717,50 @@ export default class LearnService extends Service implements LearnRuntime {
   importProblem(learner: LearnerId, spec: JsonValue, signal: AbortSignal): Promise<VariantRecord> {
     this.ensure(learner)
     return this.variants.importProblem(learner, spec, AbortSignal.any([signal, this.lifetime.signal]))
+  }
+
+  /**
+   * Start a problem-finder run: an agent searches LeetCode for problems matching the description and adds validated ones.
+   * @param learner - learner.
+   * @param description - what the learner wants, in their own words.
+   * @param count - problems to add.
+   * @returns the run as started; follow it for progress.
+   */
+  findProblems(learner: LearnerId, description: string, count: number): FinderRunView {
+    this.ensure(learner)
+    return this.finder.start(learner, description, count)
+  }
+
+  /**
+   * Recent problem-finder runs, newest first.
+   * @param learner - learner.
+   * @returns up to 20 runs.
+   */
+  finderRuns(learner: LearnerId): FinderRunView[] {
+    this.ensure(learner)
+    return this.finder.runs(learner)
+  }
+
+  /**
+   * Stream one problem-finder run.
+   * @param learner - learner.
+   * @param run - run id.
+   * @param signal - observation lifetime.
+   * @returns snapshot, event, and settled frames.
+   */
+  finderFollow(learner: LearnerId, run: FinderRunId, signal: AbortSignal): AsyncIterable<FinderStreamFrame> {
+    this.ensure(learner)
+    return this.finder.follow(learner, run, AbortSignal.any([signal, this.lifetime.signal]))
+  }
+
+  /**
+   * Cancel a running problem-finder run; problems already added stay.
+   * @param learner - learner.
+   * @param run - run id.
+   */
+  finderCancel(learner: LearnerId, run: FinderRunId): void {
+    this.ensure(learner)
+    this.finder.cancel(learner, run)
   }
 
   /**

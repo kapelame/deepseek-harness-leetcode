@@ -1,0 +1,22 @@
+id: "heap-top-k-frequent-words"
+version: 1
+suiteVersion: 1
+parentProblemId: "top-k-frequent-elements"
+topicId: "heap"
+title: {"zh": "前 k 个高频单词", "en": "Top k Frequent Words"}
+summary: {"zh": "返回出现次数最多的 k 个单词，按频率降序；频率相同按字典序升序。", "en": "Return the k most frequent words by descending frequency, breaking ties by ascending lexicographic order."}
+statement: {"zh": "给定单词列表 `words` 和整数 `k`，返回出现次数最多的 `k` 个**不同**单词。\n\n结果按出现次数**从高到低**排列；次数相同的单词按**字典序从小到大**排列。", "en": "Given a list of `words` and an integer `k`, return the `k` most frequent **distinct** words.\n\nOrder the result by frequency **from high to low**; words with equal frequency go in **ascending lexicographic** order."}
+difficulty: medium
+skills: ["counting", "heap with composite keys", "tie-breaking"]
+differences: [{"category": "output", "description": {"zh": "结果的顺序有严格要求，频率相同还要按字典序排。", "en": "The output order is strict, with lexicographic tie-breaking among equal frequencies."}}, {"category": "input-structure", "description": {"zh": "元素从整数变成字符串。", "en": "Elements change from integers to strings."}}]
+transfer: {"zh": "“先计数、再用堆取前 k”的结构不变；变化在于比较规则：键为 (-频率, 单词)，并且需要按该规则输出有序结果。", "en": "Count first, then take the top k with a heap; what changes is the comparison key, (-frequency, word), and the result must come out in that order."}
+entry: {"python": "topKFrequentWords", "typescript": "topKFrequentWords"}
+params: [{"name": "words", "type": "string[]"}, {"name": "k", "type": "int"}]
+returns: "string[]"
+comparator: {"kind": "exact"}
+perCaseMs: 1000
+inputs: [{"type": "string[]", "minLength": 1, "maxLength": 500, "smallMaxLength": 8, "largeLength": 500, "word": {"minLength": 1, "maxLength": 3, "smallMaxLength": 2, "alphabet": "abc"}}, {"type": "int", "min": 1, "max": 1}]
+constraints: [{"zh": "1 ≤ |words| ≤ 500，1 ≤ 单词长度 ≤ 10，小写字母；1 ≤ k ≤ 不同单词数", "en": "1 ≤ |words| ≤ 500, 1 ≤ word length ≤ 10, lowercase; 1 ≤ k ≤ number of distinct words"}]
+examples: [{"args": [["i", "love", "leetcode", "i", "love", "coding"], 2], "expected": ["i", "love"]}, {"args": [["b", "a", "b", "a", "c"], 3], "expected": ["a", "b", "c"]}]
+boundaryCases: [{"args": [["a"], 1]}, {"args": [["b", "a"], 2]}, {"args": [["a", "a", "b"], 1]}, {"args": [["c", "b", "a"], 1]}]
+hints: [{"zh": "先用哈希表统计每个单词的次数。", "en": "Count each word with a hash map first."}, {"zh": "排序键可以写成 (-次数, 单词)：次数大的在前，次数相同时字典序小的在前。", "en": "Use the key (-count, word): higher counts first, and smaller words first among ties."}, {"zh": "排序后取前 k 个；或用 heapq.nsmallest(k, ..., key=...)，复杂度 O(n log k)。", "en": "Sort and take the first k, or use heapq.nsmallest(k, ..., key=...) for O(n log k)."}]

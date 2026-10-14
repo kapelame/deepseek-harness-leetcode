@@ -1,0 +1,20 @@
+id: "palindrome-partitioning"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "分割回文串", "en": "Palindrome Partitioning"}
+difficulty: medium
+topics: ["backtracking"]
+leetcode: {"frontendId": 131, "title": "Palindrome Partitioning", "slug": "palindrome-partitioning", "difficulty": "medium", "tags": ["String", "Dynamic Programming", "Backtracking"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "把字符串分割成若干子串，使每个子串都是回文串，返回所有可能的分割方案，方案之间顺序不限。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Split the string into substrings that are all palindromes and return every such split, in any order. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ |s| ≤ 16，只含小写字母", "en": "1 ≤ |s| ≤ 16, lowercase letters"}]
+params: [{"name": "s", "type": "string"}]
+returns: "string[][]"
+comparator: {"kind": "unordered"}
+entry: {"python": "partition", "typescript": "partition"}
+perCaseMs: 1000
+inputs: [{"type": "string", "minLength": 1, "maxLength": 16, "smallMaxLength": 6, "largeLength": 14, "alphabet": "ab"}]
+hints: [{"zh": "第一刀切在哪里？切下的前缀必须是回文。", "en": "Where does the first cut go? The prefix cut off must be a palindrome."}, {"zh": "对每个回文前缀，递归处理剩下的后缀。", "en": "For each palindromic prefix, recurse on the remaining suffix."}, {"zh": "可以先用动态规划预处理 isPal[i][j]，让每次判断 O(1)。", "en": "Precompute isPal[i][j] with dynamic programming so each check is O(1)."}]
+solution: {"explanation": {"zh": "回溯枚举切分位置，只沿回文前缀深入；预处理回文表后每步判断 O(1)。最坏 O(n·2ⁿ)。", "en": "Backtracking enumerates cut positions, descending only through palindromic prefixes; a precomputed palindrome table makes each check O(1). Worst case O(n·2ⁿ)."}}
+examples: [{"id": "ex-1", "args": ["aab"], "expected": [["a", "a", "b"], ["aa", "b"]]}, {"id": "ex-2", "args": ["a"], "expected": [["a"]]}]
+boundaryCases: [{"args": ["a"]}, {"args": ["aa"]}, {"args": ["ab"]}, {"args": ["aab"]}, {"args": ["aaaa"]}]

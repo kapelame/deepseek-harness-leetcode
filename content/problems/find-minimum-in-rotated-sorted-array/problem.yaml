@@ -1,0 +1,20 @@
+id: "find-minimum-in-rotated-sorted-array"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "寻找旋转排序数组中的最小值", "en": "Find Minimum in Rotated Sorted Array"}
+difficulty: medium
+topics: ["binary-search"]
+leetcode: {"frontendId": 153, "title": "Find Minimum in Rotated Sorted Array", "slug": "find-minimum-in-rotated-sorted-array", "difficulty": "medium", "tags": ["Array", "Binary Search"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "元素互不相同的升序数组被旋转过若干次。返回其中的最小值，要求 O(log n)。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "A sorted array of distinct values was rotated some number of times; return its minimum in O(log n). (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 5000，-5000 ≤ nums[i] ≤ 5000，元素互不相同", "en": "1 ≤ n ≤ 5000, -5000 ≤ nums[i] ≤ 5000, distinct values"}]
+params: [{"name": "nums", "type": "int[]"}]
+returns: "int"
+comparator: {"kind": "exact"}
+entry: {"python": "findMin", "typescript": "findMin"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "maxLength": 5000, "smallMaxLength": 8, "largeLength": 5000, "min": -5000, "max": 5000, "distinct": true, "sorted": "asc"}]
+hints: [{"zh": "最小值就是旋转点。拿 nums[mid] 和谁比较能判断旋转点在哪一侧？", "en": "The minimum is the rotation point. Comparing nums[mid] with what tells you its side?"}, {"zh": "和 nums[hi] 比较：nums[mid] > nums[hi] 说明最小值在 mid 右边。", "en": "Compare with nums[hi]: if nums[mid] > nums[hi], the minimum lies right of mid."}, {"zh": "否则最小值在 [lo, mid]（mid 本身可能就是最小值），令 hi = mid；lo == hi 时结束。", "en": "Otherwise it is in [lo, mid], since mid itself may be the minimum; set hi = mid and stop when lo == hi."}]
+solution: {"explanation": {"zh": "与右端点比较的二分：始终保持最小值在 [lo, hi] 中。时间 O(log n)，空间 O(1)。", "en": "Binary search against the right end keeps the minimum inside [lo, hi]. O(log n) time, O(1) space."}}
+examples: [{"id": "ex-1", "args": [[3, 4, 5, 1, 2]], "expected": 1}, {"id": "ex-2", "args": [[4, 5, 6, 7, 0, 1, 2]], "expected": 0}, {"id": "ex-3", "args": [[11, 13, 15, 17]], "expected": 11}]
+boundaryCases: [{"args": [[1]]}, {"args": [[2, 1]]}, {"args": [[1, 2]]}, {"args": [[3, 4, 5, 1, 2]]}, {"args": [[-5000, 5000]]}]

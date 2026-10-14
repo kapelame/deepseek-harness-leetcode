@@ -1,0 +1,22 @@
+id: "greedy-farthest-reach"
+version: 1
+suiteVersion: 1
+parentProblemId: "jump-game"
+topicId: "greedy"
+title: {"zh": "能到达的最远下标", "en": "Farthest Reachable Index"}
+summary: {"zh": "规则同跳跃游戏，返回从下标 0 出发能到达的最大下标。", "en": "With Jump Game's rules, return the largest index reachable from index 0."}
+statement: {"zh": "给定非负整数数组 `nums`，从下标 `0` 出发，在位置 `i` 时可以向右跳到 `i + 1` 到 `i + nums[i]` 之间的任意位置。\n\n返回能够到达的**最大下标**（不会超过 `n - 1`）。", "en": "Given a non-negative integer array `nums`, start at index `0`; from position `i` you may jump right to any position between `i + 1` and `i + nums[i]`.\n\nReturn the **largest index** you can reach, never more than `n - 1`."}
+difficulty: easy
+skills: ["greedy reach", "invariants"]
+differences: [{"category": "output", "description": {"zh": "从“能否到达终点”变成“最远能到哪里”，需要在无法继续时返回当前可达边界。", "en": "From whether the end is reachable to how far you can get, returning the reachable boundary when progress stops."}}, {"category": "reasoning", "description": {"zh": "要正确处理被 0 卡住的情况，以及可达范围超过末尾时的截断。", "en": "Handle getting stuck behind zeros and clamp a reach that runs past the end."}}]
+transfer: {"zh": "“维护最远可达位置、遇到超过它的 i 就停止”的扫描不变；只是返回值从布尔改为该最远位置。", "en": "The scan that keeps the farthest reach and stops at an index beyond it is unchanged; only the result changes from a boolean to that reach."}
+entry: {"python": "farthestIndex", "typescript": "farthestIndex"}
+params: [{"name": "nums", "type": "int[]"}]
+returns: "int"
+comparator: {"kind": "exact"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "smallMaxLength": 8, "largeLength": 10000, "min": 0, "max": 3, "smallMin": 0, "smallMax": 3}]
+constraints: [{"zh": "1 ≤ n ≤ 10⁴，0 ≤ nums[i] ≤ 10⁵", "en": "1 ≤ n ≤ 10⁴, 0 ≤ nums[i] ≤ 10⁵"}]
+examples: [{"args": [[2, 3, 1, 1, 4]], "expected": 4}, {"args": [[3, 2, 1, 0, 4]], "expected": 3}, {"args": [[0, 5]], "expected": 0}]
+boundaryCases: [{"args": [[0]]}, {"args": [[1, 0]]}, {"args": [[1, 0, 9]]}, {"args": [[100000, 0, 0]]}, {"args": [[1, 1, 0, 1]]}]
+hints: [{"zh": "在跳跃游戏中你维护了什么量？", "en": "What quantity did you maintain in Jump Game?"}, {"zh": "最远可达位置 reach。当 i > reach 时，后面的位置都到不了。", "en": "The farthest reach. When i > reach, nothing beyond is reachable."}, {"zh": "扫描结束或遇到 i > reach 时，返回 min(reach, n - 1)。", "en": "When the scan ends or i > reach, return min(reach, n - 1)."}]

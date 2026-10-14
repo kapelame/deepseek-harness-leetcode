@@ -7,6 +7,7 @@ import type {} from '@deepseek-ai/dsh-experimental-api-learn/remote'
 import type { ReviewMoveTarget, VariantGenerationView } from '@deepseek-ai/dsh-experimental-api-learn/types'
 import type {
   AttemptId, AttemptView, CodeLanguage, EmailJobId, EmailJobView, EmailPreview, EmailSettingsView, HintLevel, HintView, JsonValue,
+  FinderRunId, FinderRunView, FinderStreamFrame,
   LearnerSettings, LearnExport, LearnOverview, LessonProgress, LessonStage, ProblemId, ProgressView, RecallRating, ReviewCompletion,
   ReviewItemId, ReviewQueue, RunnerStatus, TodayView, TopicId, TutorStreamFrame, TutorThreadId, VariantRecord, WorkspaceState,
 } from '@deepseek-ai/dsh-experimental-learn/types'
@@ -67,6 +68,17 @@ export interface LearnApi {
   generateVariant(parentId: ProblemId, signal: AbortSignal): Promise<VariantGenerationView>
   variants(): Promise<VariantRecord[]>
   importProblem(specJson: string, signal: AbortSignal): Promise<VariantRecord>
+  findProblems(description: string, count: number): Promise<FinderRunView>
+  finderRuns(): Promise<FinderRunView[]>
+  finderCancel(runId: FinderRunId): Promise<void>
+  /**
+   * Follow a problem search until the signal aborts.
+   * @param runId - run.
+   * @param onFrame - frame consumer.
+   * @param signal - observation lifetime.
+   * @returns after the observation ends.
+   */
+  finderFollow(runId: FinderRunId, onFrame: (frame: FinderStreamFrame) => void, signal: AbortSignal): Promise<void>
   progress(): Promise<ProgressView>
   runnerStatus(refresh: boolean): Promise<RunnerStatus>
   prepareRunner(language: CodeLanguage, signal: AbortSignal): Promise<RunnerStatus>
@@ -129,6 +141,29 @@ export function createLearnApi(ctx: Context): LearnApi {
     generateVariant: (parentId, signal) => unwrap(learn.generateVariant(parentId, signal)),
     variants: () => unwrap(learn.variants()),
     importProblem: (spec, signal) => unwrap(learn.importProblem(spec, signal)),
+    findProblems: (description, count) => unwrap(learn.findProblems(description, count)),
+    finderRuns: () => unwrap(learn.finderRuns()),
+    finderCancel: runId => unwrap(learn.finderCancel(runId)),
+    finderFollow: async (runId, onFrame, signal) => {
+      const stream = ctx.remote.$stream<FinderStreamFrame>({
+        name: 'Learn problem finder', open: streamSignal => learn.finderFollow(runId, streamSignal),
+        ended: () => new RemoteStreamCarrierError('Learn problem finder stream ended'), carrierFailed: () => {},
+      })
+      const stop = (): void => { void stream.dispose() }
+      signal.addEventListener('abort', stop, { once: true })
+      try {
+        for await (const item of stream) {
+          onFrame(item.value)
+          item.accept()
+          if (item.value.type === 'settled') break
+        }
+      } catch (error) {
+        if (!signal.aborted) throw error
+      } finally {
+        signal.removeEventListener('abort', stop)
+        await stream.dispose()
+      }
+    },
     progress: () => unwrap(learn.progress()),
     runnerStatus: refresh => unwrap(learn.runnerStatus(refresh)),
     prepareRunner: (language, signal) => unwrap(learn.prepareRunner(language, signal)),

@@ -1,0 +1,20 @@
+id: "jump-game"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "跳跃游戏", "en": "Jump Game"}
+difficulty: medium
+topics: ["greedy"]
+leetcode: {"frontendId": 55, "title": "Jump Game", "slug": "jump-game", "difficulty": "medium", "tags": ["Array", "Dynamic Programming", "Greedy"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "从下标 0 出发，nums[i] 表示在位置 i 最多能向前跳几步。判断能否到达最后一个下标。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Starting at index 0, nums[i] is the farthest jump from position i; decide whether the last index is reachable. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 10⁴，0 ≤ nums[i] ≤ 10⁵", "en": "1 ≤ n ≤ 10⁴, 0 ≤ nums[i] ≤ 10⁵"}]
+params: [{"name": "nums", "type": "int[]"}]
+returns: "bool"
+comparator: {"kind": "exact"}
+entry: {"python": "canJump", "typescript": "canJump"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "smallMaxLength": 8, "largeLength": 10000, "min": 0, "max": 4, "smallMin": 0, "smallMax": 3}]
+hints: [{"zh": "与其记录每一种跳法，不如记录“目前能到达的最远位置”。", "en": "Instead of tracking every jump sequence, track the farthest reachable position."}, {"zh": "遍历 i 时，如果 i 超过了最远可达位置，说明 i 永远到不了。", "en": "If i ever exceeds the farthest reachable position, i can never be reached."}, {"zh": "否则用 i + nums[i] 更新最远位置；最远位置 ≥ n-1 即可返回 true。", "en": "Otherwise update the farthest with i + nums[i]; return true once it reaches n-1."}]
+solution: {"explanation": {"zh": "贪心维护最远可达下标，一次扫描。时间 O(n)，空间 O(1)。", "en": "Greedily maintain the farthest reachable index in one scan. O(n) time, O(1) space."}}
+examples: [{"id": "ex-1", "args": [[2, 3, 1, 1, 4]], "expected": true}, {"id": "ex-2", "args": [[3, 2, 1, 0, 4]], "expected": false}]
+boundaryCases: [{"args": [[0]]}, {"args": [[1, 0]]}, {"args": [[0, 1]]}, {"args": [[2, 0, 0]]}, {"args": [[1, 0, 1]]}]

@@ -1,0 +1,20 @@
+id: "kth-largest-element-in-an-array"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "数组中的第K个最大元素", "en": "Kth Largest Element in an Array"}
+difficulty: medium
+topics: ["heap"]
+leetcode: {"frontendId": 215, "title": "Kth Largest Element in an Array", "slug": "kth-largest-element-in-an-array", "difficulty": "medium", "tags": ["Array", "Divide and Conquer", "Sorting", "Heap (Priority Queue)", "Quickselect"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "返回数组中第 k 大的元素（按排序后的位置，不是第 k 个不同的值）。尝试不完全排序。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Return the k-th largest element by sorted position, not the k-th distinct value. Try not to sort everything. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ k ≤ n ≤ 10⁵，-10⁴ ≤ nums[i] ≤ 10⁴", "en": "1 ≤ k ≤ n ≤ 10⁵, -10⁴ ≤ nums[i] ≤ 10⁴"}]
+params: [{"name": "nums", "type": "int[]"}, {"name": "k", "type": "int"}]
+returns: "int"
+comparator: {"kind": "exact"}
+entry: {"python": "findKthLargest", "typescript": "findKthLargest"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "smallMaxLength": 9, "largeLength": 20000, "min": -10000, "max": 10000, "smallMin": -5, "smallMax": 5}, {"type": "int", "min": 1, "max": 1}]
+hints: [{"zh": "排序后取下标 n-k 是 O(n log n)。只需要前 k 大的话，要保存多少个数？", "en": "Sorting and reading index n-k costs O(n log n). If only the top k matter, how many numbers must you keep?"}, {"zh": "维护一个大小为 k 的最小堆：堆顶是当前前 k 大中最小的那个。", "en": "Keep a min-heap of size k: its top is the smallest of the current top k."}, {"zh": "新数比堆顶大就替换堆顶；最后堆顶就是答案。也可以用快速选择，平均 O(n)。", "en": "Replace the top when a new number is larger; the final top is the answer. Quickselect averages O(n) as well."}]
+solution: {"explanation": {"zh": "大小为 k 的最小堆，时间 O(n log k)，空间 O(k)；快速选择平均 O(n)。", "en": "A size-k min-heap runs in O(n log k) time and O(k) space; quickselect averages O(n)."}}
+examples: [{"id": "ex-1", "args": [[3, 2, 1, 5, 6, 4], 2], "expected": 5}, {"id": "ex-2", "args": [[3, 2, 3, 1, 2, 4, 5, 5, 6], 4], "expected": 4}]
+boundaryCases: [{"args": [[1], 1]}, {"args": [[2, 1], 1]}, {"args": [[2, 1], 2]}, {"args": [[3, 3, 3], 2]}, {"args": [[-10000, 10000], 2]}]

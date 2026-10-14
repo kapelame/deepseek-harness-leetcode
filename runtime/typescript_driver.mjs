@@ -22,6 +22,16 @@ class ListNode {
   }
 }
 
+class _Node {
+  constructor(val, next, random) {
+    this.val = val === undefined ? 0 : val
+    this.next = next === undefined ? null : next
+    this.random = random === undefined ? null : random
+  }
+}
+
+class InvalidOutput extends Error {}
+
 async function readStdin() {
   const chunks = []
   for await (const chunk of process.stdin) chunks.push(chunk)
@@ -73,13 +83,31 @@ function plain(value) {
   throw new Error(`unsupported result type ${Object.prototype.toString.call(value)}`)
 }
 
+function buildList(values) {
+  let head = null
+  for (let index = values.length - 1; index >= 0; index--) head = new ListNode(values[index], head)
+  return head
+}
+
+function linkNodes(nodes) {
+  for (let index = 0; index + 1 < nodes.length; index++) nodes[index].next = nodes[index + 1]
+  return nodes
+}
+
+function walk(head) {
+  const nodes = []
+  while (head !== null && head !== undefined) {
+    if (nodes.length >= 100000) throw new Error('linked list is too long or contains a cycle')
+    nodes.push(head)
+    head = head.next
+  }
+  return nodes
+}
+
 function decode(kind, value) {
   if (kind === 'tree') return buildTree(value)
-  if (kind === 'linked-list') {
-    let head = null
-    for (let index = value.length - 1; index >= 0; index--) head = new ListNode(value[index], head)
-    return head
-  }
+  if (kind === 'linked-list') return buildList(value)
+  if (kind === 'linked-list[]') return value.map(buildList)
   return value
 }
 
@@ -96,6 +124,110 @@ function encode(kind, value) {
     return out
   }
   return plain(value)
+}
+
+function prepareDesign(shape, Cls, rawArgs) {
+  const [operations, argumentsList] = rawArgs
+  if (operations.length !== argumentsList.length || operations.length === 0 || operations[0] !== shape.className) {
+    throw new Error('design cases start with the constructor and pair every operation with its arguments')
+  }
+  const methods = new Map(shape.methods.map(method => [method.name, method]))
+  for (const name of operations.slice(1)) if (!methods.has(name)) throw new Error(`unknown operation ${name}`)
+  const call = async () => {
+    const instance = new Cls(...shape.constructorParams.map((param, index) => decode(param.type, argumentsList[0][index])))
+    const results = [[null, 'void']]
+    for (let index = 1; index < operations.length; index++) {
+      const method = methods.get(operations[index])
+      const values = method.params.map((param, position) => decode(param.type, argumentsList[index][position]))
+      if (typeof instance[method.name] !== 'function') throw new TypeError(`${shape.className}.${method.name} is not a function`)
+      results.push([await instance[method.name](...values), method.returns])
+    }
+    return results
+  }
+  const finish = results => results.map(([value, kind]) => kind === 'void' ? null : encode(kind, value))
+  return [call, finish]
+}
+
+function prepareHarness(name, fn, returns, rawArgs) {
+  if (name === 'linked-list-cycle') {
+    const [values, pos] = rawArgs
+    const nodes = linkNodes(values.map(value => new ListNode(value)))
+    if (nodes.length > 0 && pos >= 0) nodes[nodes.length - 1].next = nodes[pos]
+    const head = nodes[0] ?? null
+    const finish = (result) => {
+      if (returns === 'bool') {
+        if (typeof result !== 'boolean') throw new InvalidOutput('expected a boolean')
+        return result
+      }
+      if (result === null || result === undefined) return -1
+      const index = nodes.indexOf(result)
+      if (index < 0) throw new InvalidOutput('the returned node is not a node of the input list')
+      return index
+    }
+    return [() => fn(head), finish]
+  }
+  if (name === 'linked-list-intersection') {
+    const [intersectVal, listA, listB, skipA, skipB] = rawArgs
+    const nodesA = linkNodes(listA.map(value => new ListNode(value)))
+    const shared = intersectVal !== 0 && skipA < nodesA.length
+    const ownB = linkNodes((shared ? listB.slice(0, skipB) : listB).map(value => new ListNode(value)))
+    let headB = ownB[0] ?? null
+    if (shared) {
+      if (ownB.length > 0) ownB[ownB.length - 1].next = nodesA[skipA]
+      else headB = nodesA[skipA]
+    }
+    const headA = nodesA[0] ?? null
+    const finish = (result) => {
+      if (result === null || result === undefined) return null
+      if (!nodesA.includes(result)) throw new InvalidOutput('the returned node is not a node of listA')
+      return plain(result.val)
+    }
+    return [() => fn(headA, headB), finish]
+  }
+  if (name === 'random-list') {
+    const [pairs] = rawArgs
+    const nodes = linkNodes(pairs.map(pair => new _Node(pair[0])))
+    nodes.forEach((node, index) => { const target = pairs[index][1]; node.random = target === null ? null : nodes[target] })
+    const originals = new Set(nodes)
+    const finish = (result) => {
+      const copied = walk(result)
+      const positions = new Map(copied.map((node, index) => [node, index]))
+      return copied.map((node) => {
+        if (originals.has(node)) throw new InvalidOutput('the result reuses input nodes; return a deep copy')
+        const target = node.random ?? null
+        if (target !== null && !positions.has(target)) throw new InvalidOutput('a random pointer leaves the copied list')
+        return [plain(node.val), target === null ? null : positions.get(target)]
+      })
+    }
+    return [() => fn(nodes[0] ?? null), finish]
+  }
+  if (name === 'tree-node-refs') {
+    const [values, pValue, qValue] = rawArgs
+    const root = buildTree(values)
+    const found = new Map()
+    const stack = [root]
+    while (stack.length > 0) {
+      const node = stack.pop()
+      if (node === null || node === undefined) continue
+      if (!found.has(node.val)) found.set(node.val, node)
+      stack.push(node.left, node.right)
+    }
+    if (!found.has(pValue) || !found.has(qValue)) throw new Error('p and q must be values present in the tree')
+    const finish = (result) => {
+      if (!(result instanceof TreeNode)) throw new InvalidOutput('expected a tree node')
+      return plain(result.val)
+    }
+    return [() => fn(root, found.get(pValue), found.get(qValue)), finish]
+  }
+  throw new Error(`unknown harness ${name}`)
+}
+
+function prepare(shape, fn, params, returns, rawArgs) {
+  if (shape.kind === 'design') return prepareDesign(shape, fn, rawArgs)
+  if (shape.kind === 'harness') return prepareHarness(shape.name, fn, returns, rawArgs)
+  const args = rawArgs.map((value, index) => decode(params[index], value))
+  if (shape.kind === 'in-place') return [() => fn(...args), () => encode(params[shape.param], args[shape.param])]
+  return [() => fn(...args), result => encode(returns, result)]
 }
 
 function solutionLine(error, offset) {
@@ -126,6 +258,7 @@ async function main() {
   process.stderr.write = chunk => { sink(String(chunk)); return true }
   globalThis.TreeNode = TreeNode
   globalThis.ListNode = ListNode
+  globalThis._Node = _Node
 
   let javascript
   try {
@@ -134,7 +267,8 @@ async function main() {
     emit({ type: 'compile-error', message: String(error?.message ?? error).split('\n')[0], line: null })
     return
   }
-  const entry = request.entry
+  const shape = request.shape ?? { kind: 'function' }
+  const entry = shape.kind === 'design' ? shape.className : request.entry
   if (!/^[A-Za-z_$][\w$]*$/.test(entry)) throw new Error('invalid entry name')
   const source = `${javascript}\n;export const __dshEntry = typeof ${entry} === 'function' ? ${entry} : undefined;\n`
   let module
@@ -148,18 +282,24 @@ async function main() {
   }
   const fn = module.__dshEntry
   if (typeof fn !== 'function') {
-    emit({ type: 'compile-error', message: `Define a top-level function ${entry}`, line: null })
+    emit({ type: 'compile-error', message: shape.kind === 'design' ? `Define class ${entry}` : `Define a top-level function ${entry}`, line: null })
     return
   }
   emit({ type: 'ready' })
   for (const testCase of request.cases) {
     emit({ type: 'start', id: testCase.id })
     take()
-    const args = testCase.args.map((value, index) => decode(request.params[index], value))
+    let call, finish
+    try {
+      [call, finish] = prepare(shape, fn, request.params, request.returns, testCase.args)
+    } catch (error) {
+      emit({ type: 'driver-error', message: `Cannot decode case ${testCase.id}: ${error?.message ?? String(error)}` })
+      return
+    }
     const started = performance.now()
     let result
     try {
-      result = await fn(...args)
+      result = await call()
     } catch (error) {
       const elapsed = Math.round((performance.now() - started) * 1000) / 1000
       const [stdout, stdoutTruncated] = take()
@@ -171,9 +311,9 @@ async function main() {
     const [stdout, stdoutTruncated] = take()
     let value
     try {
-      value = encode(request.returns, result)
+      value = finish(result)
     } catch (error) {
-      emit({ type: 'case', id: testCase.id, ok: false, error: { kind: 'invalid-output', message: `Returned value is not valid for ${request.returns}: ${error.message}`, line: null }, timeMs: elapsed, stdout, stdoutTruncated })
+      emit({ type: 'case', id: testCase.id, ok: false, error: { kind: 'invalid-output', message: `Returned value is not valid: ${error.message}`, line: null }, timeMs: elapsed, stdout, stdoutTruncated })
       continue
     }
     if (JSON.stringify(value).length > request.maxValueBytes) {

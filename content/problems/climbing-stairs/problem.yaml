@@ -1,0 +1,20 @@
+id: "climbing-stairs"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "爬楼梯", "en": "Climbing Stairs"}
+difficulty: easy
+topics: ["dynamic-programming"]
+leetcode: {"frontendId": 70, "title": "Climbing Stairs", "slug": "climbing-stairs", "difficulty": "easy", "tags": ["Math", "Dynamic Programming", "Memoization"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "爬 n 级台阶，每次可以爬 1 级或 2 级，有多少种不同的爬法？（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Climbing n steps one or two at a time, how many distinct ways are there? (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 45", "en": "1 ≤ n ≤ 45"}]
+params: [{"name": "n", "type": "int"}]
+returns: "int"
+comparator: {"kind": "exact"}
+entry: {"python": "climbStairs", "typescript": "climbStairs"}
+perCaseMs: 1000
+inputs: [{"type": "int", "min": 1, "max": 45, "smallMin": 1, "smallMax": 15}]
+hints: [{"zh": "最后一步是从第 n-1 级还是第 n-2 级上来的？", "en": "Was the last move from step n-1 or from step n-2?"}, {"zh": "ways(n) = ways(n-1) + ways(n-2)。", "en": "ways(n) = ways(n-1) + ways(n-2)."}, {"zh": "初始 ways(1) = 1，ways(2) = 2；只需要两个变量滚动计算。", "en": "With ways(1) = 1 and ways(2) = 2, two rolling variables suffice."}]
+solution: {"explanation": {"zh": "斐波那契式递推，用两个变量滚动。时间 O(n)，空间 O(1)。", "en": "A Fibonacci-style recurrence with two rolling variables. O(n) time, O(1) space."}}
+examples: [{"id": "ex-1", "args": [2], "expected": 2}, {"id": "ex-2", "args": [3], "expected": 3}]
+boundaryCases: [{"args": [1]}, {"args": [2]}, {"args": [3]}, {"args": [45]}]

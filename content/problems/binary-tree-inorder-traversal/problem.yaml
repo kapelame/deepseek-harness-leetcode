@@ -1,0 +1,20 @@
+id: "binary-tree-inorder-traversal"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "二叉树的中序遍历", "en": "Binary Tree Inorder Traversal"}
+difficulty: easy
+topics: ["trees"]
+leetcode: {"frontendId": 94, "title": "Binary Tree Inorder Traversal", "slug": "binary-tree-inorder-traversal", "difficulty": "easy", "tags": ["Stack", "Tree", "Depth-First Search", "Binary Tree"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "返回二叉树的中序遍历（左子树、根、右子树）序列。进阶：不用递归。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Return the inorder traversal (left subtree, root, right subtree). Follow-up: do it without recursion. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "0 ≤ 节点数 ≤ 100，-100 ≤ Node.val ≤ 100", "en": "0 ≤ nodes ≤ 100, -100 ≤ Node.val ≤ 100"}]
+params: [{"name": "root", "type": "tree"}]
+returns: "int[]"
+comparator: {"kind": "exact"}
+entry: {"python": "inorderTraversal", "typescript": "inorderTraversal"}
+perCaseMs: 1000
+inputs: [{"type": "tree", "minLength": 0, "maxLength": 100, "smallMaxLength": 8, "largeLength": 100, "min": -100, "max": 100}]
+hints: [{"zh": "递归版本只有三行：遍历左子树、记录根、遍历右子树。", "en": "The recursive version is three lines: left subtree, record the root, right subtree."}, {"zh": "迭代版本用栈模拟递归：一路向左把节点压栈。", "en": "The iterative version simulates recursion with a stack: push nodes while going left."}, {"zh": "栈顶弹出时记录它的值，然后转向它的右子树，继续“一路向左”。", "en": "When popping, record the value, then turn to its right subtree and go left again."}]
+solution: {"explanation": {"zh": "用显式栈模拟递归：压入左链，弹出时访问并转向右子树。时间 O(n)，空间 O(h)。", "en": "An explicit stack simulates recursion: push the left chain, visit on pop, then turn right. O(n) time, O(h) space."}}
+examples: [{"id": "ex-1", "args": [[1, null, 2, 3]], "expected": [1, 3, 2]}, {"id": "ex-2", "args": [[1, 2, 3, 4, 5, null, 8, null, null, 6, 7, 9]], "expected": [4, 2, 6, 5, 7, 1, 3, 9, 8]}, {"id": "ex-3", "args": [[]], "expected": []}, {"id": "ex-4", "args": [[1]], "expected": [1]}]
+boundaryCases: [{"args": [[]]}, {"args": [[1]]}, {"args": [[1, null, 2]]}, {"args": [[1, 2]]}, {"args": [[2, 1, 3]]}]

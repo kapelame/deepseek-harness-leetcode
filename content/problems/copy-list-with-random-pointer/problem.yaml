@@ -1,0 +1,21 @@
+id: "copy-list-with-random-pointer"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "随机链表的复制", "en": "Copy List with Random Pointer"}
+difficulty: medium
+topics: ["linked-list"]
+leetcode: {"frontendId": 138, "title": "Copy List with Random Pointer", "slug": "copy-list-with-random-pointer", "difficulty": "medium", "tags": ["Hash Table", "Linked List"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "链表的每个节点除了 next 还有一个 random 指针（可指向任意节点或 null）。返回这个链表的深拷贝：新链表中的所有节点都是新建的。输入输出用 [val, random 指向的下标] 表示。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Each node has a random pointer to any node or null in addition to next. Return a deep copy in which every node is newly created. Inputs and outputs are written as [val, index the random pointer targets]. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "0 ≤ 节点数 ≤ 1000，-10⁴ ≤ Node.val ≤ 10⁴", "en": "0 ≤ nodes ≤ 1000, -10⁴ ≤ Node.val ≤ 10⁴"}]
+params: [{"name": "head", "type": "json"}]
+returns: "json"
+shape: {"kind": "harness", "name": "random-list"}
+comparator: {"kind": "exact"}
+entry: {"python": "copyRandomList", "typescript": "copyRandomList"}
+perCaseMs: 1000
+inputs: [{"type": "json"}]
+hints: [{"zh": "难点在于：复制某个节点的 random 时，它指向的节点可能还没被复制。", "en": "The difficulty: when copying a node's random pointer, its target may not be copied yet."}, {"zh": "先建立“原节点 → 新节点”的映射，再第二遍连接 next 和 random。", "en": "First build a map from original to copy, then connect next and random in a second pass."}, {"zh": "O(1) 额外空间：把每个新节点插在原节点后面，random 就是 orig.random.next，最后拆成两条链表。", "en": "O(1) extra space: weave each copy right after its original, so a copy's random is orig.random.next, then split the lists."}]
+solution: {"explanation": {"zh": "哈希表映射原节点到新节点，两遍完成 next 和 random 的连接。时间 O(n)，空间 O(n)；交织法可降到 O(1) 额外空间。", "en": "A hash map from originals to copies; two passes connect next and random. O(n) time and space; weaving the copies into the original list reduces extra space to O(1)."}}
+examples: [{"id": "ex-1", "args": [[[7, null], [13, 0], [11, 4], [10, 2], [1, 0]]], "expected": [[7, null], [13, 0], [11, 4], [10, 2], [1, 0]]}, {"id": "ex-2", "args": [[[1, 1], [2, 1]]], "expected": [[1, 1], [2, 1]]}, {"id": "ex-3", "args": [[[3, null], [3, 0], [3, null]]], "expected": [[3, null], [3, 0], [3, null]]}]
+boundaryCases: [{"args": [[]]}, {"args": [[[1, null]]]}, {"args": [[[1, 0]]]}, {"args": [[[1, 1], [2, 1]]]}, {"args": [[[3, null], [3, 0], [3, null]]]}]

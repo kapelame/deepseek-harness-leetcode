@@ -1,0 +1,20 @@
+id: "container-with-most-water"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "盛最多水的容器", "en": "Container With Most Water"}
+difficulty: medium
+topics: ["two-pointers"]
+leetcode: {"frontendId": 11, "title": "Container With Most Water", "slug": "container-with-most-water", "difficulty": "medium", "tags": ["Array", "Two Pointers", "Greedy"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "给定每个位置竖线的高度，选两条线与 x 轴围成容器，求能装的最多的水（面积 = 两线距离 × 较矮线的高度）。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Given the heights of vertical lines, pick two lines that form a container with the x-axis and return the largest area (distance × the shorter height). (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "2 ≤ n ≤ 10⁵，0 ≤ height[i] ≤ 10⁴", "en": "2 ≤ n ≤ 10⁵, 0 ≤ height[i] ≤ 10⁴"}]
+params: [{"name": "height", "type": "int[]"}]
+returns: "int"
+comparator: {"kind": "exact"}
+entry: {"python": "maxArea", "typescript": "maxArea"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 2, "smallMaxLength": 10, "largeLength": 20000, "min": 0, "max": 10000, "smallMin": 0, "smallMax": 9}]
+hints: [{"zh": "从最宽的容器（两端）开始。接下来移动哪一端才可能更好？", "en": "Start with the widest container, both ends. Moving which end could possibly help?"}, {"zh": "面积受较矮的那条线限制；移动较高的那条只会让宽度变小、高度不变或更小。", "en": "The shorter line limits the area; moving the taller one shrinks the width without raising the limit."}, {"zh": "每一步移动较矮的一端，并更新最大面积，直到两指针相遇。", "en": "Each step, move the shorter end inward and update the best area until the pointers meet."}]
+solution: {"explanation": {"zh": "左右双指针从两端向内收缩，每次移动较矮的一侧，因为保留它不可能得到更大的面积。时间 O(n)，空间 O(1)。", "en": "Two pointers move inward from both ends, always moving the shorter side, since keeping it can never produce a larger area. O(n) time, O(1) space."}}
+examples: [{"id": "ex-1", "args": [[1, 8, 6, 2, 5, 4, 8, 3, 7]], "expected": 49}, {"id": "ex-2", "args": [[1, 1]], "expected": 1}]
+boundaryCases: [{"args": [[1, 1]]}, {"args": [[0, 0]]}, {"args": [[10000, 1, 10000]]}, {"args": [[1, 2, 3, 4, 5]]}, {"args": [[5, 4, 3, 2, 1]]}]

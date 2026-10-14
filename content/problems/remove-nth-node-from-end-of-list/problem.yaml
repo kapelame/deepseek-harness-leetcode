@@ -1,0 +1,20 @@
+id: "remove-nth-node-from-end-of-list"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "删除链表的倒数第 N 个结点", "en": "Remove Nth Node From End of List"}
+difficulty: medium
+topics: ["linked-list"]
+leetcode: {"frontendId": 19, "title": "Remove Nth Node From End of List", "slug": "remove-nth-node-from-end-of-list", "difficulty": "medium", "tags": ["Linked List", "Two Pointers"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "删除链表的倒数第 n 个节点，返回新的头节点。尝试只遍历一次。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Remove the n-th node from the end of the list and return the head. Try to do it in one pass. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ 节点数 sz ≤ 30，0 ≤ Node.val ≤ 100，1 ≤ n ≤ sz", "en": "1 ≤ sz ≤ 30 nodes, 0 ≤ Node.val ≤ 100, 1 ≤ n ≤ sz"}]
+params: [{"name": "head", "type": "linked-list"}, {"name": "n", "type": "int"}]
+returns: "linked-list"
+comparator: {"kind": "exact"}
+entry: {"python": "removeNthFromEnd", "typescript": "removeNthFromEnd"}
+perCaseMs: 1000
+inputs: [{"type": "linked-list", "minLength": 1, "maxLength": 30, "smallMaxLength": 8, "largeLength": 30, "min": 0, "max": 100}, {"type": "int", "min": 1, "max": 1}]
+hints: [{"zh": "不知道长度时，如何定位倒数第 n 个？", "en": "Without knowing the length, how do you find the n-th node from the end?"}, {"zh": "让一个指针先走 n 步，然后两个指针一起走；先走的到达末尾时，后走的在哪里？", "en": "Let one pointer go n steps ahead, then move both; when the leader reaches the end, where is the follower?"}, {"zh": "从哑节点出发，后指针会停在待删节点的前一个，直接跳过它即可；哑节点处理删除头节点的情况。", "en": "Start both from a dummy node so the follower stops just before the target and can skip it; the dummy handles deleting the head."}]
+solution: {"explanation": {"zh": "前后指针间隔 n 步，一次遍历定位待删节点的前驱；哑节点统一处理删除头节点。时间 O(sz)，空间 O(1)。", "en": "Two pointers n steps apart find the predecessor of the target in one pass; a dummy node handles removing the head. O(sz) time, O(1) space."}}
+examples: [{"id": "ex-1", "args": [[1, 2, 3, 4, 5], 2], "expected": [1, 2, 3, 5]}, {"id": "ex-2", "args": [[1], 1], "expected": []}, {"id": "ex-3", "args": [[1, 2], 1], "expected": [1]}]
+boundaryCases: [{"args": [[1], 1]}, {"args": [[1, 2], 1]}, {"args": [[1, 2], 2]}, {"args": [[1, 2, 3], 3]}]

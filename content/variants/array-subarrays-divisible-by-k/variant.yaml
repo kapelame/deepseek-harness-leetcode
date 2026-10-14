@@ -1,0 +1,22 @@
+id: "array-subarrays-divisible-by-k"
+version: 1
+suiteVersion: 1
+parentProblemId: "subarray-sum-equals-k"
+topicId: "array-techniques"
+title: {"zh": "和可被 K 整除的子数组", "en": "Subarrays with Sums Divisible by K"}
+summary: {"zh": "统计和能被 k 整除的连续非空子数组个数。", "en": "Count non-empty contiguous subarrays whose sum is divisible by k."}
+statement: {"zh": "给定整数数组 `nums`（可含负数）和正整数 `k`，返回和能被 `k` 整除的**连续非空**子数组的个数。\n\n注意：负数的余数需要规范到 `0..k-1` 再比较。", "en": "Given an integer array `nums` (negatives allowed) and a positive integer `k`, return the number of **non-empty contiguous** subarrays whose sum is divisible by `k`.\n\nNote: normalize remainders of negative numbers into `0..k-1` before comparing them."}
+difficulty: medium
+skills: ["prefix sums", "remainder counting"]
+differences: [{"category": "reasoning", "description": {"zh": "目标从“差恰好等于 k”变成“差是 k 的倍数”，要比较的是前缀和的余数而不是前缀和本身。", "en": "The target changes from a difference of exactly k to a difference that is a multiple of k, so prefix-sum remainders are compared instead of the sums."}}, {"category": "constraints", "description": {"zh": "负数让余数可能为负，必须规范化后再计数。", "en": "Negative numbers can make remainders negative, so they must be normalized before counting."}}]
+transfer: {"zh": "“区间和 = 两个前缀和之差”加“哈希计数”的骨架不变；变化在于计数的键：两个前缀和之差能被 k 整除，当且仅当它们对 k 的余数相同。", "en": "The skeleton of range sum = difference of prefix sums plus hash counting stays; the key changes: two prefix sums differ by a multiple of k exactly when their remainders modulo k match."}
+entry: {"python": "subarraysDivByK", "typescript": "subarraysDivByK"}
+params: [{"name": "nums", "type": "int[]"}, {"name": "k", "type": "int"}]
+returns: "int"
+comparator: {"kind": "exact"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "smallMaxLength": 10, "largeLength": 20000, "min": -10000, "max": 10000, "smallMin": -6, "smallMax": 6}, {"type": "int", "min": 2, "max": 10000, "smallMin": 2, "smallMax": 6}]
+constraints: [{"zh": "1 ≤ n ≤ 3×10⁴，-10⁴ ≤ nums[i] ≤ 10⁴，2 ≤ k ≤ 10⁴", "en": "1 ≤ n ≤ 3×10⁴, -10⁴ ≤ nums[i] ≤ 10⁴, 2 ≤ k ≤ 10⁴"}]
+examples: [{"args": [[4, 5, 0, -2, -3, 1], 5], "expected": 7}, {"args": [[-1, 2, 9], 2], "expected": 2}]
+boundaryCases: [{"args": [[5], 5]}, {"args": [[1], 2]}, {"args": [[-5], 5]}, {"args": [[0, 0], 3]}, {"args": [[-1, -1], 2]}]
+hints: [{"zh": "a 与 b 的差能被 k 整除，等价于什么？", "en": "When is a - b divisible by k?"}, {"zh": "等价于 a mod k == b mod k。把前缀和换成前缀和的余数来计数。", "en": "Exactly when a mod k == b mod k. Count prefix-sum remainders instead of prefix sums."}, {"zh": "初始 count[0] = 1；每一步答案加上 count[s mod k]（规范到非负），再把它加一。", "en": "Start with count[0] = 1; each step add count[s mod k] (normalized to be non-negative), then increment it."}]

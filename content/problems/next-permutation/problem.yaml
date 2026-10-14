@@ -1,0 +1,21 @@
+id: "next-permutation"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "下一个排列", "en": "Next Permutation"}
+difficulty: medium
+topics: ["tricks"]
+leetcode: {"frontendId": 31, "title": "Next Permutation", "slug": "next-permutation", "difficulty": "medium", "tags": ["Array", "Two Pointers"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "原地把数组改成字典序中的下一个排列；如果已经是最大排列，就改成最小排列（升序）。只能用 O(1) 额外空间。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Rearrange the array in place into the next permutation in lexicographic order; if it is the largest, wrap around to the smallest (ascending). Use O(1) extra space. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 100，0 ≤ nums[i] ≤ 100", "en": "1 ≤ n ≤ 100, 0 ≤ nums[i] ≤ 100"}]
+params: [{"name": "nums", "type": "int[]"}]
+returns: "int[]"
+shape: {"kind": "in-place", "param": 0}
+comparator: {"kind": "exact"}
+entry: {"python": "nextPermutation", "typescript": "nextPermutation"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "maxLength": 100, "smallMaxLength": 6, "largeLength": 100, "min": 0, "max": 100, "smallMin": 0, "smallMax": 3}]
+hints: [{"zh": "从右往左看，最长的非递增后缀已经是它能达到的最大排列。", "en": "From the right, the longest non-increasing suffix is already at its largest arrangement."}, {"zh": "找到后缀前的那个位置 i（nums[i] < nums[i+1]），在后缀里找最右边一个比 nums[i] 大的数 j，交换二者。", "en": "Take the position i just before that suffix (nums[i] < nums[i+1]), find the rightmost j in the suffix with nums[j] > nums[i], and swap them."}, {"zh": "交换后后缀仍是非递增的，把它反转成升序即可；若不存在 i，直接整体反转。", "en": "The suffix stays non-increasing after the swap, so reverse it to ascending; if no i exists, reverse the whole array."}]
+solution: {"explanation": {"zh": "找到最右的上升点，与后缀中最小的更大值交换，再反转后缀。时间 O(n)，空间 O(1)。", "en": "Find the rightmost ascent, swap it with the smallest larger value in the suffix, and reverse the suffix. O(n) time, O(1) space."}}
+examples: [{"id": "ex-1", "args": [[1, 2, 3]], "expected": [1, 3, 2]}, {"id": "ex-2", "args": [[3, 2, 1]], "expected": [1, 2, 3]}, {"id": "ex-3", "args": [[1, 1, 5]], "expected": [1, 5, 1]}]
+boundaryCases: [{"args": [[1]]}, {"args": [[1, 2]]}, {"args": [[2, 1]]}, {"args": [[1, 1, 5]]}, {"args": [[3, 2, 1]]}, {"args": [[1, 5, 1]]}]

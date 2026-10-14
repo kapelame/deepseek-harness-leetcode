@@ -1,0 +1,20 @@
+id: "longest-common-subsequence"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "最长公共子序列", "en": "Longest Common Subsequence"}
+difficulty: medium
+topics: ["dynamic-programming"]
+leetcode: {"frontendId": 1143, "title": "Longest Common Subsequence", "slug": "longest-common-subsequence", "difficulty": "medium", "tags": ["String", "Dynamic Programming", "Longest Common Subsequence"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "返回两个字符串的最长公共子序列的长度（子序列可以不连续但要保持相对顺序）。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Return the length of the longest common subsequence of two strings; a subsequence keeps relative order but need not be contiguous. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ |text1|, |text2| ≤ 1000，只含小写字母", "en": "1 ≤ |text1|, |text2| ≤ 1000, lowercase letters"}]
+params: [{"name": "text1", "type": "string"}, {"name": "text2", "type": "string"}]
+returns: "int"
+comparator: {"kind": "exact"}
+entry: {"python": "longestCommonSubsequence", "typescript": "longestCommonSubsequence"}
+perCaseMs: 4000
+inputs: [{"type": "string", "minLength": 1, "maxLength": 1000, "smallMaxLength": 7, "largeLength": 1000, "alphabet": "abcd", "smallAlphabet": "abc"}, {"type": "string", "minLength": 1, "maxLength": 1000, "smallMaxLength": 7, "largeLength": 1000, "alphabet": "abcd", "smallAlphabet": "abc"}]
+hints: [{"zh": "dp[i][j] = text1 前 i 个字符与 text2 前 j 个字符的 LCS 长度。", "en": "dp[i][j] = LCS length of the first i characters of text1 and the first j of text2."}, {"zh": "末尾字符相同：dp[i][j] = dp[i-1][j-1] + 1；否则取 max(dp[i-1][j], dp[i][j-1])。", "en": "Equal last characters: dp[i][j] = dp[i-1][j-1] + 1; otherwise max(dp[i-1][j], dp[i][j-1])."}, {"zh": "dp[0][*] = dp[*][0] = 0；可以用一维数组加一个变量保存左上角的值。", "en": "dp[0][*] = dp[*][0] = 0; one row plus a variable for the upper-left value suffices."}]
+solution: {"explanation": {"zh": "双序列 DP，时间 O(mn)，空间可降到 O(min(m, n))。", "en": "Two-sequence DP in O(mn) time; space reduces to O(min(m, n))."}}
+examples: [{"id": "ex-1", "args": ["abcde", "ace"], "expected": 3}, {"id": "ex-2", "args": ["abc", "abc"], "expected": 3}, {"id": "ex-3", "args": ["abc", "def"], "expected": 0}]
+boundaryCases: [{"args": ["a", "a"]}, {"args": ["a", "b"]}, {"args": ["abc", "abc"]}, {"args": ["abc", "def"]}, {"args": ["abcde", "ace"]}]

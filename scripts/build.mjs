@@ -10,6 +10,7 @@
  *   node scripts/build.mjs <dsh-checkout>                  build, then assemble
  *   node scripts/build.mjs <dsh-checkout> --skip-install   build without running pnpm install first
  *   node scripts/build.mjs <dsh-checkout> --assemble-only  assemble an existing build
+ *   node scripts/build.mjs <dsh-checkout> --stage-only     copy sources into the checkout without building
  *
  * Tested with checkouts at tag dsh-v0.2.0-rc.2 and later 0.2.x commits.
  */
@@ -65,6 +66,7 @@ function stage() {
   }
   cpSync(join(root, 'content'), join(experimental, 'learn/content'), { recursive: true })
   cpSync(join(root, 'runtime'), join(experimental, 'learn/runtime'), { recursive: true })
+  cpSync(join(root, 'skills'), join(experimental, 'learn/skills'), { recursive: true })
   const paths = ['learn', 'learn/types', 'api-learn', 'api-learn/types', 'client-ui-learn', 'client-ui-learn/client'].map((spec) => {
     const [pkg, sub] = spec.split('/')
     const file = sub === undefined ? 'index.ts' : sub === 'client' ? 'client/index.ts' : 'types.ts'
@@ -106,6 +108,10 @@ function assemble() {
   console.log(`build: assembled ${copies.length} artifacts into lib/`)
 }
 
+if (flags.includes('--stage-only')) {
+  stage()
+  process.exit(0)
+}
 if (!flags.includes('--assemble-only')) {
   stage()
   if (!flags.includes('--skip-install')) run('pnpm', ['install'], dsh)

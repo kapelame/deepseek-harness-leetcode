@@ -1,0 +1,20 @@
+id: "merge-k-sorted-lists"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "合并 K 个升序链表", "en": "Merge k Sorted Lists"}
+difficulty: hard
+topics: ["linked-list"]
+leetcode: {"frontendId": 23, "title": "Merge k Sorted Lists", "slug": "merge-k-sorted-lists", "difficulty": "hard", "tags": ["Linked List", "Divide and Conquer", "Heap (Priority Queue)", "Merge Sort", "Tournament Sort"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "给定 k 个升序链表，把它们合并成一个升序链表返回。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Given k sorted linked lists, merge them into one sorted list and return it. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "0 ≤ k ≤ 10⁴，所有链表节点总数 ≤ 10⁴，-10⁴ ≤ Node.val ≤ 10⁴", "en": "0 ≤ k ≤ 10⁴, at most 10⁴ nodes in total, -10⁴ ≤ Node.val ≤ 10⁴"}]
+params: [{"name": "lists", "type": "linked-list[]"}]
+returns: "linked-list"
+comparator: {"kind": "exact"}
+entry: {"python": "mergeKLists", "typescript": "mergeKLists"}
+perCaseMs: 1000
+inputs: [{"type": "linked-list[]", "minLength": 0, "smallMaxLength": 4, "largeLength": 2000, "row": {"minLength": 0, "maxLength": 5, "smallMaxLength": 4, "largeLength": 5}, "min": -10000, "max": 10000, "smallMin": -6, "smallMax": 6, "sorted": "asc"}]
+hints: [{"zh": "每次都要从 k 个链表头中取最小的那个。怎样快速找到最小值？", "en": "Each step takes the smallest of k heads. How do you find it quickly?"}, {"zh": "用最小堆保存各链表当前的头节点（值、编号、节点），弹出最小者并把它的 next 放回堆。", "en": "Keep the current heads in a min-heap of (value, index, node); pop the smallest and push its next."}, {"zh": "也可以分治：两两合并，log k 轮完成。", "en": "Alternatively divide and conquer: merge in pairs over log k rounds."}]
+solution: {"explanation": {"zh": "最小堆维护 k 个候选头节点，每次取出最小者，总时间 O(N log k)，空间 O(k)；分治两两合并具有同样的复杂度。", "en": "A min-heap holds the k candidate heads and yields the smallest each time, O(N log k) time and O(k) space; pairwise divide and conquer has the same bound."}}
+examples: [{"id": "ex-1", "args": [[[1, 4, 5], [1, 3, 4], [2, 6]]], "expected": [1, 1, 2, 3, 4, 4, 5, 6]}, {"id": "ex-2", "args": [[]], "expected": []}, {"id": "ex-3", "args": [[[]]], "expected": []}]
+boundaryCases: [{"args": [[]]}, {"args": [[[]]]}, {"args": [[[], [1]]]}, {"args": [[[1], [1], [1]]]}, {"args": [[[-10000], [10000]]]}]

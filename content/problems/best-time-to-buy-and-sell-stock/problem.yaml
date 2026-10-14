@@ -1,0 +1,20 @@
+id: "best-time-to-buy-and-sell-stock"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "买卖股票的最佳时机", "en": "Best Time to Buy and Sell Stock"}
+difficulty: easy
+topics: ["greedy"]
+leetcode: {"frontendId": 121, "title": "Best Time to Buy and Sell Stock", "slug": "best-time-to-buy-and-sell-stock", "difficulty": "easy", "tags": ["Array", "Dynamic Programming"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "给定每天的股价，只能买入一次、之后某天卖出一次，求最大利润；无法获利则返回 0。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Given daily prices, buy once and sell once on a later day; return the maximum profit, or 0 if no profit is possible. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 10⁵，0 ≤ prices[i] ≤ 10⁴", "en": "1 ≤ n ≤ 10⁵, 0 ≤ prices[i] ≤ 10⁴"}]
+params: [{"name": "prices", "type": "int[]"}]
+returns: "int"
+comparator: {"kind": "exact"}
+entry: {"python": "maxProfit", "typescript": "maxProfit"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "smallMaxLength": 9, "largeLength": 20000, "min": 0, "max": 10000, "smallMin": 0, "smallMax": 9}]
+hints: [{"zh": "如果确定在第 i 天卖出，应该在哪天买入？", "en": "If you sell on day i, on which day should you have bought?"}, {"zh": "在第 i 天之前价格最低的那天。", "en": "On the cheapest day before day i."}, {"zh": "从左到右维护历史最低价，用 prices[i] - 最低价 更新最大利润。", "en": "Scan left to right keeping the lowest price so far and update the best profit with prices[i] - lowest."}]
+solution: {"explanation": {"zh": "一次遍历维护最低买入价与最大差值。时间 O(n)，空间 O(1)。", "en": "One pass tracks the lowest buying price and the best difference. O(n) time, O(1) space."}}
+examples: [{"id": "ex-1", "args": [[7, 1, 5, 3, 6, 4]], "expected": 5}, {"id": "ex-2", "args": [[7, 6, 4, 3, 1]], "expected": 0}]
+boundaryCases: [{"args": [[5]]}, {"args": [[1, 2]]}, {"args": [[2, 1]]}, {"args": [[3, 3, 3]]}, {"args": [[0, 10000]]}]

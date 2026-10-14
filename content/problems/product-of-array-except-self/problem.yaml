@@ -1,0 +1,20 @@
+id: "product-of-array-except-self"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "除了自身以外数组的乘积", "en": "Product of Array Except Self"}
+difficulty: medium
+topics: ["array-techniques"]
+leetcode: {"frontendId": 238, "title": "Product of Array Except Self", "slug": "product-of-array-except-self", "difficulty": "medium", "tags": ["Array", "Prefix Sum"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "对每个位置，返回数组中除它以外所有元素的乘积。不能使用除法，要求 O(n)。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "For each position, return the product of every other element. Do not use division; aim for O(n). (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "2 ≤ n ≤ 10⁵，-30 ≤ nums[i] ≤ 30，任意前缀或后缀的乘积都在 32 位整数范围内", "en": "2 ≤ n ≤ 10⁵, -30 ≤ nums[i] ≤ 30, every prefix or suffix product fits in a 32-bit integer"}]
+params: [{"name": "nums", "type": "int[]"}]
+returns: "int[]"
+comparator: {"kind": "exact"}
+entry: {"python": "productExceptSelf", "typescript": "productExceptSelf"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 2, "smallMaxLength": 8, "largeLength": 20000, "min": -1, "max": 1, "smallMin": -3, "smallMax": 3}]
+hints: [{"zh": "“除自己以外的乘积”可以拆成左边部分和右边部分的乘积吗？", "en": "Can 'product of everything else' split into a left part and a right part?"}, {"zh": "answer[i] = 前缀积(0..i-1) × 后缀积(i+1..n-1)。", "en": "answer[i] = prefix product (0..i-1) × suffix product (i+1..n-1)."}, {"zh": "第一遍从左写入前缀积，第二遍从右乘上后缀积，只用一个变量保存后缀积。", "en": "First pass writes prefix products left to right; second pass multiplies suffix products right to left using a single variable."}]
+solution: {"explanation": {"zh": "两遍扫描：先在答案数组中存前缀积，再从右向左乘以累积的后缀积。时间 O(n)，除输出外 O(1) 空间。", "en": "Two passes: store prefix products in the answer, then multiply by a running suffix product from the right. O(n) time, O(1) extra space besides the output."}}
+examples: [{"id": "ex-1", "args": [[1, 2, 3, 4]], "expected": [24, 12, 8, 6]}, {"id": "ex-2", "args": [[-1, 1, 0, -3, 3]], "expected": [0, 0, 9, 0, 0]}]
+boundaryCases: [{"args": [[1, 2]]}, {"args": [[0, 0]]}, {"args": [[0, 4, 5]]}, {"args": [[-1, 1, 0, -3, 3]]}, {"args": [[1, 1, 1, 1]]}]

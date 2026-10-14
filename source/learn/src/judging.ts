@@ -13,6 +13,7 @@ import type {
   TutorAssessment, VerdictKind,
 } from './types.ts'
 import type { ProblemDefinition, SuiteDefinition } from './content/catalog.ts'
+import { executionSignature } from './content/signature.ts'
 import { assembleVerdict, type JudgedCase } from './judge/verdict.ts'
 import { outputsMatch } from './judge/compare.ts'
 import { toJson } from './json.ts'
@@ -125,8 +126,7 @@ export class Judging {
   private execute(definition: ProblemDefinition, language: CodeLanguage, code: string, cases: readonly JudgedCase[],
     signal: AbortSignal): Promise<ExecutionOutcome> {
     return this.runtime.runner.execute({
-      language, code, entry: definition.entry[language],
-      params: definition.params.map(item => item.type), returns: definition.returns,
+      language, code, entry: definition.entry[language], ...executionSignature(definition),
       cases: cases.map(item => ({ id: item.id, args: item.args })), perCaseMs: definition.perCaseMs,
     }, signal)
   }
@@ -147,8 +147,8 @@ export class Judging {
     })
     const cases = inputs.map((args, index) => ({ id: `custom-${String(index + 1)}`, args }))
     const reference = await this.runtime.runner.execute({
-      language: 'python', code: definition.reference, entry: definition.entry.python,
-      params: definition.params.map(item => item.type), returns: definition.returns, cases, perCaseMs: definition.perCaseMs,
+      language: 'python', code: definition.reference, entry: definition.entry.python, ...executionSignature(definition), cases,
+      perCaseMs: definition.perCaseMs,
     }, signal)
     const values = new Map('cases' in reference ? reference.cases.map(item => [item.id, item]) : [])
     return cases.map((item) => {

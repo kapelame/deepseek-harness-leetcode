@@ -1,0 +1,20 @@
+id: "combination-sum"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "组合总和", "en": "Combination Sum"}
+difficulty: medium
+topics: ["backtracking"]
+leetcode: {"frontendId": 39, "title": "Combination Sum", "slug": "combination-sum", "difficulty": "medium", "tags": ["Array", "Backtracking"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "给定互不相同的正整数 candidates 和目标 target，找出所有和为 target 的组合；同一个数可以无限次使用。组合之间不能重复（只看各数出现次数），顺序不限。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Given distinct positive integers and a target, return every combination summing to target; a number may be reused without limit. Combinations are unique by the count of each number, in any order. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 30，2 ≤ candidates[i] ≤ 40，1 ≤ target ≤ 40", "en": "1 ≤ n ≤ 30, 2 ≤ candidates[i] ≤ 40, 1 ≤ target ≤ 40"}]
+params: [{"name": "candidates", "type": "int[]"}, {"name": "target", "type": "int"}]
+returns: "int[][]"
+comparator: {"kind": "unordered-nested"}
+entry: {"python": "combinationSum", "typescript": "combinationSum"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "maxLength": 30, "smallMaxLength": 4, "largeLength": 12, "min": 2, "max": 40, "smallMin": 2, "smallMax": 9, "distinct": true}, {"type": "int", "min": 1, "max": 40, "smallMin": 1, "smallMax": 14}]
+hints: [{"zh": "怎样避免 [2,3] 和 [3,2] 被当成两个组合？", "en": "How do you avoid counting [2,3] and [3,2] as different combinations?"}, {"zh": "规定组合内元素按下标非递减选取：递归时从当前下标开始，而不是从 0 开始。", "en": "Pick elements in non-decreasing index order: recurse from the current index rather than from 0."}, {"zh": "可以重复使用当前数，所以递归时仍传当前下标 i；剩余目标为负时剪枝。", "en": "The current number may repeat, so recurse with index i itself; prune when the remaining target goes negative."}]
+solution: {"explanation": {"zh": "回溯 + 起始下标去重，并对剩余目标剪枝（候选排序后可提前结束循环）。", "en": "Backtracking with a start index for uniqueness and pruning on the remaining target; sorting the candidates lets the loop stop early."}}
+examples: [{"id": "ex-1", "args": [[2, 3, 6, 7], 7], "expected": [[2, 2, 3], [7]]}, {"id": "ex-2", "args": [[2, 3, 5], 8], "expected": [[2, 2, 2, 2], [2, 3, 3], [3, 5]]}, {"id": "ex-3", "args": [[2], 1], "expected": []}]
+boundaryCases: [{"args": [[2], 1]}, {"args": [[2], 2]}, {"args": [[7, 3, 2], 7]}, {"args": [[40], 40]}]

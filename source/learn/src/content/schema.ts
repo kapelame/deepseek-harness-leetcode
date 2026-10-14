@@ -1,14 +1,35 @@
 /** zod validation for curriculum files, frozen suites, imports, and model-produced variant specifications. */
 import { z } from 'zod'
-import type { ValueType } from '../types.ts'
+import type { HarnessName, ParamSpec, ProblemShape, ValueType } from '../types.ts'
 
 /** Every value encoding accepted from content, imports, and models. */
 export const VALUE_TYPES = [
   'int', 'float', 'bool', 'string',
   'int[]', 'float[]', 'bool[]', 'string[]',
   'int[][]', 'string[][]',
-  'tree', 'linked-list',
+  'tree', 'linked-list', 'linked-list[]',
+  'json',
 ] as const satisfies readonly ValueType[]
+
+/**
+ * Argument encodings each harness accepts, the return encodings it reports, and the parameters the
+ * solution itself receives (used for starters and prompts).
+ */
+export const HARNESS_SIGNATURES: Readonly<Record<HarnessName, {
+  readonly params: readonly ValueType[]
+  readonly returns: readonly ValueType[]
+  readonly solution: readonly { readonly name: string; readonly node: 'ListNode' | 'TreeNode' | 'Node' }[]
+  readonly result: Readonly<Partial<Record<ValueType, 'ListNode' | 'TreeNode' | 'Node' | 'bool'>>>
+}>> = {
+  'linked-list-cycle': { params: ['linked-list', 'int'], returns: ['bool', 'int'], solution: [{ name: 'head', node: 'ListNode' }],
+    result: { bool: 'bool', int: 'ListNode' } },
+  'linked-list-intersection': { params: ['int', 'linked-list', 'linked-list', 'int', 'int'], returns: ['json'],
+    solution: [{ name: 'headA', node: 'ListNode' }, { name: 'headB', node: 'ListNode' }], result: { json: 'ListNode' } },
+  'random-list': { params: ['json'], returns: ['json'], solution: [{ name: 'head', node: 'Node' }], result: { json: 'Node' } },
+  'tree-node-refs': { params: ['tree', 'int', 'int'], returns: ['int'],
+    solution: [{ name: 'root', node: 'TreeNode' }, { name: 'p', node: 'TreeNode' }, { name: 'q', node: 'TreeNode' }],
+    result: { int: 'TreeNode' } },
+}
 
 const bound = z.number().int().min(-1_000_000_000).max(1_000_000_000)
 const length = z.number().int().min(0).max(200_000)
@@ -58,10 +79,60 @@ export const comparatorSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('unordered') }).strict(),
   z.object({ kind: z.literal('unordered-nested') }).strict(),
   z.object({ kind: z.literal('float'), tolerance: z.number().positive().max(1) }).strict(),
-  z.object({ kind: z.literal('validator'), name: z.enum(['pair-indices-sum', 'pair-indices-sum-one-based']) }).strict(),
+  z.object({ kind: z.literal('validator'), name: z.enum(['pair-indices-sum', 'pair-indices-sum-one-based',
+    'longest-palindromic-substring', 'balanced-bst-same-inorder']) }).strict(),
 ])
 
 const param = z.object({ name: identifier, type: valueType }).strict()
+
+/** Judge calling convention; see `ProblemShape`. */
+export const shapeSchema = z.discriminatedUnion('kind', [
+  z.object({ kind: z.literal('in-place'), param: z.number().int().nonnegative() }).strict(),
+  z.object({ kind: z.literal('harness'), name: z.enum(['linked-list-cycle', 'linked-list-intersection', 'random-list',
+    'tree-node-refs']) }).strict(),
+  z.object({
+    kind: z.literal('design'),
+    className: identifier,
+    constructorParams: z.array(param),
+    methods: z.array(z.object({ name: identifier, params: z.array(param), returns: z.union([valueType, z.literal('void')]) }).strict())
+      .min(1),
+  }).strict(),
+])
+
+/**
+ * Check that a signature fits its calling convention.
+ * @param params - declared parameters.
+ * @param returns - declared return encoding.
+ * @param shape - optional calling convention.
+ * @returns a problem description, or `undefined` when consistent.
+ */
+export function shapeProblem(params: readonly ParamSpec[], returns: ValueType, shape: ProblemShape | undefined): string | undefined {
+  if (shape === undefined) return undefined
+  switch (shape.kind) {
+    case 'in-place': {
+      const target = params[shape.param]
+      if (target === undefined) return `in-place parameter ${String(shape.param)} does not exist`
+      return target.type === returns ? undefined : `in-place problems declare returns as the compared parameter type (${target.type})`
+    }
+    case 'harness': {
+      const signature = HARNESS_SIGNATURES[shape.name]
+      const types = params.map(item => item.type)
+      if (types.length !== signature.params.length || types.some((type, index) => type !== signature.params[index])) {
+        return `harness ${shape.name} needs parameters (${signature.params.join(', ')})`
+      }
+      return signature.returns.includes(returns) ? undefined : `harness ${shape.name} returns ${signature.returns.join(' or ')}`
+    }
+    case 'design':
+      if (params.length !== 2 || params[0]?.type !== 'string[]' || params[1]?.type !== 'json' || returns !== 'json') {
+        return 'design problems take (operations: string[], arguments: json) and return json'
+      }
+      return new Set(shape.methods.map(item => item.name)).size === shape.methods.length ? undefined : 'design method names repeat'
+    default: {
+      const unreachable: never = shape
+      return unreachable
+    }
+  }
+}
 const entry = z.object({ python: identifier, typescript: identifier }).strict()
 
 /** One `content/topics/<id>.yaml` file. */
@@ -94,6 +165,14 @@ export const topicFileSchema = z.object({
   }).strict(),
 }).strict()
 
+/** One `content/collections/<id>.yaml` file: a curated list of built-in problems in its publisher's grouping. */
+export const collectionFileSchema = z.object({
+  id: contentId,
+  title: localized,
+  source: z.object({ name: z.string().min(1), url: z.url(), verifiedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/) }).strict(),
+  groups: z.array(z.object({ id: z.string().regex(/^[a-z0-9-]{1,64}$/), title: localized, problems: z.array(contentId).min(1) }).strict()).min(1),
+}).strict()
+
 /** Parsed topic file. */
 export type TopicFile = z.infer<typeof topicFileSchema>
 
@@ -122,6 +201,7 @@ export const problemFileSchema = z.object({
   constraints: z.array(localized),
   params: z.array(param).min(1),
   returns: valueType,
+  shape: shapeSchema.optional(),
   comparator: comparatorSchema,
   entry,
   perCaseMs: z.number().int().min(100).max(10_000),
@@ -139,6 +219,8 @@ export const problemFileSchema = z.object({
     message: 'original problems need a full statement' })
   if (value.kind === 'leetcode' && value.statement !== undefined) issue.addIssue({ code: 'custom',
     message: 'LeetCode statements are not stored; write an original summary' })
+  const mismatch = shapeProblem(value.params, value.returns, value.shape)
+  if (mismatch !== undefined) issue.addIssue({ code: 'custom', message: mismatch })
 })
 
 /** Parsed problem file. */
@@ -188,6 +270,7 @@ export const variantSpecSchema = z.object({
   entry,
   params: z.array(param).min(1),
   returns: valueType,
+  shape: shapeSchema.optional(),
   comparator: comparatorSchema,
   constraints: z.array(localized).min(1),
   examples: z.array(z.object({ args: z.array(z.json()), expected: z.json() }).strict()).min(1).max(5),
@@ -206,9 +289,51 @@ export const variantSpecSchema = z.object({
   hints: z.array(localized).length(3),
 }).strict()
 
+/** Model-written parts of a problem found on LeetCode; signature, ids, and examples come from verified metadata. */
+export const foundSubmissionSchema = z.object({
+  topicId: contentId,
+  summary: localized,
+  constraints: z.array(localized).min(1).max(8),
+  hints: z.array(localized).length(3),
+  explanation: localized,
+  comparator: comparatorSchema,
+  reference: z.string().min(1).max(20_000),
+  oracle: z.string().min(1).max(20_000),
+  inputs: z.array(inputDomainSchema).optional(),
+  hooks: z.string().min(1).max(20_000).optional(),
+  generator: z.string().min(1).max(20_000).optional(),
+  boundaryCases: z.array(z.array(z.json())).min(1).max(20),
+}).strict()
+
+/** Parsed model submission for a found problem. */
+export type FoundSubmission = z.infer<typeof foundSubmissionSchema>
+
+/** Stored specification of a LeetCode problem added by the problem finder. */
+export const foundProblemSpecSchema = z.object({
+  format: z.literal('leetcode'),
+  leetcode,
+  title: localized,
+  difficulty,
+  topicId: contentId,
+  summary: localized,
+  constraints: z.array(localized),
+  hints: z.array(localized).length(3),
+  explanation: localized,
+  entry,
+  params: z.array(param).min(1),
+  returns: valueType,
+  shape: shapeSchema.optional(),
+  comparator: comparatorSchema,
+  reference: z.string().min(1),
+  oracle: z.string().min(1),
+}).strict()
+
+/** Parsed found-problem specification. */
+export type FoundProblemSpec = z.infer<typeof foundProblemSpecSchema>
+
 /** Stored content origin. */
 export const contentOriginSchema = z.object({
-  source: z.enum(['authored', 'generated', 'imported']),
+  source: z.enum(['authored', 'generated', 'imported', 'found']),
   author: z.string(),
   createdAt: z.string(),
   seed: z.number().optional(),
@@ -265,6 +390,8 @@ export function matchesValueType(type: ValueType, value: unknown): boolean {
     case 'string[][]': return isArrayOf(value, row => isArrayOf(row, item => typeof item === 'string'))
     case 'tree': return isArrayOf(value, item => item === null || isInt(item))
     case 'linked-list': return isArrayOf(value, isInt)
+    case 'linked-list[]': return isArrayOf(value, list => isArrayOf(list, isInt))
+    case 'json': return true
     default: {
       const unreachable: never = type
       return unreachable

@@ -1,0 +1,20 @@
+id: "subsets"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "子集", "en": "Subsets"}
+difficulty: medium
+topics: ["backtracking"]
+leetcode: {"frontendId": 78, "title": "Subsets", "slug": "subsets", "difficulty": "medium", "tags": ["Array", "Backtracking", "Bit Manipulation"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "给定互不相同的整数数组，返回它的所有子集（幂集），不能包含重复子集，顺序不限。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Given distinct integers, return every subset (the power set) without duplicates, in any order. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 10，-10 ≤ nums[i] ≤ 10，元素互不相同", "en": "1 ≤ n ≤ 10, -10 ≤ nums[i] ≤ 10, all distinct"}]
+params: [{"name": "nums", "type": "int[]"}]
+returns: "int[][]"
+comparator: {"kind": "unordered-nested"}
+entry: {"python": "subsets", "typescript": "subsets"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "maxLength": 10, "smallMaxLength": 5, "largeLength": 10, "min": -10, "max": 10, "distinct": true}]
+hints: [{"zh": "每个元素只有两种状态：选或不选。", "en": "Each element is either in or out."}, {"zh": "递归到第 i 个元素时，分别走“选它”和“不选它”两条分支。", "en": "At element i, recurse once with it and once without it."}, {"zh": "或者按起点枚举：dfs(start) 每进入一次就记录当前路径，再从 start 往后依次尝试加入元素。", "en": "Or enumerate by start: dfs(start) records the current path on entry, then tries adding each later element."}]
+solution: {"explanation": {"zh": "回溯枚举每个元素的选/不选，共 2ⁿ 个子集，时间 O(n·2ⁿ)。", "en": "Backtracking over in/out for each element yields 2ⁿ subsets in O(n·2ⁿ) time."}}
+examples: [{"id": "ex-1", "args": [[1, 2, 3]], "expected": [[], [1], [1, 2], [1, 2, 3], [1, 3], [2], [2, 3], [3]]}, {"id": "ex-2", "args": [[0]], "expected": [[], [0]]}]
+boundaryCases: [{"args": [[0]]}, {"args": [[1, 2]]}, {"args": [[-10, 10, 0]]}]

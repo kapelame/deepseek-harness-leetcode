@@ -5,6 +5,7 @@
  */
 import type { LearnLocale, Localized } from '../types.ts'
 import type { ProblemDefinition } from '../content/catalog.ts'
+import { HARNESS_SIGNATURES } from '../content/schema.ts'
 
 const LANGUAGE: Readonly<Record<LearnLocale, string>> = {
   zh: 'Write every explanation in Simplified Chinese. Keep code identifiers, function names, and complexity notation as they are.',
@@ -24,6 +25,28 @@ export function pick(text: Localized, locale: LearnLocale): string {
 }
 
 /**
+ * One-line solution signature as the learner writes it.
+ * @param problem - definition.
+ * @returns the signature text.
+ */
+export function signatureLine(problem: Pick<ProblemDefinition, 'entry' | 'params' | 'returns' | 'shape'>): string {
+  const list = (params: readonly { name: string; type: string }[]): string => params.map(item => `${item.name}: ${item.type}`).join(', ')
+  const shape = problem.shape
+  if (shape?.kind === 'design') {
+    return `class ${shape.className}(${list(shape.constructorParams)}) with methods ${shape.methods.map(item =>
+      `${item.name}(${list(item.params)}) -> ${item.returns}`).join('; ')}; tests list operations and arguments as on LeetCode`
+  }
+  if (shape?.kind === 'harness') {
+    const harness = HARNESS_SIGNATURES[shape.name]
+    return `${problem.entry.python}(${harness.solution.map(item => `${item.name}: ${item.node}`).join(', ')}) -> ${harness.result[problem.returns] ?? problem.returns}; test inputs are (${list(problem.params)})`
+  }
+  if (shape?.kind === 'in-place') {
+    return `${problem.entry.python}(${list(problem.params)}) -> None; modify ${problem.params[shape.param]?.name ?? 'the argument'} in place`
+  }
+  return `${problem.entry.python}(${list(problem.params)}) -> ${problem.returns}`
+}
+
+/**
  * Learner-safe problem description for prompts: no reference, oracle, solution, or hidden cases.
  * @param problem - definition.
  * @param locale - learner locale.
@@ -37,7 +60,7 @@ export function problemBlock(problem: ProblemDefinition, locale: LearnLocale): s
     problem.leetcode === undefined ? `Kind: ${problem.kind}` : `LeetCode #${String(problem.leetcode.frontendId)} (${problem.leetcode.url}); the official statement is not included.`,
     `Description: ${pick(problem.statement ?? problem.summary, locale)}`,
     `Constraints: ${problem.constraints.map(item => pick(item, locale)).join('; ')}`,
-    `Signature: ${problem.entry.python}(${problem.params.map(item => `${item.name}: ${item.type}`).join(', ')}) -> ${problem.returns}`,
+    `Signature: ${signatureLine(problem)}`,
     `Output comparison: ${problem.comparator.kind}`,
     ...examples.map(item => `Example ${item.id}: args=${JSON.stringify(item.args)} expected=${JSON.stringify(item.expected)}`),
     '</problem>',

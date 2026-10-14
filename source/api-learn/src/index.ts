@@ -12,6 +12,7 @@ import type {
   LearnerSettings, LearnExport, LearnOverview, LessonProgress, LessonStage, ProblemId, ProgressView, RecallRating, ReviewCompletion,
   ReviewItemId, ReviewQueue,
   RunnerStatus, TodayView, TopicId, TutorStreamFrame, TutorThreadId, VariantRecord, WorkspaceState,
+  FinderRunId, FinderRunView, FinderStreamFrame,
 } from '@deepseek-ai/dsh-experimental-learn/types'
 import type { ReviewMoveTarget, VariantGenerationView } from './types.ts'
 
@@ -232,6 +233,46 @@ export default class LearnController extends TypertRemoteService {
   async *tutorFollow(threadId: TutorThreadId, signal: AbortSignal): AsyncIterable<TutorStreamFrame> {
     try {
       for await (const frame of this.ctx.learn.tutorFollow(OWNER_LEARNER, threadId, signal)) yield frame
+    } catch (error) {
+      throw toRemote(error)
+    }
+  }
+
+  /**
+   * Start a problem search from a description; progress streams through `finderFollow`.
+   * @param description - what the learner wants, in their own words.
+   * @param count - problems to add.
+   * @returns the run as started.
+   */
+  @Remote
+  findProblems(description: string, count: number): FinderRunView {
+    return remote(() => this.ctx.learn.findProblems(OWNER_LEARNER, description, count))
+  }
+
+  /**
+   * Recent problem searches, newest first.
+   * @returns up to 20 runs.
+   */
+  @Remote
+  finderRuns(): FinderRunView[] { return remote(() => this.ctx.learn.finderRuns(OWNER_LEARNER)) }
+
+  /**
+   * Cancel a running problem search; problems already added stay.
+   * @param runId - run.
+   */
+  @Remote
+  finderCancel(runId: FinderRunId): void { remote(() => { this.ctx.learn.finderCancel(OWNER_LEARNER, runId) }) }
+
+  /**
+   * Follow a problem search.
+   * @param runId - run.
+   * @param signal - observation lifetime.
+   * @returns a snapshot, then events, then the settled run.
+   */
+  @Remote({ mode: 'stream' })
+  async *finderFollow(runId: FinderRunId, signal: AbortSignal): AsyncIterable<FinderStreamFrame> {
+    try {
+      for await (const frame of this.ctx.learn.finderFollow(OWNER_LEARNER, runId, signal)) yield frame
     } catch (error) {
       throw toRemote(error)
     }

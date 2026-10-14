@@ -1,0 +1,20 @@
+id: "largest-rectangle-in-histogram"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "柱状图中最大的矩形", "en": "Largest Rectangle in Histogram"}
+difficulty: hard
+topics: ["stack"]
+leetcode: {"frontendId": 84, "title": "Largest Rectangle in Histogram", "slug": "largest-rectangle-in-histogram", "difficulty": "hard", "tags": ["Array", "Stack", "Monotonic Stack", "Range Minimum/Maximum Query"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "柱状图中每根柱子宽度为 1、高度为 heights[i]，求能勾勒出的最大矩形面积。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Bars of width 1 have heights heights[i]; return the area of the largest rectangle inside the histogram. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 10⁵，0 ≤ heights[i] ≤ 10⁴", "en": "1 ≤ n ≤ 10⁵, 0 ≤ heights[i] ≤ 10⁴"}]
+params: [{"name": "heights", "type": "int[]"}]
+returns: "int"
+comparator: {"kind": "exact"}
+entry: {"python": "largestRectangleArea", "typescript": "largestRectangleArea"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "smallMaxLength": 9, "largeLength": 20000, "min": 0, "max": 10000, "smallMin": 0, "smallMax": 6}]
+hints: [{"zh": "以柱子 i 的高度为矩形高度时，矩形最多能向左右延伸到哪里？", "en": "With bar i's height as the rectangle height, how far can it extend left and right?"}, {"zh": "延伸到两侧第一个比它矮的柱子为止。这就是“上一个/下一个更小元素”问题。", "en": "Until the first shorter bar on each side: a previous/next smaller element problem."}, {"zh": "单调递增栈：当前柱子比栈顶矮时弹出栈顶，此时栈顶的右边界是当前位置、左边界是新的栈顶。", "en": "With an increasing stack, pop while the current bar is shorter than the top; the popped bar's right bound is the current index and its left bound the new top."}]
+solution: {"explanation": {"zh": "单调栈一次扫描求出每根柱子作为最矮柱时的最大宽度。时间 O(n)，空间 O(n)。", "en": "One monotonic-stack pass finds, for each bar, the widest span where it is the shortest. O(n) time and space."}}
+examples: [{"id": "ex-1", "args": [[2, 1, 5, 6, 2, 3]], "expected": 10}, {"id": "ex-2", "args": [[2, 4]], "expected": 4}]
+boundaryCases: [{"args": [[0]]}, {"args": [[5]]}, {"args": [[2, 4]]}, {"args": [[2, 1, 2]]}, {"args": [[1, 2, 3, 4, 5]]}, {"args": [[5, 4, 3, 2, 1]]}]

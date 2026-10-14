@@ -55,13 +55,17 @@
     "@deepseek-ai/dsh-session": "workspace:*",
     "@deepseek-ai/dsh-subprocess": "workspace:*",
     "@deepseek-ai/dsh-system-prompt": "workspace:*",
-    "@deepseek-ai/dsh-tools": "workspace:*"
+    "@deepseek-ai/dsh-tools": "workspace:*",
+    "@deepseek-ai/dsh-skill": "workspace:*"
   },
   "peerDependenciesMeta": {
     "@deepseek-ai/dsh-credentials": {
       "optional": true
     },
     "@deepseek-ai/dsh-host-webserver": {
+      "optional": true
+    },
+    "@deepseek-ai/dsh-skill": {
       "optional": true
     }
   },
@@ -81,6 +85,7 @@
     "@deepseek-ai/dsh-system-prompt": "workspace:*",
     "@deepseek-ai/dsh-tools": "workspace:*",
     "@types/js-yaml": "^4.0.9",
-    "@types/nodemailer": "^6.4.17"
+    "@types/nodemailer": "^6.4.17",
+    "@deepseek-ai/dsh-skill": "workspace:*"
   }
 }

@@ -1,0 +1,22 @@
+id: "dp-coin-change-combinations"
+version: 1
+suiteVersion: 1
+parentProblemId: "coin-change"
+topicId: "dynamic-programming"
+title: {"zh": "凑出金额的组合数", "en": "Ways to Make an Amount"}
+summary: {"zh": "每种硬币数量不限，求凑出 amount 的组合数（不区分顺序）。", "en": "With unlimited coins of each kind, count the combinations that make amount, ignoring order."}
+statement: {"zh": "给定互不相同的正整数面额 `coins` 和总金额 `amount`，每种面额的硬币数量不限。返回凑成 `amount` 的**组合数**：只看每种硬币用了几枚，`1 + 2` 和 `2 + 1` 算同一种。金额为 0 时有 1 种组合（什么都不用）。\n\n保证答案在 32 位有符号整数范围内。", "en": "Given distinct positive denominations `coins` and an `amount`, with unlimited coins of each kind, return the number of **combinations** that make `amount`: only the count of each coin matters, so `1 + 2` and `2 + 1` are the same. An amount of 0 has exactly 1 combination, using nothing.\n\nThe answer fits in a signed 32-bit integer."}
+difficulty: medium
+skills: ["unbounded knapsack", "counting DP", "loop order"]
+differences: [{"category": "output", "description": {"zh": "从“最少硬币数”变成“方案数”，转移从取最小值变成求和。", "en": "From the fewest coins to the number of ways, so the transition sums instead of taking a minimum."}}, {"category": "reasoning", "description": {"zh": "必须避免把不同顺序算成不同方案：外层遍历硬币、内层遍历金额。", "en": "Different orders must not count separately: loop over coins outside and amounts inside."}}]
+transfer: {"zh": "完全背包“dp[x] 依赖 dp[x - coin]”的结构保持不变；变化在于聚合方式（最小值 → 求和）和循环顺序对计数的影响。", "en": "The unbounded-knapsack structure, dp[x] from dp[x - coin], carries over; what changes is the aggregation (minimum → sum) and how loop order affects counting."}
+entry: {"python": "change", "typescript": "change"}
+params: [{"name": "amount", "type": "int"}, {"name": "coins", "type": "int[]"}]
+returns: "int"
+comparator: {"kind": "exact"}
+perCaseMs: 1000
+inputs: [{"type": "int", "min": 0, "max": 5000, "smallMin": 0, "smallMax": 12}, {"type": "int[]", "minLength": 1, "maxLength": 300, "smallMaxLength": 4, "largeLength": 30, "min": 1, "max": 5000, "smallMin": 1, "smallMax": 8, "distinct": true}]
+constraints: [{"zh": "0 ≤ amount ≤ 5000，1 ≤ coins.length ≤ 300，1 ≤ coins[i] ≤ 5000，面额互不相同", "en": "0 ≤ amount ≤ 5000, 1 ≤ coins.length ≤ 300, 1 ≤ coins[i] ≤ 5000, distinct denominations"}]
+examples: [{"args": [5, [1, 2, 5]], "expected": 4}, {"args": [3, [2]], "expected": 0}, {"args": [10, [10]], "expected": 1}]
+boundaryCases: [{"args": [0, [7]]}, {"args": [1, [2]]}, {"args": [4, [1, 2]]}, {"args": [7, [2, 3]]}]
+hints: [{"zh": "dp[x] 表示凑出金额 x 的组合数，dp[0] = 1。", "en": "Let dp[x] be the number of ways to make x, with dp[0] = 1."}, {"zh": "如果外层循环金额、内层循环硬币，[1, 2] 和 [2, 1] 会被分别计数。为什么？", "en": "With amounts outside and coins inside, [1, 2] and [2, 1] are counted separately. Why?"}, {"zh": "外层循环硬币：for coin in coins: for x in range(coin, amount + 1): dp[x] += dp[x - coin]。这样每种组合按硬币顺序只被构造一次。", "en": "Loop coins outside: for coin in coins: for x in range(coin, amount + 1): dp[x] += dp[x - coin]. Each combination is built once, in coin order."}]

@@ -1,0 +1,21 @@
+id: "flatten-binary-tree-to-linked-list"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "二叉树展开为链表", "en": "Flatten Binary Tree to Linked List"}
+difficulty: medium
+topics: ["trees"]
+leetcode: {"frontendId": 114, "title": "Flatten Binary Tree to Linked List", "slug": "flatten-binary-tree-to-linked-list", "difficulty": "medium", "tags": ["Linked List", "Stack", "Tree", "Depth-First Search", "Binary Tree"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "把二叉树原地展开成“链表”：按先序遍历的顺序，每个节点的左孩子为空、右孩子指向下一个节点。函数不返回值，结果按修改后的树显示。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Flatten the tree in place into a 'linked list': in preorder, every node's left child is empty and its right child is the next node. The function returns nothing; the result is shown as the modified tree. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "0 ≤ 节点数 ≤ 2000，-100 ≤ Node.val ≤ 100；进阶：O(1) 额外空间", "en": "0 ≤ nodes ≤ 2000, -100 ≤ Node.val ≤ 100; follow-up: O(1) extra space"}]
+params: [{"name": "root", "type": "tree"}]
+returns: "tree"
+shape: {"kind": "in-place", "param": 0}
+comparator: {"kind": "exact"}
+entry: {"python": "flatten", "typescript": "flatten"}
+perCaseMs: 1000
+inputs: [{"type": "tree", "minLength": 0, "maxLength": 2000, "smallMaxLength": 9, "largeLength": 2000, "min": -100, "max": 100}]
+hints: [{"zh": "展开后的顺序就是先序遍历顺序。", "en": "The flattened order is the preorder sequence."}, {"zh": "对节点 x：把左子树接到 x.right，原来的右子树接到左子树最右节点的后面。", "en": "For node x: move the left subtree to x.right and attach the old right subtree after the left subtree's rightmost node."}, {"zh": "从根开始沿 right 逐个处理，每处理一个节点把它的 left 设为 null，即可 O(1) 额外空间。", "en": "Walk from the root along right, processing each node and clearing its left, for O(1) extra space."}]
+solution: {"explanation": {"zh": "类 Morris 方法：把左子树整体插到右边，前驱（左子树最右节点）连接原右子树。每条边处理常数次，时间 O(n)，额外空间 O(1)。", "en": "A Morris-like splice: move the left subtree to the right and link its rightmost node to the old right subtree. Each edge is handled a constant number of times, O(n) time, O(1) extra space."}}
+examples: [{"id": "ex-1", "args": [[1, 2, 5, 3, 4, null, 6]], "expected": [1, null, 2, null, 3, null, 4, null, 5, null, 6]}, {"id": "ex-2", "args": [[]], "expected": []}, {"id": "ex-3", "args": [[0]], "expected": [0]}]
+boundaryCases: [{"args": [[]]}, {"args": [[0]]}, {"args": [[1, 2]]}, {"args": [[1, null, 2]]}, {"args": [[1, 2, 5, 3, 4, null, 6]]}]

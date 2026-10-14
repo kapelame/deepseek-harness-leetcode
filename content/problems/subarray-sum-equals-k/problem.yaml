@@ -1,0 +1,20 @@
+id: "subarray-sum-equals-k"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "和为 K 的子数组", "en": "Subarray Sum Equals K"}
+difficulty: medium
+topics: ["array-techniques"]
+leetcode: {"frontendId": 560, "title": "Subarray Sum Equals K", "slug": "subarray-sum-equals-k", "difficulty": "medium", "tags": ["Array", "Hash Table", "Prefix Sum"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "统计数组中和恰好为 k 的连续非空子数组的个数。元素可以为负数。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Count the non-empty contiguous subarrays whose sum is exactly k. Elements may be negative. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 2×10⁴，-1000 ≤ nums[i] ≤ 1000，-10⁷ ≤ k ≤ 10⁷", "en": "1 ≤ n ≤ 2×10⁴, -1000 ≤ nums[i] ≤ 1000, -10⁷ ≤ k ≤ 10⁷"}]
+params: [{"name": "nums", "type": "int[]"}, {"name": "k", "type": "int"}]
+returns: "int"
+comparator: {"kind": "exact"}
+entry: {"python": "subarraySum", "typescript": "subarraySum"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "smallMaxLength": 10, "largeLength": 20000, "min": -1000, "max": 1000, "smallMin": -3, "smallMax": 3}, {"type": "int", "min": -10000000, "max": 10000000, "smallMin": -4, "smallMax": 4}]
+hints: [{"zh": "有负数时滑动窗口不再适用。子数组的和能用两个前缀和表示吗？", "en": "With negative numbers a sliding window fails. Can a subarray sum be written with two prefix sums?"}, {"zh": "sum(i..j) = prefix[j+1] - prefix[i]。要它等于 k，就是找之前出现过多少次 prefix - k。", "en": "sum(i..j) = prefix[j+1] - prefix[i]. For it to equal k, count how often prefix - k appeared before."}, {"zh": "用哈希表记录每个前缀和出现的次数，初始放入 {0: 1}，边扫描边累加答案。", "en": "Keep a hash map of prefix-sum counts, starting with {0: 1}, and accumulate the answer while scanning."}]
+solution: {"explanation": {"zh": "前缀和加哈希计数：扫描到当前前缀和 s 时，之前出现的 s-k 的次数就是以当前位置结尾、和为 k 的子数组数。时间 O(n)，空间 O(n)。", "en": "Prefix sums with a hash count: at prefix sum s, the earlier occurrences of s-k are exactly the subarrays ending here with sum k. O(n) time and space."}}
+examples: [{"id": "ex-1", "args": [[1, 1, 1], 2], "expected": 2}, {"id": "ex-2", "args": [[1, 2, 3], 3], "expected": 2}]
+boundaryCases: [{"args": [[0], 0]}, {"args": [[1], 1]}, {"args": [[1], 0]}, {"args": [[0, 0, 0], 0]}, {"args": [[1, -1, 1, -1], 0]}, {"args": [[-1000, 1000], 0]}]

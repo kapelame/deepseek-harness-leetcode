@@ -1,0 +1,20 @@
+id: "longest-increasing-subsequence"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "最长递增子序列", "en": "Longest Increasing Subsequence"}
+difficulty: medium
+topics: ["dynamic-programming"]
+leetcode: {"frontendId": 300, "title": "Longest Increasing Subsequence", "slug": "longest-increasing-subsequence", "difficulty": "medium", "tags": ["Array", "Binary Search", "Dynamic Programming", "Longest Increasing Subsequence"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "求数组中最长严格递增子序列的长度（子序列可以不连续）。进阶：O(n log n)。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Return the length of the longest strictly increasing subsequence; it need not be contiguous. Follow-up: O(n log n). (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 2500，-10⁴ ≤ nums[i] ≤ 10⁴", "en": "1 ≤ n ≤ 2500, -10⁴ ≤ nums[i] ≤ 10⁴"}]
+params: [{"name": "nums", "type": "int[]"}]
+returns: "int"
+comparator: {"kind": "exact"}
+entry: {"python": "lengthOfLIS", "typescript": "lengthOfLIS"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "maxLength": 2500, "smallMaxLength": 9, "largeLength": 2500, "min": -10000, "max": 10000, "smallMin": -5, "smallMax": 5}]
+hints: [{"zh": "dp[i] = 以 nums[i] 结尾的最长递增子序列长度。", "en": "dp[i] = length of the longest increasing subsequence ending at nums[i]."}, {"zh": "dp[i] = 1 + max(dp[j])，其中 j < i 且 nums[j] < nums[i]；答案是所有 dp[i] 的最大值。O(n²)。", "en": "dp[i] = 1 + max(dp[j]) over j < i with nums[j] < nums[i]; the answer is the maximum dp[i]. O(n²)."}, {"zh": "O(n log n)：tails[k] 记录长度为 k+1 的递增子序列的最小结尾，用二分查找替换。", "en": "O(n log n): tails[k] holds the smallest ending of an increasing subsequence of length k+1; update it by binary search."}]
+solution: {"explanation": {"zh": "耐心排序：维护各长度递增子序列的最小结尾，二分更新。时间 O(n log n)，空间 O(n)。", "en": "Patience sorting keeps the smallest ending for each length and updates it by binary search. O(n log n) time, O(n) space."}}
+examples: [{"id": "ex-1", "args": [[10, 9, 2, 5, 3, 7, 101, 18]], "expected": 4}, {"id": "ex-2", "args": [[0, 1, 0, 3, 2, 3]], "expected": 4}, {"id": "ex-3", "args": [[7, 7, 7, 7, 7, 7, 7]], "expected": 1}]
+boundaryCases: [{"args": [[1]]}, {"args": [[2, 2]]}, {"args": [[1, 2]]}, {"args": [[2, 1]]}, {"args": [[0, 1, 0, 3, 2, 3]]}]

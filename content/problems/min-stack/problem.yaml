@@ -1,0 +1,21 @@
+id: "min-stack"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "最小栈", "en": "Min Stack"}
+difficulty: medium
+topics: ["design"]
+leetcode: {"frontendId": 155, "title": "Min Stack", "slug": "min-stack", "difficulty": "medium", "tags": ["Stack", "Design"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "设计一个栈，除了 push、pop、top 外，还能在 O(1) 时间内返回当前栈中的最小元素 getMin。pop、top、getMin 只会在栈非空时调用。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Design a stack that supports push, pop, and top, and returns the current minimum with getMin in O(1) time. pop, top, and getMin are only called on a non-empty stack. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "-2³¹ ≤ val ≤ 2³¹-1，调用总次数 ≤ 3×10⁴", "en": "-2³¹ ≤ val ≤ 2³¹-1, at most 3×10⁴ calls"}]
+params: [{"name": "operations", "type": "string[]"}, {"name": "arguments", "type": "json"}]
+returns: "json"
+shape: {"kind": "design", "className": "MinStack", "constructorParams": [], "methods": [{"name": "push", "params": [{"name": "val", "type": "int"}], "returns": "void"}, {"name": "pop", "params": [], "returns": "void"}, {"name": "top", "params": [], "returns": "int"}, {"name": "getMin", "params": [], "returns": "int"}]}
+comparator: {"kind": "exact"}
+entry: {"python": "MinStack", "typescript": "MinStack"}
+perCaseMs: 1000
+inputs: [{"type": "string[]"}, {"type": "json"}]
+hints: [{"zh": "只用一个变量记录最小值，pop 掉最小值之后怎么办？", "en": "With one variable for the minimum, what happens after popping the minimum?"}, {"zh": "让每个栈元素同时记住“压入它时栈中的最小值”。", "en": "Let every stack entry remember the minimum at the time it was pushed."}, {"zh": "压入 (val, min(val, 当前最小值))；getMin 就是栈顶记录的最小值，pop 后自然恢复。", "en": "Push (val, min(val, current minimum)); getMin reads the top's recorded minimum and recovers automatically after pop."}]
+solution: {"explanation": {"zh": "辅助信息与元素一同入栈：每个位置保存到该位置为止的最小值，所有操作 O(1)。空间 O(n)。", "en": "Store auxiliary data with each entry: every position keeps the minimum up to itself, so all operations are O(1). O(n) space."}}
+examples: [{"id": "ex-1", "args": [["MinStack", "push", "push", "push", "getMin", "pop", "top", "getMin"], [[], [-2], [0], [-3], [], [], [], []]], "expected": [null, null, null, null, -3, null, 0, -2]}]
+boundaryCases: [{"args": [["MinStack", "push", "getMin"], [[], [5], []]]}, {"args": [["MinStack", "push", "push", "pop", "getMin"], [[], [1], [0], [], []]]}, {"args": [["MinStack", "push", "push", "push", "getMin", "pop", "top", "getMin"], [[], [-2], [0], [-3], [], [], [], []]]}, {"args": [["MinStack", "push", "push", "getMin", "pop", "getMin"], [[], [2], [2], [], [], []]]}]

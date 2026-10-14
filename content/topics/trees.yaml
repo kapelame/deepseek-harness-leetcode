@@ -5,7 +5,7 @@ summary:
   zh: 深度优先遍历把“整棵树的答案”拆成“子树答案的组合”，广度优先遍历按层处理节点；两者都只访问每个节点一次。
   en: Depth-first traversal combines answers from subtrees into the answer for the whole tree, while breadth-first traversal handles nodes level by level; both visit each node once.
 prerequisites: [stack]
-problems: [maximum-depth-of-binary-tree, invert-binary-tree, binary-tree-level-order-traversal]
+problems: [maximum-depth-of-binary-tree, invert-binary-tree, binary-tree-level-order-traversal, binary-tree-inorder-traversal, symmetric-tree, diameter-of-binary-tree, convert-sorted-array-to-binary-search-tree, validate-binary-search-tree, kth-smallest-element-in-a-bst, binary-tree-right-side-view, flatten-binary-tree-to-linked-list, construct-binary-tree-from-preorder-and-inorder-traversal, path-sum-iii, lowest-common-ancestor-of-a-binary-tree, binary-tree-maximum-path-sum]
 variants: [trees-max-level-sum, trees-good-nodes]
 lesson:
   motivation:

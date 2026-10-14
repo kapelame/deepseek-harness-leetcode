@@ -1,0 +1,21 @@
+id: "sort-colors"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "颜色分类", "en": "Sort Colors"}
+difficulty: medium
+topics: ["tricks"]
+leetcode: {"frontendId": 75, "title": "Sort Colors", "slug": "sort-colors", "difficulty": "medium", "tags": ["Array", "Two Pointers", "Sorting", "Quicksort", "Bubble Sort"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "数组只含 0、1、2（代表三种颜色），原地把它排成 0…0 1…1 2…2，不能使用库函数排序。尝试一次遍历。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "The array holds only 0, 1, and 2 (three colors); sort it in place into 0…0 1…1 2…2 without a library sort. Try one pass. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 300，nums[i] ∈ {0, 1, 2}", "en": "1 ≤ n ≤ 300, nums[i] ∈ {0, 1, 2}"}]
+params: [{"name": "nums", "type": "int[]"}]
+returns: "int[]"
+shape: {"kind": "in-place", "param": 0}
+comparator: {"kind": "exact"}
+entry: {"python": "sortColors", "typescript": "sortColors"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "maxLength": 300, "smallMaxLength": 9, "largeLength": 300, "min": 0, "max": 2}]
+hints: [{"zh": "两遍扫描：先数出 0、1、2 的个数，再依次写回。能一遍完成吗？", "en": "Two passes: count the 0s, 1s, and 2s, then write them back. Can one pass do it?"}, {"zh": "荷兰国旗问题：维护三个区域 [0, low) 全是 0，(high, n-1] 全是 2，中间是待处理或 1。", "en": "Dutch national flag: keep [0, low) all 0, (high, n-1] all 2, and the middle unprocessed or 1."}, {"zh": "指针 i 从左向右：遇 0 与 low 交换并都前进；遇 2 与 high 交换、high 后退（i 不动）；遇 1 只前进。", "en": "Move i rightward: on 0 swap with low and advance both; on 2 swap with high and retreat high, keeping i; on 1 just advance."}]
+solution: {"explanation": {"zh": "三指针划分（荷兰国旗），一次遍历原地完成。时间 O(n)，空间 O(1)。", "en": "Three-pointer partitioning, the Dutch national flag, in one in-place pass. O(n) time, O(1) space."}}
+examples: [{"id": "ex-1", "args": [[2, 0, 2, 1, 1, 0]], "expected": [0, 0, 1, 1, 2, 2]}, {"id": "ex-2", "args": [[2, 0, 1]], "expected": [0, 1, 2]}]
+boundaryCases: [{"args": [[0]]}, {"args": [[2, 0]]}, {"args": [[1, 1]]}, {"args": [[2, 1, 0]]}, {"args": [[2, 2, 0, 0, 1]]}]

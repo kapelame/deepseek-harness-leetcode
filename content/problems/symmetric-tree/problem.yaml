@@ -1,0 +1,20 @@
+id: "symmetric-tree"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "对称二叉树", "en": "Symmetric Tree"}
+difficulty: easy
+topics: ["trees"]
+leetcode: {"frontendId": 101, "title": "Symmetric Tree", "slug": "symmetric-tree", "difficulty": "easy", "tags": ["Tree", "Depth-First Search", "Breadth-First Search", "Binary Tree"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "判断二叉树是否关于中心轴镜像对称。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Report whether the tree is a mirror image of itself around its center. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ 节点数 ≤ 1000，-100 ≤ Node.val ≤ 100", "en": "1 ≤ nodes ≤ 1000, -100 ≤ Node.val ≤ 100"}]
+params: [{"name": "root", "type": "tree"}]
+returns: "bool"
+comparator: {"kind": "exact"}
+entry: {"python": "isSymmetric", "typescript": "isSymmetric"}
+perCaseMs: 1000
+inputs: [{"type": "tree", "minLength": 1, "maxLength": 1000, "smallMaxLength": 7, "largeLength": 1000, "min": -100, "max": 100, "smallMin": 1, "smallMax": 3}]
+hints: [{"zh": "对称意味着左子树和右子树互为镜像。两棵树互为镜像需要满足什么？", "en": "Symmetric means the left and right subtrees mirror each other. When are two trees mirrors?"}, {"zh": "根值相等，且 A 的左子树与 B 的右子树互为镜像，A 的右子树与 B 的左子树互为镜像。", "en": "Equal roots, A's left mirrors B's right, and A's right mirrors B's left."}, {"zh": "写一个 mirror(a, b) 递归函数，或用队列成对比较节点。", "en": "Write a recursive mirror(a, b), or compare nodes in pairs with a queue."}]
+solution: {"explanation": {"zh": "同时遍历两棵子树，比较外侧与外侧、内侧与内侧。时间 O(n)，空间 O(h)。", "en": "Walk both subtrees together, comparing outer with outer and inner with inner. O(n) time, O(h) space."}}
+examples: [{"id": "ex-1", "args": [[1, 2, 2, 3, 4, 4, 3]], "expected": true}, {"id": "ex-2", "args": [[1, 2, 2, null, 3, null, 3]], "expected": false}]
+boundaryCases: [{"args": [[1]]}, {"args": [[1, 2, 2]]}, {"args": [[1, 2]]}, {"args": [[1, 2, 2, null, 3, null, 3]]}, {"args": [[1, 2, 2, 3, 4, 4, 3]]}]

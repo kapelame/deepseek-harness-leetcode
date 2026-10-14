@@ -7,7 +7,7 @@ import { mkdir, open } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 
 /** Current monotonic schema version. */
-export const LEARN_SCHEMA_VERSION = 1
+export const LEARN_SCHEMA_VERSION = 2
 
 /** SQLite application id ("LERN") protecting unrelated databases. */
 export const LEARN_APPLICATION_ID = 0x4C45524E
@@ -254,6 +254,21 @@ const MIGRATIONS: readonly string[] = [
     created_at TEXT NOT NULL
   ) STRICT;
   `,
+  `
+  CREATE TABLE finder_runs (
+    id TEXT PRIMARY KEY,
+    learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
+    description TEXT NOT NULL,
+    count INTEGER NOT NULL,
+    status TEXT NOT NULL CHECK (status IN ('running', 'completed', 'failed', 'cancelled')),
+    events_json TEXT NOT NULL,
+    added_json TEXT NOT NULL,
+    error TEXT,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL
+  ) STRICT;
+  CREATE INDEX finder_runs_by_learner ON finder_runs (learner_id, created_at);
+  `
 ]
 
 async function createDatabaseFile(path: string): Promise<void> {

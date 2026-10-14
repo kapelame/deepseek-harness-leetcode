@@ -1,0 +1,22 @@
+id: "backtracking-subsets-with-duplicates"
+version: 1
+suiteVersion: 1
+parentProblemId: "subsets"
+topicId: "backtracking"
+title: {"zh": "含重复元素的子集", "en": "Subsets of a Multiset"}
+summary: {"zh": "数组可能含重复值，返回所有不重复的子集。", "en": "The array may contain repeated values; return every distinct subset."}
+statement: {"zh": "给定可能包含**重复**值的整数数组 `nums`，返回它的所有子集。结果中不能包含重复的子集（两个子集包含的各个值的出现次数完全相同即视为重复），子集与子集内部的顺序都不限。", "en": "Given an integer array `nums` that may contain **repeated** values, return all of its subsets. The result must not contain duplicate subsets (two subsets are duplicates when every value occurs the same number of times in both); neither the subsets nor the values inside them need any particular order."}
+difficulty: medium
+skills: ["backtracking", "deduplication by sorting"]
+differences: [{"category": "input-structure", "description": {"zh": "输入可能有重复值，原来的枚举会产生重复子集。", "en": "The input may repeat values, so plain enumeration produces duplicate subsets."}}, {"category": "reasoning", "description": {"zh": "需要排序并在同一层跳过相同的值，同时保留 [2, 2] 这类来自不同层的组合。", "en": "You must sort and skip equal values within a level while keeping combinations like [2, 2] that come from different levels."}}]
+transfer: {"zh": "“dfs(start) 进入即记录、从 start 往后选”的子集模板不变；新增的是排序与同层去重。", "en": "The subset template, recording on entry and choosing from start onward, stays; sorting and same-level deduplication are new."}
+entry: {"python": "subsetsWithDup", "typescript": "subsetsWithDup"}
+params: [{"name": "nums", "type": "int[]"}]
+returns: "int[][]"
+comparator: {"kind": "unordered-nested"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "maxLength": 10, "smallMaxLength": 6, "largeLength": 10, "min": -10, "max": 10, "smallMin": 0, "smallMax": 2}]
+constraints: [{"zh": "1 ≤ n ≤ 10，-10 ≤ nums[i] ≤ 10", "en": "1 ≤ n ≤ 10, -10 ≤ nums[i] ≤ 10"}]
+examples: [{"args": [[1, 2, 2]], "expected": [[], [1], [1, 2], [1, 2, 2], [2], [2, 2]]}, {"args": [[0]], "expected": [[], [0]]}, {"args": [[2, 1, 2, 1]], "expected": [[], [1], [1, 1], [1, 1, 2], [1, 1, 2, 2], [1, 2], [1, 2, 2], [2], [2, 2]]}]
+boundaryCases: [{"args": [[5]]}, {"args": [[1, 1]]}, {"args": [[3, 3, 3]]}, {"args": [[-10, 10, -10]]}]
+hints: [{"zh": "先排序，让相同的值挨在一起。", "en": "Sort first so equal values sit together."}, {"zh": "在 dfs(start) 的循环里，如果 i > start 且 nums[i] == nums[i-1]，说明这个值在本层已经试过了。", "en": "Inside dfs(start), when i > start and nums[i] == nums[i-1], that value was already tried at this level."}, {"zh": "跳过它即可；注意 i == start 时不能跳过，否则 [2, 2] 会被漏掉。", "en": "Skip it, but never when i == start, or subsets like [2, 2] would be lost."}]

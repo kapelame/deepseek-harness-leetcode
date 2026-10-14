@@ -1,0 +1,4292 @@
+{
+ "verifiedAt": "2026-10-14",
+ "source": "https://leetcode.com/graphql question(titleSlug)",
+ "questions": {
+  "two-sum": {
+   "questionFrontendId": "1",
+   "title": "Two Sum",
+   "titleSlug": "two-sum",
+   "difficulty": "Easy",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Hash Table",
+     "slug": "hash-table"
+    }
+   ],
+   "metaData": {
+    "name": "twoSum",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     },
+     {
+      "name": "target",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[]",
+     "size": 2
+    },
+    "manual": false
+   },
+   "exampleTestcaseList": [
+    "[2,7,11,15]\n9",
+    "[3,2,4]\n6",
+    "[3,3]\n6"
+   ]
+  },
+  "group-anagrams": {
+   "questionFrontendId": "49",
+   "title": "Group Anagrams",
+   "titleSlug": "group-anagrams",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Hash Table",
+     "slug": "hash-table"
+    },
+    {
+     "name": "String",
+     "slug": "string"
+    },
+    {
+     "name": "Sorting",
+     "slug": "sorting"
+    }
+   ],
+   "metaData": {
+    "name": "groupAnagrams",
+    "params": [
+     {
+      "name": "strs",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "list<list<string>>",
+     "dealloc": true
+    }
+   },
+   "exampleTestcaseList": [
+    "[\"eat\",\"tea\",\"tan\",\"ate\",\"nat\",\"bat\"]",
+    "[\"\"]",
+    "[\"a\"]"
+   ]
+  },
+  "longest-consecutive-sequence": {
+   "questionFrontendId": "128",
+   "title": "Longest Consecutive Sequence",
+   "titleSlug": "longest-consecutive-sequence",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Hash Table",
+     "slug": "hash-table"
+    },
+    {
+     "name": "Union-Find",
+     "slug": "union-find"
+    }
+   ],
+   "metaData": {
+    "name": "longestConsecutive",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "[100,4,200,1,3,2]",
+    "[0,3,7,2,5,8,4,6,0,1]",
+    "[1,0,1,2]"
+   ]
+  },
+  "move-zeroes": {
+   "questionFrontendId": "283",
+   "title": "Move Zeroes",
+   "titleSlug": "move-zeroes",
+   "difficulty": "Easy",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Two Pointers",
+     "slug": "two-pointers"
+    }
+   ],
+   "metaData": {
+    "name": "moveZeroes",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "void"
+    },
+    "output": {
+     "paramindex": 0
+    }
+   },
+   "exampleTestcaseList": [
+    "[0,1,0,3,12]",
+    "[0]"
+   ]
+  },
+  "container-with-most-water": {
+   "questionFrontendId": "11",
+   "title": "Container With Most Water",
+   "titleSlug": "container-with-most-water",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Two Pointers",
+     "slug": "two-pointers"
+    },
+    {
+     "name": "Greedy",
+     "slug": "greedy"
+    }
+   ],
+   "metaData": {
+    "name": "maxArea",
+    "params": [
+     {
+      "name": "height",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "[1,8,6,2,5,4,8,3,7]",
+    "[1,1]"
+   ]
+  },
+  "3sum": {
+   "questionFrontendId": "15",
+   "title": "3Sum",
+   "titleSlug": "3sum",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Two Pointers",
+     "slug": "two-pointers"
+    },
+    {
+     "name": "Sorting",
+     "slug": "sorting"
+    }
+   ],
+   "metaData": {
+    "name": "threeSum",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "list<list<integer>>",
+     "colsize": 3,
+     "dealloc": true
+    }
+   },
+   "exampleTestcaseList": [
+    "[-1,0,1,2,-1,-4]",
+    "[0,1,1]",
+    "[0,0,0]"
+   ]
+  },
+  "trapping-rain-water": {
+   "questionFrontendId": "42",
+   "title": "Trapping Rain Water",
+   "titleSlug": "trapping-rain-water",
+   "difficulty": "Hard",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Two Pointers",
+     "slug": "two-pointers"
+    },
+    {
+     "name": "Dynamic Programming",
+     "slug": "dynamic-programming"
+    },
+    {
+     "name": "Stack",
+     "slug": "stack"
+    },
+    {
+     "name": "Monotonic Stack",
+     "slug": "monotonic-stack"
+    }
+   ],
+   "metaData": {
+    "name": "trap",
+    "params": [
+     {
+      "name": "height",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "[0,1,0,2,1,0,1,3,2,1,2,1]",
+    "[4,2,0,3,2,5]"
+   ]
+  },
+  "longest-substring-without-repeating-characters": {
+   "questionFrontendId": "3",
+   "title": "Longest Substring Without Repeating Characters",
+   "titleSlug": "longest-substring-without-repeating-characters",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Hash Table",
+     "slug": "hash-table"
+    },
+    {
+     "name": "String",
+     "slug": "string"
+    },
+    {
+     "name": "Sliding Window",
+     "slug": "sliding-window"
+    }
+   ],
+   "metaData": {
+    "name": "lengthOfLongestSubstring",
+    "params": [
+     {
+      "name": "s",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "\"abcabcbb\"",
+    "\"bbbbb\"",
+    "\"pwwkew\""
+   ]
+  },
+  "find-all-anagrams-in-a-string": {
+   "questionFrontendId": "438",
+   "title": "Find All Anagrams in a String",
+   "titleSlug": "find-all-anagrams-in-a-string",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Hash Table",
+     "slug": "hash-table"
+    },
+    {
+     "name": "String",
+     "slug": "string"
+    },
+    {
+     "name": "Sliding Window",
+     "slug": "sliding-window"
+    }
+   ],
+   "metaData": {
+    "name": "findAnagrams",
+    "params": [
+     {
+      "name": "s",
+      "type": "string"
+     },
+     {
+      "name": "p",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "list<integer>"
+    }
+   },
+   "exampleTestcaseList": [
+    "\"cbaebabacd\"\n\"abc\"",
+    "\"abab\"\n\"ab\""
+   ]
+  },
+  "subarray-sum-equals-k": {
+   "questionFrontendId": "560",
+   "title": "Subarray Sum Equals K",
+   "titleSlug": "subarray-sum-equals-k",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Hash Table",
+     "slug": "hash-table"
+    },
+    {
+     "name": "Prefix Sum",
+     "slug": "prefix-sum"
+    }
+   ],
+   "metaData": {
+    "name": "subarraySum",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "[1,1,1]\n2",
+    "[1,2,3]\n3"
+   ]
+  },
+  "sliding-window-maximum": {
+   "questionFrontendId": "239",
+   "title": "Sliding Window Maximum",
+   "titleSlug": "sliding-window-maximum",
+   "difficulty": "Hard",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Queue",
+     "slug": "queue"
+    },
+    {
+     "name": "Sliding Window",
+     "slug": "sliding-window"
+    },
+    {
+     "name": "Heap (Priority Queue)",
+     "slug": "heap-priority-queue"
+    },
+    {
+     "name": "Monotonic Queue",
+     "slug": "monotonic-queue"
+    },
+    {
+     "name": "Range Minimum/Maximum Query",
+     "slug": "range-minimum-maximum-query"
+    }
+   ],
+   "metaData": {
+    "name": "maxSlidingWindow",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "exampleTestcaseList": [
+    "[1,3,-1,-3,5,3,6,7]\n3",
+    "[1]\n1"
+   ]
+  },
+  "minimum-window-substring": {
+   "questionFrontendId": "76",
+   "title": "Minimum Window Substring",
+   "titleSlug": "minimum-window-substring",
+   "difficulty": "Hard",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Hash Table",
+     "slug": "hash-table"
+    },
+    {
+     "name": "String",
+     "slug": "string"
+    },
+    {
+     "name": "Sliding Window",
+     "slug": "sliding-window"
+    }
+   ],
+   "metaData": {
+    "name": "minWindow",
+    "params": [
+     {
+      "name": "s",
+      "type": "string"
+     },
+     {
+      "name": "t",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "exampleTestcaseList": [
+    "\"ADOBECODEBANC\"\n\"ABC\"",
+    "\"a\"\n\"a\"",
+    "\"a\"\n\"aa\""
+   ]
+  },
+  "maximum-subarray": {
+   "questionFrontendId": "53",
+   "title": "Maximum Subarray",
+   "titleSlug": "maximum-subarray",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Divide and Conquer",
+     "slug": "divide-and-conquer"
+    },
+    {
+     "name": "Dynamic Programming",
+     "slug": "dynamic-programming"
+    }
+   ],
+   "metaData": {
+    "name": "maxSubArray",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "[-2,1,-3,4,-1,2,1,-5,4]",
+    "[1]",
+    "[5,4,-1,7,8]"
+   ]
+  },
+  "merge-intervals": {
+   "questionFrontendId": "56",
+   "title": "Merge Intervals",
+   "titleSlug": "merge-intervals",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Sorting",
+     "slug": "sorting"
+    },
+    {
+     "name": "Quicksort",
+     "slug": "quicksort"
+    }
+   ],
+   "metaData": {
+    "name": "merge",
+    "params": [
+     {
+      "name": "intervals",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "integer[][]"
+    }
+   },
+   "exampleTestcaseList": [
+    "[[1,3],[2,6],[8,10],[15,18]]",
+    "[[1,4],[4,5]]",
+    "[[4,7],[1,4]]"
+   ]
+  },
+  "rotate-array": {
+   "questionFrontendId": "189",
+   "title": "Rotate Array",
+   "titleSlug": "rotate-array",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Math",
+     "slug": "math"
+    },
+    {
+     "name": "Two Pointers",
+     "slug": "two-pointers"
+    }
+   ],
+   "metaData": {
+    "name": "rotate",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "void"
+    },
+    "output": {
+     "paramindex": 0
+    }
+   },
+   "exampleTestcaseList": [
+    "[1,2,3,4,5,6,7]\n3",
+    "[-1,-100,3,99]\n2"
+   ]
+  },
+  "product-of-array-except-self": {
+   "questionFrontendId": "238",
+   "title": "Product of Array Except Self",
+   "titleSlug": "product-of-array-except-self",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Prefix Sum",
+     "slug": "prefix-sum"
+    }
+   ],
+   "metaData": {
+    "name": "productExceptSelf",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "exampleTestcaseList": [
+    "[1,2,3,4]",
+    "[-1,1,0,-3,3]"
+   ]
+  },
+  "first-missing-positive": {
+   "questionFrontendId": "41",
+   "title": "First Missing Positive",
+   "titleSlug": "first-missing-positive",
+   "difficulty": "Hard",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Hash Table",
+     "slug": "hash-table"
+    }
+   ],
+   "metaData": {
+    "name": "firstMissingPositive",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "[1,2,0]",
+    "[3,4,-1,1]",
+    "[7,8,9,11,12]"
+   ]
+  },
+  "set-matrix-zeroes": {
+   "questionFrontendId": "73",
+   "title": "Set Matrix Zeroes",
+   "titleSlug": "set-matrix-zeroes",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Hash Table",
+     "slug": "hash-table"
+    },
+    {
+     "name": "Matrix",
+     "slug": "matrix"
+    }
+   ],
+   "metaData": {
+    "name": "setZeroes",
+    "params": [
+     {
+      "name": "matrix",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "void"
+    },
+    "output": {
+     "paramindex": 0
+    },
+    "manual": false
+   },
+   "exampleTestcaseList": [
+    "[[1,1,1],[1,0,1],[1,1,1]]",
+    "[[0,1,2,0],[3,4,5,2],[1,3,1,5]]"
+   ]
+  },
+  "spiral-matrix": {
+   "questionFrontendId": "54",
+   "title": "Spiral Matrix",
+   "titleSlug": "spiral-matrix",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Matrix",
+     "slug": "matrix"
+    },
+    {
+     "name": "Simulation",
+     "slug": "simulation"
+    }
+   ],
+   "metaData": {
+    "name": "spiralOrder",
+    "params": [
+     {
+      "name": "matrix",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "list<integer>",
+     "size": "size_1 * col_size_1",
+     "dealloc": true
+    }
+   },
+   "exampleTestcaseList": [
+    "[[1,2,3],[4,5,6],[7,8,9]]",
+    "[[1,2,3,4],[5,6,7,8],[9,10,11,12]]"
+   ]
+  },
+  "rotate-image": {
+   "questionFrontendId": "48",
+   "title": "Rotate Image",
+   "titleSlug": "rotate-image",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Math",
+     "slug": "math"
+    },
+    {
+     "name": "Matrix",
+     "slug": "matrix"
+    }
+   ],
+   "metaData": {
+    "name": "rotate",
+    "params": [
+     {
+      "name": "matrix",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "void"
+    },
+    "output": {
+     "paramindex": 0
+    }
+   },
+   "exampleTestcaseList": [
+    "[[1,2,3],[4,5,6],[7,8,9]]",
+    "[[5,1,9,11],[2,4,8,10],[13,3,6,7],[15,14,12,16]]"
+   ]
+  },
+  "search-a-2d-matrix-ii": {
+   "questionFrontendId": "240",
+   "title": "Search a 2D Matrix II",
+   "titleSlug": "search-a-2d-matrix-ii",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Binary Search",
+     "slug": "binary-search"
+    },
+    {
+     "name": "Divide and Conquer",
+     "slug": "divide-and-conquer"
+    },
+    {
+     "name": "Matrix",
+     "slug": "matrix"
+    }
+   ],
+   "metaData": {
+    "name": "searchMatrix",
+    "params": [
+     {
+      "name": "matrix",
+      "type": "integer[][]"
+     },
+     {
+      "name": "target",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    },
+    "manual": true
+   },
+   "exampleTestcaseList": [
+    "[[1,4,7,11,15],[2,5,8,12,19],[3,6,9,16,22],[10,13,14,17,24],[18,21,23,26,30]]\n5",
+    "[[1,4,7,11,15],[2,5,8,12,19],[3,6,9,16,22],[10,13,14,17,24],[18,21,23,26,30]]\n20"
+   ]
+  },
+  "intersection-of-two-linked-lists": {
+   "questionFrontendId": "160",
+   "title": "Intersection of Two Linked Lists",
+   "titleSlug": "intersection-of-two-linked-lists",
+   "difficulty": "Easy",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Hash Table",
+     "slug": "hash-table"
+    },
+    {
+     "name": "Linked List",
+     "slug": "linked-list"
+    },
+    {
+     "name": "Two Pointers",
+     "slug": "two-pointers"
+    }
+   ],
+   "metaData": {
+    "name": "getIntersectionNode",
+    "params": [
+     {
+      "name": "intersectVal",
+      "type": "integer"
+     },
+     {
+      "name": "listA",
+      "type": "ListNode"
+     },
+     {
+      "name": "listB",
+      "type": "ListNode"
+     },
+     {
+      "name": "skipA",
+      "type": "integer"
+     },
+     {
+      "name": "skipB",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "ListNode"
+    },
+    "manual": true
+   },
+   "exampleTestcaseList": [
+    "8\n[4,1,8,4,5]\n[5,6,1,8,4,5]\n2\n3",
+    "2\n[1,9,1,2,4]\n[3,2,4]\n3\n1",
+    "0\n[2,6,4]\n[1,5]\n3\n2"
+   ]
+  },
+  "reverse-linked-list": {
+   "questionFrontendId": "206",
+   "title": "Reverse Linked List",
+   "titleSlug": "reverse-linked-list",
+   "difficulty": "Easy",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Linked List",
+     "slug": "linked-list"
+    },
+    {
+     "name": "Recursion",
+     "slug": "recursion"
+    }
+   ],
+   "metaData": {
+    "name": "reverseList",
+    "params": [
+     {
+      "name": "head",
+      "type": "ListNode",
+      "dealloc": false
+     }
+    ],
+    "return": {
+     "type": "ListNode",
+     "dealloc": true
+    }
+   },
+   "exampleTestcaseList": [
+    "[1,2,3,4,5]",
+    "[1,2]",
+    "[]"
+   ]
+  },
+  "palindrome-linked-list": {
+   "questionFrontendId": "234",
+   "title": "Palindrome Linked List",
+   "titleSlug": "palindrome-linked-list",
+   "difficulty": "Easy",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Linked List",
+     "slug": "linked-list"
+    },
+    {
+     "name": "Two Pointers",
+     "slug": "two-pointers"
+    },
+    {
+     "name": "Stack",
+     "slug": "stack"
+    },
+    {
+     "name": "Recursion",
+     "slug": "recursion"
+    }
+   ],
+   "metaData": {
+    "name": "isPalindrome",
+    "params": [
+     {
+      "name": "head",
+      "type": "ListNode"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   "exampleTestcaseList": [
+    "[1,2,2,1]",
+    "[1,2]"
+   ]
+  },
+  "linked-list-cycle": {
+   "questionFrontendId": "141",
+   "title": "Linked List Cycle",
+   "titleSlug": "linked-list-cycle",
+   "difficulty": "Easy",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Hash Table",
+     "slug": "hash-table"
+    },
+    {
+     "name": "Linked List",
+     "slug": "linked-list"
+    },
+    {
+     "name": "Two Pointers",
+     "slug": "two-pointers"
+    },
+    {
+     "name": "Floyd's Cycle Finding Algorithm",
+     "slug": "floyds-cycle-finding-algorithm"
+    }
+   ],
+   "metaData": {
+    "name": "hasCycle",
+    "params": [
+     {
+      "name": "head",
+      "type": "ListNode"
+     },
+     {
+      "name": "pos",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    },
+    "manual": true
+   },
+   "exampleTestcaseList": [
+    "[3,2,0,-4]\n1",
+    "[1,2]\n0",
+    "[1]\n-1"
+   ]
+  },
+  "linked-list-cycle-ii": {
+   "questionFrontendId": "142",
+   "title": "Linked List Cycle II",
+   "titleSlug": "linked-list-cycle-ii",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Hash Table",
+     "slug": "hash-table"
+    },
+    {
+     "name": "Linked List",
+     "slug": "linked-list"
+    },
+    {
+     "name": "Two Pointers",
+     "slug": "two-pointers"
+    },
+    {
+     "name": "Floyd's Cycle Finding Algorithm",
+     "slug": "floyds-cycle-finding-algorithm"
+    }
+   ],
+   "metaData": {
+    "name": "detectCycle",
+    "params": [
+     {
+      "name": "head",
+      "type": "ListNode"
+     },
+     {
+      "name": "pos",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "ListNode"
+    },
+    "manual": true
+   },
+   "exampleTestcaseList": [
+    "[3,2,0,-4]\n1",
+    "[1,2]\n0",
+    "[1]\n-1"
+   ]
+  },
+  "merge-two-sorted-lists": {
+   "questionFrontendId": "21",
+   "title": "Merge Two Sorted Lists",
+   "titleSlug": "merge-two-sorted-lists",
+   "difficulty": "Easy",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Linked List",
+     "slug": "linked-list"
+    },
+    {
+     "name": "Recursion",
+     "slug": "recursion"
+    }
+   ],
+   "metaData": {
+    "name": "mergeTwoLists",
+    "params": [
+     {
+      "name": "list1",
+      "type": "ListNode",
+      "dealloc": false
+     },
+     {
+      "name": "list2",
+      "type": "ListNode",
+      "dealloc": false
+     }
+    ],
+    "return": {
+     "type": "ListNode",
+     "dealloc": true
+    }
+   },
+   "exampleTestcaseList": [
+    "[1,2,4]\n[1,3,4]",
+    "[]\n[]",
+    "[]\n[0]"
+   ]
+  },
+  "add-two-numbers": {
+   "questionFrontendId": "2",
+   "title": "Add Two Numbers",
+   "titleSlug": "add-two-numbers",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Linked List",
+     "slug": "linked-list"
+    },
+    {
+     "name": "Math",
+     "slug": "math"
+    },
+    {
+     "name": "Recursion",
+     "slug": "recursion"
+    }
+   ],
+   "metaData": {
+    "name": "addTwoNumbers",
+    "params": [
+     {
+      "name": "l1",
+      "type": "ListNode",
+      "dealloc": false
+     },
+     {
+      "name": "l2",
+      "type": "ListNode",
+      "dealloc": false
+     }
+    ],
+    "return": {
+     "type": "ListNode",
+     "dealloc": true
+    }
+   },
+   "exampleTestcaseList": [
+    "[2,4,3]\n[5,6,4]",
+    "[0]\n[0]",
+    "[9,9,9,9,9,9,9]\n[9,9,9,9]"
+   ]
+  },
+  "remove-nth-node-from-end-of-list": {
+   "questionFrontendId": "19",
+   "title": "Remove Nth Node From End of List",
+   "titleSlug": "remove-nth-node-from-end-of-list",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Linked List",
+     "slug": "linked-list"
+    },
+    {
+     "name": "Two Pointers",
+     "slug": "two-pointers"
+    }
+   ],
+   "metaData": {
+    "name": "removeNthFromEnd",
+    "params": [
+     {
+      "name": "head",
+      "type": "ListNode",
+      "dealloc": false
+     },
+     {
+      "name": "n",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "ListNode",
+     "dealloc": true
+    }
+   },
+   "exampleTestcaseList": [
+    "[1,2,3,4,5]\n2",
+    "[1]\n1",
+    "[1,2]\n1"
+   ]
+  },
+  "swap-nodes-in-pairs": {
+   "questionFrontendId": "24",
+   "title": "Swap Nodes in Pairs",
+   "titleSlug": "swap-nodes-in-pairs",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Linked List",
+     "slug": "linked-list"
+    },
+    {
+     "name": "Recursion",
+     "slug": "recursion"
+    }
+   ],
+   "metaData": {
+    "name": "swapPairs",
+    "params": [
+     {
+      "name": "head",
+      "type": "ListNode"
+     }
+    ],
+    "return": {
+     "type": "ListNode"
+    }
+   },
+   "exampleTestcaseList": [
+    "[1,2,3,4]",
+    "[]",
+    "[1]",
+    "[1,2,3]"
+   ]
+  },
+  "reverse-nodes-in-k-group": {
+   "questionFrontendId": "25",
+   "title": "Reverse Nodes in k-Group",
+   "titleSlug": "reverse-nodes-in-k-group",
+   "difficulty": "Hard",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Linked List",
+     "slug": "linked-list"
+    },
+    {
+     "name": "Recursion",
+     "slug": "recursion"
+    }
+   ],
+   "metaData": {
+    "name": "reverseKGroup",
+    "params": [
+     {
+      "name": "head",
+      "type": "ListNode"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "ListNode"
+    }
+   },
+   "exampleTestcaseList": [
+    "[1,2,3,4,5]\n2",
+    "[1,2,3,4,5]\n3"
+   ]
+  },
+  "copy-list-with-random-pointer": {
+   "questionFrontendId": "138",
+   "title": "Copy List with Random Pointer",
+   "titleSlug": "copy-list-with-random-pointer",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Hash Table",
+     "slug": "hash-table"
+    },
+    {
+     "name": "Linked List",
+     "slug": "linked-list"
+    }
+   ],
+   "metaData": {
+    "name": "copyRandomList",
+    "params": [
+     {
+      "name": "head",
+      "type": "ListNode"
+     }
+    ],
+    "return": {
+     "type": "ListNode"
+    },
+    "manual": true,
+    "typescriptCustomType": "class _Node {\n    val: number\n    next: _Node | null\n    random: _Node | null\n\n    constructor(val?: number, next?: _Node, random?: _Node) {\n        this.val = (val===undefined ? 0 : val)\n        this.next = (next===undefined ? null : next)\n        this.random = (random===undefined ? null : random)\n    }\n}\n"
+   },
+   "exampleTestcaseList": [
+    "[[7,null],[13,0],[11,4],[10,2],[1,0]]",
+    "[[1,1],[2,1]]",
+    "[[3,null],[3,0],[3,null]]"
+   ]
+  },
+  "sort-list": {
+   "questionFrontendId": "148",
+   "title": "Sort List",
+   "titleSlug": "sort-list",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Linked List",
+     "slug": "linked-list"
+    },
+    {
+     "name": "Two Pointers",
+     "slug": "two-pointers"
+    },
+    {
+     "name": "Divide and Conquer",
+     "slug": "divide-and-conquer"
+    },
+    {
+     "name": "Sorting",
+     "slug": "sorting"
+    },
+    {
+     "name": "Merge Sort",
+     "slug": "merge-sort"
+    }
+   ],
+   "metaData": {
+    "name": "sortList",
+    "params": [
+     {
+      "name": "head",
+      "type": "ListNode",
+      "dealloc": false
+     }
+    ],
+    "return": {
+     "type": "ListNode",
+     "dealloc": true
+    }
+   },
+   "exampleTestcaseList": [
+    "[4,2,1,3]",
+    "[-1,5,3,4,0]",
+    "[]"
+   ]
+  },
+  "merge-k-sorted-lists": {
+   "questionFrontendId": "23",
+   "title": "Merge k Sorted Lists",
+   "titleSlug": "merge-k-sorted-lists",
+   "difficulty": "Hard",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Linked List",
+     "slug": "linked-list"
+    },
+    {
+     "name": "Divide and Conquer",
+     "slug": "divide-and-conquer"
+    },
+    {
+     "name": "Heap (Priority Queue)",
+     "slug": "heap-priority-queue"
+    },
+    {
+     "name": "Merge Sort",
+     "slug": "merge-sort"
+    },
+    {
+     "name": "Tournament Sort",
+     "slug": "tournament-sort"
+    }
+   ],
+   "metaData": {
+    "name": "mergeKLists",
+    "params": [
+     {
+      "name": "lists",
+      "type": "ListNode[]",
+      "dealloc": false
+     }
+    ],
+    "return": {
+     "type": "ListNode",
+     "dealloc": true
+    }
+   },
+   "exampleTestcaseList": [
+    "[[1,4,5],[1,3,4],[2,6]]",
+    "[]",
+    "[[]]"
+   ]
+  },
+  "lru-cache": {
+   "questionFrontendId": "146",
+   "title": "LRU Cache",
+   "titleSlug": "lru-cache",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Hash Table",
+     "slug": "hash-table"
+    },
+    {
+     "name": "Linked List",
+     "slug": "linked-list"
+    },
+    {
+     "name": "Design",
+     "slug": "design"
+    },
+    {
+     "name": "Doubly-Linked List",
+     "slug": "doubly-linked-list"
+    }
+   ],
+   "metaData": {
+    "classname": "LRUCache",
+    "maxbytesperline": 200000,
+    "constructor": {
+     "params": [
+      {
+       "type": "integer",
+       "name": "capacity"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "get",
+      "params": [
+       {
+        "type": "integer",
+        "name": "key"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "put",
+      "params": [
+       {
+        "type": "integer",
+        "name": "key"
+       },
+       {
+        "type": "integer",
+        "name": "value"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     }
+    ],
+    "systemdesign": true,
+    "params": [
+     {
+      "name": "inputs",
+      "type": "integer[]"
+     },
+     {
+      "name": "inputs",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "list<String>",
+     "dealloc": true
+    }
+   },
+   "exampleTestcaseList": [
+    "[\"LRUCache\",\"put\",\"put\",\"get\",\"put\",\"get\",\"put\",\"get\",\"get\",\"get\"]\n[[2],[1,1],[2,2],[1],[3,3],[2],[4,4],[1],[3],[4]]"
+   ]
+  },
+  "binary-tree-inorder-traversal": {
+   "questionFrontendId": "94",
+   "title": "Binary Tree Inorder Traversal",
+   "titleSlug": "binary-tree-inorder-traversal",
+   "difficulty": "Easy",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Stack",
+     "slug": "stack"
+    },
+    {
+     "name": "Tree",
+     "slug": "tree"
+    },
+    {
+     "name": "Depth-First Search",
+     "slug": "depth-first-search"
+    },
+    {
+     "name": "Binary Tree",
+     "slug": "binary-tree"
+    }
+   ],
+   "metaData": {
+    "name": "inorderTraversal",
+    "params": [
+     {
+      "name": "root",
+      "type": "TreeNode"
+     }
+    ],
+    "return": {
+     "type": "list<integer>",
+     "dealloc": true
+    }
+   },
+   "exampleTestcaseList": [
+    "[1,null,2,3]",
+    "[1,2,3,4,5,null,8,null,null,6,7,9]",
+    "[]",
+    "[1]"
+   ]
+  },
+  "maximum-depth-of-binary-tree": {
+   "questionFrontendId": "104",
+   "title": "Maximum Depth of Binary Tree",
+   "titleSlug": "maximum-depth-of-binary-tree",
+   "difficulty": "Easy",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Tree",
+     "slug": "tree"
+    },
+    {
+     "name": "Depth-First Search",
+     "slug": "depth-first-search"
+    },
+    {
+     "name": "Breadth-First Search",
+     "slug": "breadth-first-search"
+    },
+    {
+     "name": "Binary Tree",
+     "slug": "binary-tree"
+    }
+   ],
+   "metaData": {
+    "name": "maxDepth",
+    "params": [
+     {
+      "name": "root",
+      "type": "TreeNode"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "[3,9,20,null,null,15,7]",
+    "[1,null,2]"
+   ]
+  },
+  "invert-binary-tree": {
+   "questionFrontendId": "226",
+   "title": "Invert Binary Tree",
+   "titleSlug": "invert-binary-tree",
+   "difficulty": "Easy",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Tree",
+     "slug": "tree"
+    },
+    {
+     "name": "Depth-First Search",
+     "slug": "depth-first-search"
+    },
+    {
+     "name": "Breadth-First Search",
+     "slug": "breadth-first-search"
+    },
+    {
+     "name": "Binary Tree",
+     "slug": "binary-tree"
+    }
+   ],
+   "metaData": {
+    "name": "invertTree",
+    "params": [
+     {
+      "name": "root",
+      "type": "TreeNode"
+     }
+    ],
+    "return": {
+     "type": "TreeNode"
+    }
+   },
+   "exampleTestcaseList": [
+    "[4,2,7,1,3,6,9]",
+    "[2,1,3]",
+    "[]"
+   ]
+  },
+  "symmetric-tree": {
+   "questionFrontendId": "101",
+   "title": "Symmetric Tree",
+   "titleSlug": "symmetric-tree",
+   "difficulty": "Easy",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Tree",
+     "slug": "tree"
+    },
+    {
+     "name": "Depth-First Search",
+     "slug": "depth-first-search"
+    },
+    {
+     "name": "Breadth-First Search",
+     "slug": "breadth-first-search"
+    },
+    {
+     "name": "Binary Tree",
+     "slug": "binary-tree"
+    }
+   ],
+   "metaData": {
+    "name": "isSymmetric",
+    "params": [
+     {
+      "name": "root",
+      "type": "TreeNode"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   "exampleTestcaseList": [
+    "[1,2,2,3,4,4,3]",
+    "[1,2,2,null,3,null,3]"
+   ]
+  },
+  "diameter-of-binary-tree": {
+   "questionFrontendId": "543",
+   "title": "Diameter of Binary Tree",
+   "titleSlug": "diameter-of-binary-tree",
+   "difficulty": "Easy",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Tree",
+     "slug": "tree"
+    },
+    {
+     "name": "Depth-First Search",
+     "slug": "depth-first-search"
+    },
+    {
+     "name": "Binary Tree",
+     "slug": "binary-tree"
+    },
+    {
+     "name": "DP on Trees",
+     "slug": "dp-on-trees"
+    }
+   ],
+   "metaData": {
+    "name": "diameterOfBinaryTree",
+    "params": [
+     {
+      "name": "root",
+      "type": "TreeNode"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "[1,2,3,4,5]",
+    "[1,2]"
+   ]
+  },
+  "binary-tree-level-order-traversal": {
+   "questionFrontendId": "102",
+   "title": "Binary Tree Level Order Traversal",
+   "titleSlug": "binary-tree-level-order-traversal",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Tree",
+     "slug": "tree"
+    },
+    {
+     "name": "Breadth-First Search",
+     "slug": "breadth-first-search"
+    },
+    {
+     "name": "Binary Tree",
+     "slug": "binary-tree"
+    }
+   ],
+   "metaData": {
+    "name": "levelOrder",
+    "params": [
+     {
+      "name": "root",
+      "type": "TreeNode"
+     }
+    ],
+    "return": {
+     "type": "list<list<integer>>",
+     "dealloc": true
+    }
+   },
+   "exampleTestcaseList": [
+    "[3,9,20,null,null,15,7]",
+    "[1]",
+    "[]"
+   ]
+  },
+  "convert-sorted-array-to-binary-search-tree": {
+   "questionFrontendId": "108",
+   "title": "Convert Sorted Array to Binary Search Tree",
+   "titleSlug": "convert-sorted-array-to-binary-search-tree",
+   "difficulty": "Easy",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Divide and Conquer",
+     "slug": "divide-and-conquer"
+    },
+    {
+     "name": "Tree",
+     "slug": "tree"
+    },
+    {
+     "name": "Binary Search Tree",
+     "slug": "binary-search-tree"
+    },
+    {
+     "name": "Binary Tree",
+     "slug": "binary-tree"
+    }
+   ],
+   "metaData": {
+    "name": "sortedArrayToBST",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "TreeNode",
+     "dealloc": true
+    }
+   },
+   "exampleTestcaseList": [
+    "[-10,-3,0,5,9]",
+    "[1,3]"
+   ]
+  },
+  "validate-binary-search-tree": {
+   "questionFrontendId": "98",
+   "title": "Validate Binary Search Tree",
+   "titleSlug": "validate-binary-search-tree",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Tree",
+     "slug": "tree"
+    },
+    {
+     "name": "Depth-First Search",
+     "slug": "depth-first-search"
+    },
+    {
+     "name": "Binary Search Tree",
+     "slug": "binary-search-tree"
+    },
+    {
+     "name": "Binary Tree",
+     "slug": "binary-tree"
+    }
+   ],
+   "metaData": {
+    "name": "isValidBST",
+    "params": [
+     {
+      "name": "root",
+      "type": "TreeNode"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   "exampleTestcaseList": [
+    "[2,1,3]",
+    "[5,1,4,null,null,3,6]"
+   ]
+  },
+  "kth-smallest-element-in-a-bst": {
+   "questionFrontendId": "230",
+   "title": "Kth Smallest Element in a BST",
+   "titleSlug": "kth-smallest-element-in-a-bst",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Tree",
+     "slug": "tree"
+    },
+    {
+     "name": "Depth-First Search",
+     "slug": "depth-first-search"
+    },
+    {
+     "name": "Binary Search Tree",
+     "slug": "binary-search-tree"
+    },
+    {
+     "name": "Binary Tree",
+     "slug": "binary-tree"
+    }
+   ],
+   "metaData": {
+    "name": "kthSmallest",
+    "params": [
+     {
+      "name": "root",
+      "type": "TreeNode"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "[3,1,4,null,2]\n1",
+    "[5,3,6,2,4,null,null,1]\n3"
+   ]
+  },
+  "binary-tree-right-side-view": {
+   "questionFrontendId": "199",
+   "title": "Binary Tree Right Side View",
+   "titleSlug": "binary-tree-right-side-view",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Tree",
+     "slug": "tree"
+    },
+    {
+     "name": "Depth-First Search",
+     "slug": "depth-first-search"
+    },
+    {
+     "name": "Breadth-First Search",
+     "slug": "breadth-first-search"
+    },
+    {
+     "name": "Binary Tree",
+     "slug": "binary-tree"
+    }
+   ],
+   "metaData": {
+    "name": "rightSideView",
+    "params": [
+     {
+      "name": "root",
+      "type": "TreeNode"
+     }
+    ],
+    "return": {
+     "type": "list<integer>",
+     "dealloc": true
+    }
+   },
+   "exampleTestcaseList": [
+    "[1,2,3,null,5,null,4]",
+    "[1,2,3,4,null,null,null,5]",
+    "[1,null,3]",
+    "[]"
+   ]
+  },
+  "flatten-binary-tree-to-linked-list": {
+   "questionFrontendId": "114",
+   "title": "Flatten Binary Tree to Linked List",
+   "titleSlug": "flatten-binary-tree-to-linked-list",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Linked List",
+     "slug": "linked-list"
+    },
+    {
+     "name": "Stack",
+     "slug": "stack"
+    },
+    {
+     "name": "Tree",
+     "slug": "tree"
+    },
+    {
+     "name": "Depth-First Search",
+     "slug": "depth-first-search"
+    },
+    {
+     "name": "Binary Tree",
+     "slug": "binary-tree"
+    }
+   ],
+   "metaData": {
+    "name": "flatten",
+    "params": [
+     {
+      "name": "root",
+      "type": "TreeNode"
+     }
+    ],
+    "return": {
+     "type": "void"
+    },
+    "output": {
+     "paramindex": 0
+    }
+   },
+   "exampleTestcaseList": [
+    "[1,2,5,3,4,null,6]",
+    "[]",
+    "[0]"
+   ]
+  },
+  "construct-binary-tree-from-preorder-and-inorder-traversal": {
+   "questionFrontendId": "105",
+   "title": "Construct Binary Tree from Preorder and Inorder Traversal",
+   "titleSlug": "construct-binary-tree-from-preorder-and-inorder-traversal",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Hash Table",
+     "slug": "hash-table"
+    },
+    {
+     "name": "Divide and Conquer",
+     "slug": "divide-and-conquer"
+    },
+    {
+     "name": "Tree",
+     "slug": "tree"
+    },
+    {
+     "name": "Binary Tree",
+     "slug": "binary-tree"
+    }
+   ],
+   "metaData": {
+    "name": "buildTree",
+    "params": [
+     {
+      "name": "preorder",
+      "type": "integer[]"
+     },
+     {
+      "name": "inorder",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "TreeNode",
+     "dealloc": true
+    }
+   },
+   "exampleTestcaseList": [
+    "[3,9,20,15,7]\n[9,3,15,20,7]",
+    "[-1]\n[-1]"
+   ]
+  },
+  "path-sum-iii": {
+   "questionFrontendId": "437",
+   "title": "Path Sum III",
+   "titleSlug": "path-sum-iii",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Tree",
+     "slug": "tree"
+    },
+    {
+     "name": "Depth-First Search",
+     "slug": "depth-first-search"
+    },
+    {
+     "name": "Binary Tree",
+     "slug": "binary-tree"
+    }
+   ],
+   "metaData": {
+    "name": "pathSum",
+    "params": [
+     {
+      "name": "root",
+      "type": "TreeNode"
+     },
+     {
+      "name": "targetSum",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "[10,5,-3,3,2,null,11,3,-2,null,1]\n8",
+    "[5,4,8,11,null,13,4,7,2,null,null,5,1]\n22"
+   ]
+  },
+  "lowest-common-ancestor-of-a-binary-tree": {
+   "questionFrontendId": "236",
+   "title": "Lowest Common Ancestor of a Binary Tree",
+   "titleSlug": "lowest-common-ancestor-of-a-binary-tree",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Tree",
+     "slug": "tree"
+    },
+    {
+     "name": "Depth-First Search",
+     "slug": "depth-first-search"
+    },
+    {
+     "name": "Binary Tree",
+     "slug": "binary-tree"
+    },
+    {
+     "name": "Binary Lifting",
+     "slug": "binary-lifting"
+    },
+    {
+     "name": "Lowest Common Ancestor",
+     "slug": "lowest-common-ancestor"
+    }
+   ],
+   "metaData": {
+    "name": "lowestCommonAncestor",
+    "params": [
+     {
+      "name": "root",
+      "type": "TreeNode"
+     },
+     {
+      "name": "p",
+      "type": "integer"
+     },
+     {
+      "name": "q",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "TreeNode"
+    },
+    "manual": true
+   },
+   "exampleTestcaseList": [
+    "[3,5,1,6,2,0,8,null,null,7,4]\n5\n1",
+    "[3,5,1,6,2,0,8,null,null,7,4]\n5\n4",
+    "[1,2]\n1\n2"
+   ]
+  },
+  "binary-tree-maximum-path-sum": {
+   "questionFrontendId": "124",
+   "title": "Binary Tree Maximum Path Sum",
+   "titleSlug": "binary-tree-maximum-path-sum",
+   "difficulty": "Hard",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Dynamic Programming",
+     "slug": "dynamic-programming"
+    },
+    {
+     "name": "Tree",
+     "slug": "tree"
+    },
+    {
+     "name": "Depth-First Search",
+     "slug": "depth-first-search"
+    },
+    {
+     "name": "Binary Tree",
+     "slug": "binary-tree"
+    },
+    {
+     "name": "DP on Trees",
+     "slug": "dp-on-trees"
+    }
+   ],
+   "metaData": {
+    "name": "maxPathSum",
+    "params": [
+     {
+      "name": "root",
+      "type": "TreeNode"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "[1,2,3]",
+    "[-10,9,20,null,null,15,7]"
+   ]
+  },
+  "number-of-islands": {
+   "questionFrontendId": "200",
+   "title": "Number of Islands",
+   "titleSlug": "number-of-islands",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Depth-First Search",
+     "slug": "depth-first-search"
+    },
+    {
+     "name": "Breadth-First Search",
+     "slug": "breadth-first-search"
+    },
+    {
+     "name": "Union-Find",
+     "slug": "union-find"
+    },
+    {
+     "name": "Matrix",
+     "slug": "matrix"
+    }
+   ],
+   "metaData": {
+    "name": "numIslands",
+    "params": [
+     {
+      "name": "grid",
+      "type": "character[][]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    },
+    "manual": true
+   },
+   "exampleTestcaseList": [
+    "[[\"1\",\"1\",\"1\",\"1\",\"0\"],[\"1\",\"1\",\"0\",\"1\",\"0\"],[\"1\",\"1\",\"0\",\"0\",\"0\"],[\"0\",\"0\",\"0\",\"0\",\"0\"]]",
+    "[[\"1\",\"1\",\"0\",\"0\",\"0\"],[\"1\",\"1\",\"0\",\"0\",\"0\"],[\"0\",\"0\",\"1\",\"0\",\"0\"],[\"0\",\"0\",\"0\",\"1\",\"1\"]]"
+   ]
+  },
+  "rotting-oranges": {
+   "questionFrontendId": "994",
+   "title": "Rotting Oranges",
+   "titleSlug": "rotting-oranges",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Breadth-First Search",
+     "slug": "breadth-first-search"
+    },
+    {
+     "name": "Matrix",
+     "slug": "matrix"
+    }
+   ],
+   "metaData": {
+    "name": "orangesRotting",
+    "params": [
+     {
+      "name": "grid",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "[[2,1,1],[1,1,0],[0,1,1]]",
+    "[[2,1,1],[0,1,1],[1,0,1]]",
+    "[[0,2]]"
+   ]
+  },
+  "course-schedule": {
+   "questionFrontendId": "207",
+   "title": "Course Schedule",
+   "titleSlug": "course-schedule",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Depth-First Search",
+     "slug": "depth-first-search"
+    },
+    {
+     "name": "Breadth-First Search",
+     "slug": "breadth-first-search"
+    },
+    {
+     "name": "Graph Theory",
+     "slug": "graph"
+    },
+    {
+     "name": "Topological Sort",
+     "slug": "topological-sort"
+    },
+    {
+     "name": "Directed Acyclic Graph",
+     "slug": "directed-acyclic-graph"
+    }
+   ],
+   "metaData": {
+    "name": "canFinish",
+    "params": [
+     {
+      "name": "numCourses",
+      "type": "integer"
+     },
+     {
+      "name": "prerequisites",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   "exampleTestcaseList": [
+    "2\n[[1,0]]",
+    "2\n[[1,0],[0,1]]"
+   ]
+  },
+  "implement-trie-prefix-tree": {
+   "questionFrontendId": "208",
+   "title": "Implement Trie (Prefix Tree)",
+   "titleSlug": "implement-trie-prefix-tree",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Hash Table",
+     "slug": "hash-table"
+    },
+    {
+     "name": "String",
+     "slug": "string"
+    },
+    {
+     "name": "Design",
+     "slug": "design"
+    },
+    {
+     "name": "Trie",
+     "slug": "trie"
+    }
+   ],
+   "metaData": {
+    "classname": "Trie",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "params": [
+       {
+        "type": "string",
+        "name": "word"
+       }
+      ],
+      "name": "insert",
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "params": [
+       {
+        "type": "string",
+        "name": "word"
+       }
+      ],
+      "name": "search",
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "params": [
+       {
+        "type": "string",
+        "name": "prefix"
+       }
+      ],
+      "name": "startsWith",
+      "return": {
+       "type": "boolean"
+      }
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    },
+    "systemdesign": true
+   },
+   "exampleTestcaseList": [
+    "[\"Trie\",\"insert\",\"search\",\"search\",\"startsWith\",\"insert\",\"search\"]\n[[],[\"apple\"],[\"apple\"],[\"app\"],[\"app\"],[\"app\"],[\"app\"]]"
+   ]
+  },
+  "permutations": {
+   "questionFrontendId": "46",
+   "title": "Permutations",
+   "titleSlug": "permutations",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Backtracking",
+     "slug": "backtracking"
+    }
+   ],
+   "metaData": {
+    "name": "permute",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "list<list<integer>>",
+     "colsize": "size_1",
+     "dealloc": true
+    }
+   },
+   "exampleTestcaseList": [
+    "[1,2,3]",
+    "[0,1]",
+    "[1]"
+   ]
+  },
+  "subsets": {
+   "questionFrontendId": "78",
+   "title": "Subsets",
+   "titleSlug": "subsets",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Backtracking",
+     "slug": "backtracking"
+    },
+    {
+     "name": "Bit Manipulation",
+     "slug": "bit-manipulation"
+    }
+   ],
+   "metaData": {
+    "name": "subsets",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "list<list<integer>>",
+     "dealloc": true
+    }
+   },
+   "exampleTestcaseList": [
+    "[1,2,3]",
+    "[0]"
+   ]
+  },
+  "letter-combinations-of-a-phone-number": {
+   "questionFrontendId": "17",
+   "title": "Letter Combinations of a Phone Number",
+   "titleSlug": "letter-combinations-of-a-phone-number",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Hash Table",
+     "slug": "hash-table"
+    },
+    {
+     "name": "String",
+     "slug": "string"
+    },
+    {
+     "name": "Backtracking",
+     "slug": "backtracking"
+    }
+   ],
+   "metaData": {
+    "name": "letterCombinations",
+    "params": [
+     {
+      "name": "digits",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "list<string>"
+    }
+   },
+   "exampleTestcaseList": [
+    "\"23\"",
+    "\"2\""
+   ]
+  },
+  "combination-sum": {
+   "questionFrontendId": "39",
+   "title": "Combination Sum",
+   "titleSlug": "combination-sum",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Backtracking",
+     "slug": "backtracking"
+    }
+   ],
+   "metaData": {
+    "name": "combinationSum",
+    "params": [
+     {
+      "name": "candidates",
+      "type": "integer[]"
+     },
+     {
+      "name": "target",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "list<list<integer>>",
+     "dealloc": true
+    }
+   },
+   "exampleTestcaseList": [
+    "[2,3,6,7]\n7",
+    "[2,3,5]\n8",
+    "[2]\n1"
+   ]
+  },
+  "generate-parentheses": {
+   "questionFrontendId": "22",
+   "title": "Generate Parentheses",
+   "titleSlug": "generate-parentheses",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "String",
+     "slug": "string"
+    },
+    {
+     "name": "Dynamic Programming",
+     "slug": "dynamic-programming"
+    },
+    {
+     "name": "Backtracking",
+     "slug": "backtracking"
+    },
+    {
+     "name": "Bracket Sequences",
+     "slug": "bracket-sequences"
+    }
+   ],
+   "metaData": {
+    "name": "generateParenthesis",
+    "params": [
+     {
+      "name": "n",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "list<string>"
+    }
+   },
+   "exampleTestcaseList": [
+    "3",
+    "1"
+   ]
+  },
+  "word-search": {
+   "questionFrontendId": "79",
+   "title": "Word Search",
+   "titleSlug": "word-search",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "String",
+     "slug": "string"
+    },
+    {
+     "name": "Backtracking",
+     "slug": "backtracking"
+    },
+    {
+     "name": "Depth-First Search",
+     "slug": "depth-first-search"
+    },
+    {
+     "name": "Matrix",
+     "slug": "matrix"
+    }
+   ],
+   "metaData": {
+    "name": "exist",
+    "params": [
+     {
+      "name": "board",
+      "type": "character[][]"
+     },
+     {
+      "name": "word",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   "exampleTestcaseList": [
+    "[[\"A\",\"B\",\"C\",\"E\"],[\"S\",\"F\",\"C\",\"S\"],[\"A\",\"D\",\"E\",\"E\"]]\n\"ABCCED\"",
+    "[[\"A\",\"B\",\"C\",\"E\"],[\"S\",\"F\",\"C\",\"S\"],[\"A\",\"D\",\"E\",\"E\"]]\n\"SEE\"",
+    "[[\"A\",\"B\",\"C\",\"E\"],[\"S\",\"F\",\"C\",\"S\"],[\"A\",\"D\",\"E\",\"E\"]]\n\"ABCB\""
+   ]
+  },
+  "palindrome-partitioning": {
+   "questionFrontendId": "131",
+   "title": "Palindrome Partitioning",
+   "titleSlug": "palindrome-partitioning",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "String",
+     "slug": "string"
+    },
+    {
+     "name": "Dynamic Programming",
+     "slug": "dynamic-programming"
+    },
+    {
+     "name": "Backtracking",
+     "slug": "backtracking"
+    }
+   ],
+   "metaData": {
+    "name": "partition",
+    "params": [
+     {
+      "name": "s",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "list<list<string>>",
+     "dealloc": true
+    }
+   },
+   "exampleTestcaseList": [
+    "\"aab\"",
+    "\"a\""
+   ]
+  },
+  "n-queens": {
+   "questionFrontendId": "51",
+   "title": "N-Queens",
+   "titleSlug": "n-queens",
+   "difficulty": "Hard",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Backtracking",
+     "slug": "backtracking"
+    },
+    {
+     "name": "Algorithm X",
+     "slug": "algorithm-x"
+    }
+   ],
+   "metaData": {
+    "name": "solveNQueens",
+    "params": [
+     {
+      "name": "n",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "list<list<string>>",
+     "colsize": "param_1",
+     "dealloc": true
+    }
+   },
+   "exampleTestcaseList": [
+    "4",
+    "1"
+   ]
+  },
+  "search-insert-position": {
+   "questionFrontendId": "35",
+   "title": "Search Insert Position",
+   "titleSlug": "search-insert-position",
+   "difficulty": "Easy",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Binary Search",
+     "slug": "binary-search"
+    }
+   ],
+   "metaData": {
+    "name": "searchInsert",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     },
+     {
+      "name": "target",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "[1,3,5,6]\n5",
+    "[1,3,5,6]\n2",
+    "[1,3,5,6]\n7"
+   ]
+  },
+  "search-a-2d-matrix": {
+   "questionFrontendId": "74",
+   "title": "Search a 2D Matrix",
+   "titleSlug": "search-a-2d-matrix",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Binary Search",
+     "slug": "binary-search"
+    },
+    {
+     "name": "Matrix",
+     "slug": "matrix"
+    }
+   ],
+   "metaData": {
+    "name": "searchMatrix",
+    "params": [
+     {
+      "name": "matrix",
+      "type": "integer[][]"
+     },
+     {
+      "name": "target",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   "exampleTestcaseList": [
+    "[[1,3,5,7],[10,11,16,20],[23,30,34,60]]\n3",
+    "[[1,3,5,7],[10,11,16,20],[23,30,34,60]]\n13"
+   ]
+  },
+  "find-first-and-last-position-of-element-in-sorted-array": {
+   "questionFrontendId": "34",
+   "title": "Find First and Last Position of Element in Sorted Array",
+   "titleSlug": "find-first-and-last-position-of-element-in-sorted-array",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Binary Search",
+     "slug": "binary-search"
+    }
+   ],
+   "metaData": {
+    "name": "searchRange",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     },
+     {
+      "name": "target",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "exampleTestcaseList": [
+    "[5,7,7,8,8,10]\n8",
+    "[5,7,7,8,8,10]\n6",
+    "[]\n0"
+   ]
+  },
+  "search-in-rotated-sorted-array": {
+   "questionFrontendId": "33",
+   "title": "Search in Rotated Sorted Array",
+   "titleSlug": "search-in-rotated-sorted-array",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Binary Search",
+     "slug": "binary-search"
+    }
+   ],
+   "metaData": {
+    "name": "search",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     },
+     {
+      "name": "target",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "[4,5,6,7,0,1,2]\n0",
+    "[4,5,6,7,0,1,2]\n3",
+    "[1]\n0"
+   ]
+  },
+  "find-minimum-in-rotated-sorted-array": {
+   "questionFrontendId": "153",
+   "title": "Find Minimum in Rotated Sorted Array",
+   "titleSlug": "find-minimum-in-rotated-sorted-array",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Binary Search",
+     "slug": "binary-search"
+    }
+   ],
+   "metaData": {
+    "name": "findMin",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "[3,4,5,1,2]",
+    "[4,5,6,7,0,1,2]",
+    "[11,13,15,17]"
+   ]
+  },
+  "median-of-two-sorted-arrays": {
+   "questionFrontendId": "4",
+   "title": "Median of Two Sorted Arrays",
+   "titleSlug": "median-of-two-sorted-arrays",
+   "difficulty": "Hard",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Binary Search",
+     "slug": "binary-search"
+    },
+    {
+     "name": "Divide and Conquer",
+     "slug": "divide-and-conquer"
+    }
+   ],
+   "metaData": {
+    "name": "findMedianSortedArrays",
+    "params": [
+     {
+      "name": "nums1",
+      "type": "integer[]"
+     },
+     {
+      "name": "nums2",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "double"
+    }
+   },
+   "exampleTestcaseList": [
+    "[1,3]\n[2]",
+    "[1,2]\n[3,4]"
+   ]
+  },
+  "valid-parentheses": {
+   "questionFrontendId": "20",
+   "title": "Valid Parentheses",
+   "titleSlug": "valid-parentheses",
+   "difficulty": "Easy",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "String",
+     "slug": "string"
+    },
+    {
+     "name": "Stack",
+     "slug": "stack"
+    },
+    {
+     "name": "Bracket Sequences",
+     "slug": "bracket-sequences"
+    }
+   ],
+   "metaData": {
+    "name": "isValid",
+    "params": [
+     {
+      "name": "s",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   "exampleTestcaseList": [
+    "\"()\"",
+    "\"()[]{}\"",
+    "\"(]\"",
+    "\"([])\"",
+    "\"([)]\""
+   ]
+  },
+  "min-stack": {
+   "questionFrontendId": "155",
+   "title": "Min Stack",
+   "titleSlug": "min-stack",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Stack",
+     "slug": "stack"
+    },
+    {
+     "name": "Design",
+     "slug": "design"
+    }
+   ],
+   "metaData": {
+    "classname": "MinStack",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "params": [
+       {
+        "type": "integer",
+        "name": "value"
+       }
+      ],
+      "return": {
+       "type": "void"
+      },
+      "name": "push"
+     },
+     {
+      "params": [],
+      "return": {
+       "type": "void"
+      },
+      "name": "pop"
+     },
+     {
+      "params": [],
+      "return": {
+       "type": "integer"
+      },
+      "name": "top"
+     },
+     {
+      "params": [],
+      "return": {
+       "type": "integer"
+      },
+      "name": "getMin"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    },
+    "systemdesign": true
+   },
+   "exampleTestcaseList": [
+    "[\"MinStack\",\"push\",\"push\",\"push\",\"getMin\",\"pop\",\"top\",\"getMin\"]\n[[],[-2],[0],[-3],[],[],[],[]]"
+   ]
+  },
+  "decode-string": {
+   "questionFrontendId": "394",
+   "title": "Decode String",
+   "titleSlug": "decode-string",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "String",
+     "slug": "string"
+    },
+    {
+     "name": "Stack",
+     "slug": "stack"
+    },
+    {
+     "name": "Recursion",
+     "slug": "recursion"
+    }
+   ],
+   "metaData": {
+    "name": "decodeString",
+    "params": [
+     {
+      "name": "s",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "exampleTestcaseList": [
+    "\"3[a]2[bc]\"",
+    "\"3[a2[c]]\"",
+    "\"2[abc]3[cd]ef\""
+   ]
+  },
+  "daily-temperatures": {
+   "questionFrontendId": "739",
+   "title": "Daily Temperatures",
+   "titleSlug": "daily-temperatures",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Stack",
+     "slug": "stack"
+    },
+    {
+     "name": "Monotonic Stack",
+     "slug": "monotonic-stack"
+    }
+   ],
+   "metaData": {
+    "name": "dailyTemperatures",
+    "params": [
+     {
+      "name": "temperatures",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "exampleTestcaseList": [
+    "[73,74,75,71,69,72,76,73]",
+    "[30,40,50,60]",
+    "[30,60,90]"
+   ]
+  },
+  "largest-rectangle-in-histogram": {
+   "questionFrontendId": "84",
+   "title": "Largest Rectangle in Histogram",
+   "titleSlug": "largest-rectangle-in-histogram",
+   "difficulty": "Hard",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Stack",
+     "slug": "stack"
+    },
+    {
+     "name": "Monotonic Stack",
+     "slug": "monotonic-stack"
+    },
+    {
+     "name": "Range Minimum/Maximum Query",
+     "slug": "range-minimum-maximum-query"
+    }
+   ],
+   "metaData": {
+    "name": "largestRectangleArea",
+    "params": [
+     {
+      "name": "heights",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "[2,1,5,6,2,3]",
+    "[2,4]"
+   ]
+  },
+  "kth-largest-element-in-an-array": {
+   "questionFrontendId": "215",
+   "title": "Kth Largest Element in an Array",
+   "titleSlug": "kth-largest-element-in-an-array",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Divide and Conquer",
+     "slug": "divide-and-conquer"
+    },
+    {
+     "name": "Sorting",
+     "slug": "sorting"
+    },
+    {
+     "name": "Heap (Priority Queue)",
+     "slug": "heap-priority-queue"
+    },
+    {
+     "name": "Quickselect",
+     "slug": "quickselect"
+    }
+   ],
+   "metaData": {
+    "name": "findKthLargest",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "[3,2,1,5,6,4]\n2",
+    "[3,2,3,1,2,4,5,5,6]\n4"
+   ]
+  },
+  "top-k-frequent-elements": {
+   "questionFrontendId": "347",
+   "title": "Top K Frequent Elements",
+   "titleSlug": "top-k-frequent-elements",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Hash Table",
+     "slug": "hash-table"
+    },
+    {
+     "name": "Divide and Conquer",
+     "slug": "divide-and-conquer"
+    },
+    {
+     "name": "Sorting",
+     "slug": "sorting"
+    },
+    {
+     "name": "Heap (Priority Queue)",
+     "slug": "heap-priority-queue"
+    },
+    {
+     "name": "Bucket Sort",
+     "slug": "bucket-sort"
+    },
+    {
+     "name": "Counting",
+     "slug": "counting"
+    },
+    {
+     "name": "Quickselect",
+     "slug": "quickselect"
+    }
+   ],
+   "metaData": {
+    "name": "topKFrequent",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "exampleTestcaseList": [
+    "[1,1,1,2,2,3]\n2",
+    "[1]\n1",
+    "[1,2,1,2,1,2,3,1,3,2]\n2"
+   ]
+  },
+  "find-median-from-data-stream": {
+   "questionFrontendId": "295",
+   "title": "Find Median from Data Stream",
+   "titleSlug": "find-median-from-data-stream",
+   "difficulty": "Hard",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Two Pointers",
+     "slug": "two-pointers"
+    },
+    {
+     "name": "Design",
+     "slug": "design"
+    },
+    {
+     "name": "Sorting",
+     "slug": "sorting"
+    },
+    {
+     "name": "Heap (Priority Queue)",
+     "slug": "heap-priority-queue"
+    },
+    {
+     "name": "Data Stream",
+     "slug": "data-stream"
+    }
+   ],
+   "metaData": {
+    "classname": "MedianFinder",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "params": [
+       {
+        "type": "integer",
+        "name": "num"
+       }
+      ],
+      "name": "addNum",
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "params": [],
+      "name": "findMedian",
+      "return": {
+       "type": "double"
+      }
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    },
+    "systemdesign": true
+   },
+   "exampleTestcaseList": [
+    "[\"MedianFinder\",\"addNum\",\"addNum\",\"findMedian\",\"addNum\",\"findMedian\"]\n[[],[1],[2],[],[3],[]]"
+   ]
+  },
+  "best-time-to-buy-and-sell-stock": {
+   "questionFrontendId": "121",
+   "title": "Best Time to Buy and Sell Stock",
+   "titleSlug": "best-time-to-buy-and-sell-stock",
+   "difficulty": "Easy",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Dynamic Programming",
+     "slug": "dynamic-programming"
+    }
+   ],
+   "metaData": {
+    "name": "maxProfit",
+    "params": [
+     {
+      "name": "prices",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "[7,1,5,3,6,4]",
+    "[7,6,4,3,1]"
+   ]
+  },
+  "jump-game": {
+   "questionFrontendId": "55",
+   "title": "Jump Game",
+   "titleSlug": "jump-game",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Dynamic Programming",
+     "slug": "dynamic-programming"
+    },
+    {
+     "name": "Greedy",
+     "slug": "greedy"
+    }
+   ],
+   "metaData": {
+    "name": "canJump",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   "exampleTestcaseList": [
+    "[2,3,1,1,4]",
+    "[3,2,1,0,4]"
+   ]
+  },
+  "jump-game-ii": {
+   "questionFrontendId": "45",
+   "title": "Jump Game II",
+   "titleSlug": "jump-game-ii",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Dynamic Programming",
+     "slug": "dynamic-programming"
+    },
+    {
+     "name": "Greedy",
+     "slug": "greedy"
+    }
+   ],
+   "metaData": {
+    "name": "jump",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "[2,3,1,1,4]",
+    "[2,3,0,1,4]"
+   ]
+  },
+  "partition-labels": {
+   "questionFrontendId": "763",
+   "title": "Partition Labels",
+   "titleSlug": "partition-labels",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Hash Table",
+     "slug": "hash-table"
+    },
+    {
+     "name": "Two Pointers",
+     "slug": "two-pointers"
+    },
+    {
+     "name": "String",
+     "slug": "string"
+    },
+    {
+     "name": "Greedy",
+     "slug": "greedy"
+    }
+   ],
+   "metaData": {
+    "name": "partitionLabels",
+    "params": [
+     {
+      "name": "s",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "list<integer>"
+    }
+   },
+   "exampleTestcaseList": [
+    "\"ababcbacadefegdehijhklij\"",
+    "\"eccbbbbdec\""
+   ]
+  },
+  "climbing-stairs": {
+   "questionFrontendId": "70",
+   "title": "Climbing Stairs",
+   "titleSlug": "climbing-stairs",
+   "difficulty": "Easy",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Math",
+     "slug": "math"
+    },
+    {
+     "name": "Dynamic Programming",
+     "slug": "dynamic-programming"
+    },
+    {
+     "name": "Memoization",
+     "slug": "memoization"
+    }
+   ],
+   "metaData": {
+    "name": "climbStairs",
+    "params": [
+     {
+      "name": "n",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "2",
+    "3"
+   ]
+  },
+  "pascals-triangle": {
+   "questionFrontendId": "118",
+   "title": "Pascal's Triangle",
+   "titleSlug": "pascals-triangle",
+   "difficulty": "Easy",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Dynamic Programming",
+     "slug": "dynamic-programming"
+    }
+   ],
+   "metaData": {
+    "name": "generate",
+    "params": [
+     {
+      "name": "numRows",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "list<list<integer>>",
+     "dealloc": true,
+     "rowsize": "param_1"
+    }
+   },
+   "exampleTestcaseList": [
+    "5",
+    "1"
+   ]
+  },
+  "house-robber": {
+   "questionFrontendId": "198",
+   "title": "House Robber",
+   "titleSlug": "house-robber",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Dynamic Programming",
+     "slug": "dynamic-programming"
+    }
+   ],
+   "metaData": {
+    "name": "rob",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "[1,2,3,1]",
+    "[2,7,9,3,1]"
+   ]
+  },
+  "perfect-squares": {
+   "questionFrontendId": "279",
+   "title": "Perfect Squares",
+   "titleSlug": "perfect-squares",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Math",
+     "slug": "math"
+    },
+    {
+     "name": "Dynamic Programming",
+     "slug": "dynamic-programming"
+    },
+    {
+     "name": "Breadth-First Search",
+     "slug": "breadth-first-search"
+    },
+    {
+     "name": "Knapsack Problem",
+     "slug": "knapsack-problem"
+    },
+    {
+     "name": "Complete Knapsack",
+     "slug": "complete-knapsack"
+    }
+   ],
+   "metaData": {
+    "name": "numSquares",
+    "params": [
+     {
+      "name": "n",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "12",
+    "13"
+   ]
+  },
+  "coin-change": {
+   "questionFrontendId": "322",
+   "title": "Coin Change",
+   "titleSlug": "coin-change",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Dynamic Programming",
+     "slug": "dynamic-programming"
+    },
+    {
+     "name": "Breadth-First Search",
+     "slug": "breadth-first-search"
+    },
+    {
+     "name": "Knapsack Problem",
+     "slug": "knapsack-problem"
+    },
+    {
+     "name": "Complete Knapsack",
+     "slug": "complete-knapsack"
+    }
+   ],
+   "metaData": {
+    "name": "coinChange",
+    "params": [
+     {
+      "name": "coins",
+      "type": "integer[]"
+     },
+     {
+      "name": "amount",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "[1,2,5]\n11",
+    "[2]\n3",
+    "[1]\n0"
+   ]
+  },
+  "word-break": {
+   "questionFrontendId": "139",
+   "title": "Word Break",
+   "titleSlug": "word-break",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Hash Table",
+     "slug": "hash-table"
+    },
+    {
+     "name": "String",
+     "slug": "string"
+    },
+    {
+     "name": "Dynamic Programming",
+     "slug": "dynamic-programming"
+    },
+    {
+     "name": "Trie",
+     "slug": "trie"
+    },
+    {
+     "name": "Memoization",
+     "slug": "memoization"
+    },
+    {
+     "name": "Brute-Force Search",
+     "slug": "brute-force-search"
+    }
+   ],
+   "metaData": {
+    "name": "wordBreak",
+    "params": [
+     {
+      "name": "s",
+      "type": "string"
+     },
+     {
+      "name": "wordDict",
+      "type": "list<string>"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   "exampleTestcaseList": [
+    "\"leetcode\"\n[\"leet\",\"code\"]",
+    "\"applepenapple\"\n[\"apple\",\"pen\"]",
+    "\"catsandog\"\n[\"cats\",\"dog\",\"sand\",\"and\",\"cat\"]"
+   ]
+  },
+  "longest-increasing-subsequence": {
+   "questionFrontendId": "300",
+   "title": "Longest Increasing Subsequence",
+   "titleSlug": "longest-increasing-subsequence",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Binary Search",
+     "slug": "binary-search"
+    },
+    {
+     "name": "Dynamic Programming",
+     "slug": "dynamic-programming"
+    },
+    {
+     "name": "Longest Increasing Subsequence",
+     "slug": "longest-increasing-subsequence"
+    }
+   ],
+   "metaData": {
+    "name": "lengthOfLIS",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "[10,9,2,5,3,7,101,18]",
+    "[0,1,0,3,2,3]",
+    "[7,7,7,7,7,7,7]"
+   ]
+  },
+  "maximum-product-subarray": {
+   "questionFrontendId": "152",
+   "title": "Maximum Product Subarray",
+   "titleSlug": "maximum-product-subarray",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Dynamic Programming",
+     "slug": "dynamic-programming"
+    }
+   ],
+   "metaData": {
+    "name": "maxProduct",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "[2,3,-2,4]",
+    "[-2,0,-1]"
+   ]
+  },
+  "partition-equal-subset-sum": {
+   "questionFrontendId": "416",
+   "title": "Partition Equal Subset Sum",
+   "titleSlug": "partition-equal-subset-sum",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Dynamic Programming",
+     "slug": "dynamic-programming"
+    },
+    {
+     "name": "Knapsack Problem",
+     "slug": "knapsack-problem"
+    },
+    {
+     "name": "0-1 Knapsack",
+     "slug": "0-1-knapsack"
+    }
+   ],
+   "metaData": {
+    "name": "canPartition",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   "exampleTestcaseList": [
+    "[1,5,11,5]",
+    "[1,2,3,5]"
+   ]
+  },
+  "longest-valid-parentheses": {
+   "questionFrontendId": "32",
+   "title": "Longest Valid Parentheses",
+   "titleSlug": "longest-valid-parentheses",
+   "difficulty": "Hard",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "String",
+     "slug": "string"
+    },
+    {
+     "name": "Dynamic Programming",
+     "slug": "dynamic-programming"
+    },
+    {
+     "name": "Stack",
+     "slug": "stack"
+    },
+    {
+     "name": "Bracket Sequences",
+     "slug": "bracket-sequences"
+    }
+   ],
+   "metaData": {
+    "name": "longestValidParentheses",
+    "params": [
+     {
+      "name": "s",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "\"(()\"",
+    "\")()())\"",
+    "\"\""
+   ]
+  },
+  "unique-paths": {
+   "questionFrontendId": "62",
+   "title": "Unique Paths",
+   "titleSlug": "unique-paths",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Math",
+     "slug": "math"
+    },
+    {
+     "name": "Dynamic Programming",
+     "slug": "dynamic-programming"
+    },
+    {
+     "name": "Combinatorics",
+     "slug": "combinatorics"
+    }
+   ],
+   "metaData": {
+    "name": "uniquePaths",
+    "params": [
+     {
+      "name": "m",
+      "type": "integer"
+     },
+     {
+      "name": "n",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "3\n7",
+    "3\n2"
+   ]
+  },
+  "minimum-path-sum": {
+   "questionFrontendId": "64",
+   "title": "Minimum Path Sum",
+   "titleSlug": "minimum-path-sum",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Dynamic Programming",
+     "slug": "dynamic-programming"
+    },
+    {
+     "name": "Matrix",
+     "slug": "matrix"
+    }
+   ],
+   "metaData": {
+    "name": "minPathSum",
+    "params": [
+     {
+      "name": "grid",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "[[1,3,1],[1,5,1],[4,2,1]]",
+    "[[1,2,3],[4,5,6]]"
+   ]
+  },
+  "longest-palindromic-substring": {
+   "questionFrontendId": "5",
+   "title": "Longest Palindromic Substring",
+   "titleSlug": "longest-palindromic-substring",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Two Pointers",
+     "slug": "two-pointers"
+    },
+    {
+     "name": "String",
+     "slug": "string"
+    },
+    {
+     "name": "Dynamic Programming",
+     "slug": "dynamic-programming"
+    },
+    {
+     "name": "Manacher",
+     "slug": "manacher"
+    }
+   ],
+   "metaData": {
+    "name": "longestPalindrome",
+    "params": [
+     {
+      "name": "s",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "exampleTestcaseList": [
+    "\"babad\"",
+    "\"cbbd\""
+   ]
+  },
+  "longest-common-subsequence": {
+   "questionFrontendId": "1143",
+   "title": "Longest Common Subsequence",
+   "titleSlug": "longest-common-subsequence",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "String",
+     "slug": "string"
+    },
+    {
+     "name": "Dynamic Programming",
+     "slug": "dynamic-programming"
+    },
+    {
+     "name": "Longest Common Subsequence",
+     "slug": "longest-common-subsequence"
+    }
+   ],
+   "metaData": {
+    "name": "longestCommonSubsequence",
+    "params": [
+     {
+      "name": "text1",
+      "type": "string"
+     },
+     {
+      "type": "string",
+      "name": "text2"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "\"abcde\"\n\"ace\"",
+    "\"abc\"\n\"abc\"",
+    "\"abc\"\n\"def\""
+   ]
+  },
+  "edit-distance": {
+   "questionFrontendId": "72",
+   "title": "Edit Distance",
+   "titleSlug": "edit-distance",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "String",
+     "slug": "string"
+    },
+    {
+     "name": "Dynamic Programming",
+     "slug": "dynamic-programming"
+    }
+   ],
+   "metaData": {
+    "name": "minDistance",
+    "params": [
+     {
+      "name": "word1",
+      "type": "string"
+     },
+     {
+      "name": "word2",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "\"horse\"\n\"ros\"",
+    "\"intention\"\n\"execution\""
+   ]
+  },
+  "single-number": {
+   "questionFrontendId": "136",
+   "title": "Single Number",
+   "titleSlug": "single-number",
+   "difficulty": "Easy",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Bit Manipulation",
+     "slug": "bit-manipulation"
+    }
+   ],
+   "metaData": {
+    "name": "singleNumber",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "[2,2,1]",
+    "[4,1,2,1,2]",
+    "[1]"
+   ]
+  },
+  "majority-element": {
+   "questionFrontendId": "169",
+   "title": "Majority Element",
+   "titleSlug": "majority-element",
+   "difficulty": "Easy",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Hash Table",
+     "slug": "hash-table"
+    },
+    {
+     "name": "Divide and Conquer",
+     "slug": "divide-and-conquer"
+    },
+    {
+     "name": "Sorting",
+     "slug": "sorting"
+    },
+    {
+     "name": "Counting",
+     "slug": "counting"
+    },
+    {
+     "name": "Boyer–Moore Majority Vote Algorithm",
+     "slug": "boyer-moore-majority-vote-algorithm"
+    }
+   ],
+   "metaData": {
+    "name": "majorityElement",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "[3,2,3]",
+    "[2,2,1,1,1,2,2]"
+   ]
+  },
+  "sort-colors": {
+   "questionFrontendId": "75",
+   "title": "Sort Colors",
+   "titleSlug": "sort-colors",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Two Pointers",
+     "slug": "two-pointers"
+    },
+    {
+     "name": "Sorting",
+     "slug": "sorting"
+    },
+    {
+     "name": "Quicksort",
+     "slug": "quicksort"
+    },
+    {
+     "name": "Bubble Sort",
+     "slug": "bubble-sort"
+    }
+   ],
+   "metaData": {
+    "name": "sortColors",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "void"
+    },
+    "output": {
+     "paramindex": 0
+    },
+    "manual": false
+   },
+   "exampleTestcaseList": [
+    "[2,0,2,1,1,0]",
+    "[2,0,1]"
+   ]
+  },
+  "next-permutation": {
+   "questionFrontendId": "31",
+   "title": "Next Permutation",
+   "titleSlug": "next-permutation",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Two Pointers",
+     "slug": "two-pointers"
+    }
+   ],
+   "metaData": {
+    "name": "nextPermutation",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "void"
+    },
+    "output": {
+     "paramindex": 0
+    }
+   },
+   "exampleTestcaseList": [
+    "[1,2,3]",
+    "[3,2,1]",
+    "[1,1,5]"
+   ]
+  },
+  "find-the-duplicate-number": {
+   "questionFrontendId": "287",
+   "title": "Find the Duplicate Number",
+   "titleSlug": "find-the-duplicate-number",
+   "difficulty": "Medium",
+   "isPaidOnly": false,
+   "topicTags": [
+    {
+     "name": "Array",
+     "slug": "array"
+    },
+    {
+     "name": "Two Pointers",
+     "slug": "two-pointers"
+    },
+    {
+     "name": "Binary Search",
+     "slug": "binary-search"
+    },
+    {
+     "name": "Bit Manipulation",
+     "slug": "bit-manipulation"
+    },
+    {
+     "name": "Pigeonhole Principle",
+     "slug": "pigeonhole-principle"
+    },
+    {
+     "name": "Floyd's Cycle Finding Algorithm",
+     "slug": "floyds-cycle-finding-algorithm"
+    }
+   ],
+   "metaData": {
+    "name": "findDuplicate",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "exampleTestcaseList": [
+    "[1,3,4,2,2]",
+    "[3,1,3,4,2]",
+    "[3,3,3,3,3]"
+   ]
+  }
+ }
+}

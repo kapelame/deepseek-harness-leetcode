@@ -1,0 +1,20 @@
+id: "longest-valid-parentheses"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "最长有效括号", "en": "Longest Valid Parentheses"}
+difficulty: hard
+topics: ["dynamic-programming"]
+leetcode: {"frontendId": 32, "title": "Longest Valid Parentheses", "slug": "longest-valid-parentheses", "difficulty": "hard", "tags": ["String", "Dynamic Programming", "Stack", "Bracket Sequences"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "只含 '(' 和 ')' 的字符串中，求最长的合法（正确配对）括号子串的长度。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "In a string of '(' and ')', return the length of the longest well-formed parentheses substring. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "0 ≤ |s| ≤ 3×10⁴，s[i] 为 '(' 或 ')'", "en": "0 ≤ |s| ≤ 3×10⁴, s[i] is '(' or ')'"}]
+params: [{"name": "s", "type": "string"}]
+returns: "int"
+comparator: {"kind": "exact"}
+entry: {"python": "longestValidParentheses", "typescript": "longestValidParentheses"}
+perCaseMs: 1000
+inputs: [{"type": "string", "minLength": 0, "smallMaxLength": 10, "largeLength": 20000, "alphabet": "()"}]
+hints: [{"zh": "dp[i] = 以 s[i] 结尾的最长合法子串长度；只有 s[i] == ')' 时才可能非零。", "en": "dp[i] = longest valid substring ending at s[i]; only s[i] == ')' can be non-zero."}, {"zh": "若 s[i-1] == '('，dp[i] = dp[i-2] + 2；若 s[i-1] == ')'，看 dp[i-1] 前面那个字符是不是 '('。", "en": "If s[i-1] == '(', dp[i] = dp[i-2] + 2; if s[i-1] == ')', check whether the character before dp[i-1]'s run is '('."}, {"zh": "也可以用栈：栈底保存“最后一个未匹配的位置”，匹配时用 i - 栈顶 更新答案。", "en": "Or use a stack whose bottom holds the last unmatched index; on a match update the answer with i - top."}]
+solution: {"explanation": {"zh": "用栈记录未匹配位置，或用以 i 结尾的 DP。时间 O(n)，空间 O(n)。", "en": "A stack of unmatched indices, or DP over substrings ending at i. O(n) time and space."}}
+examples: [{"id": "ex-1", "args": ["(()"], "expected": 2}, {"id": "ex-2", "args": [")()())"], "expected": 4}, {"id": "ex-3", "args": [""], "expected": 0}]
+boundaryCases: [{"args": [""]}, {"args": ["("]}, {"args": [")"]}, {"args": ["()"]}, {"args": [")()())"]}, {"args": ["(()"]}, {"args": ["()(()"]}]

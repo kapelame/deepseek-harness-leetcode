@@ -1,0 +1,20 @@
+id: "find-first-and-last-position-of-element-in-sorted-array"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "在排序数组中查找元素的第一个和最后一个位置", "en": "Find First and Last Position of Element in Sorted Array"}
+difficulty: medium
+topics: ["binary-search"]
+leetcode: {"frontendId": 34, "title": "Find First and Last Position of Element in Sorted Array", "slug": "find-first-and-last-position-of-element-in-sorted-array", "difficulty": "medium", "tags": ["Array", "Binary Search"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "在非递减数组中找出 target 第一次和最后一次出现的下标；不存在则返回 [-1, -1]。要求 O(log n)。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "In a non-decreasing array, return the first and last index of target, or [-1, -1] if absent, in O(log n). (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "0 ≤ n ≤ 10⁵，-10⁹ ≤ nums[i], target ≤ 10⁹，nums 非递减", "en": "0 ≤ n ≤ 10⁵, -10⁹ ≤ nums[i], target ≤ 10⁹, nums non-decreasing"}]
+params: [{"name": "nums", "type": "int[]"}, {"name": "target", "type": "int"}]
+returns: "int[]"
+comparator: {"kind": "exact"}
+entry: {"python": "searchRange", "typescript": "searchRange"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 0, "smallMaxLength": 8, "largeLength": 20000, "min": -1000000000, "max": 1000000000, "smallMin": 0, "smallMax": 4, "sorted": "asc"}, {"type": "int", "min": -1000000000, "max": 1000000000, "smallMin": -1, "smallMax": 5}]
+hints: [{"zh": "找到一个 target 后向两边扩展，最坏会退化成 O(n)。", "en": "Finding one target and expanding outward degrades to O(n) in the worst case."}, {"zh": "做两次二分：一次找“第一个 ≥ target”的位置，一次找“第一个 > target”的位置。", "en": "Run two binary searches: the first position ≥ target and the first position > target."}, {"zh": "左边界 = lower_bound(target)，右边界 = lower_bound(target + 1) - 1；左边界越界或值不等时返回 [-1, -1]。", "en": "Left = lower_bound(target), right = lower_bound(target + 1) - 1; if left is out of range or holds another value, return [-1, -1]."}]
+solution: {"explanation": {"zh": "两次下界二分确定区间两端。时间 O(log n)，空间 O(1)。", "en": "Two lower-bound searches find both ends. O(log n) time, O(1) space."}}
+examples: [{"id": "ex-1", "args": [[5, 7, 7, 8, 8, 10], 8], "expected": [3, 4]}, {"id": "ex-2", "args": [[5, 7, 7, 8, 8, 10], 6], "expected": [-1, -1]}, {"id": "ex-3", "args": [[], 0], "expected": [-1, -1]}]
+boundaryCases: [{"args": [[], 0]}, {"args": [[1], 1]}, {"args": [[1], 2]}, {"args": [[2, 2], 2]}, {"args": [[1, 2, 2, 3], 2]}]

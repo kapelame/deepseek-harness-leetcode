@@ -1,0 +1,20 @@
+id: "palindrome-linked-list"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "回文链表", "en": "Palindrome Linked List"}
+difficulty: easy
+topics: ["linked-list"]
+leetcode: {"frontendId": 234, "title": "Palindrome Linked List", "slug": "palindrome-linked-list", "difficulty": "easy", "tags": ["Linked List", "Two Pointers", "Stack", "Recursion"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "判断单链表的值序列正着读和反着读是否相同。进阶要求 O(n) 时间、O(1) 额外空间。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Report whether the list's values read the same forward and backward. Follow-up: O(n) time and O(1) extra space. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ 节点数 ≤ 10⁵，0 ≤ Node.val ≤ 9", "en": "1 ≤ nodes ≤ 10⁵, 0 ≤ Node.val ≤ 9"}]
+params: [{"name": "head", "type": "linked-list"}]
+returns: "bool"
+comparator: {"kind": "exact"}
+entry: {"python": "isPalindrome", "typescript": "isPalindrome"}
+perCaseMs: 1000
+inputs: [{"type": "linked-list", "minLength": 1, "smallMaxLength": 8, "largeLength": 20000, "min": 0, "max": 9, "smallMin": 0, "smallMax": 2}]
+hints: [{"zh": "最直接的方法：把值复制到数组里再比较。能否不用额外数组？", "en": "The direct way copies values into an array. Can you avoid the extra array?"}, {"zh": "用快慢指针找到中点，然后反转后半段。", "en": "Find the middle with slow and fast pointers, then reverse the second half."}, {"zh": "从头和反转后的后半段同时向后比较；比较结束后可以再反转回来恢复链表。", "en": "Compare from the head and from the reversed half in step; afterwards you can reverse again to restore the list."}]
+solution: {"explanation": {"zh": "快慢指针找中点，原地反转后半段并与前半段逐一比较。时间 O(n)，额外空间 O(1)。", "en": "Find the middle with slow and fast pointers, reverse the second half in place, and compare it with the first half. O(n) time, O(1) extra space."}}
+examples: [{"id": "ex-1", "args": [[1, 2, 2, 1]], "expected": true}, {"id": "ex-2", "args": [[1, 2]], "expected": false}]
+boundaryCases: [{"args": [[1]]}, {"args": [[1, 2]]}, {"args": [[1, 1]]}, {"args": [[1, 2, 1]]}, {"args": [[1, 2, 2, 1]]}, {"args": [[1, 2, 3, 1]]}]

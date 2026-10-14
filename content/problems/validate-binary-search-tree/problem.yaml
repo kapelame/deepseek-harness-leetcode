@@ -1,0 +1,20 @@
+id: "validate-binary-search-tree"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "验证二叉搜索树", "en": "Validate Binary Search Tree"}
+difficulty: medium
+topics: ["trees"]
+leetcode: {"frontendId": 98, "title": "Validate Binary Search Tree", "slug": "validate-binary-search-tree", "difficulty": "medium", "tags": ["Tree", "Depth-First Search", "Binary Search Tree", "Binary Tree"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "判断二叉树是否为有效的二叉搜索树：每个节点的左子树所有值都严格小于它，右子树所有值都严格大于它。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Report whether the tree is a valid binary search tree: every value in a node's left subtree is strictly smaller and every value in its right subtree strictly larger. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ 节点数 ≤ 10⁴，-2³¹ ≤ Node.val ≤ 2³¹-1", "en": "1 ≤ nodes ≤ 10⁴, -2³¹ ≤ Node.val ≤ 2³¹-1"}]
+params: [{"name": "root", "type": "tree"}]
+returns: "bool"
+comparator: {"kind": "exact"}
+entry: {"python": "isValidBST", "typescript": "isValidBST"}
+perCaseMs: 1000
+inputs: [{"type": "tree", "minLength": 1, "maxLength": 10000, "smallMaxLength": 8, "largeLength": 3000, "min": -1000000000, "max": 1000000000}]
+hints: [{"zh": "只比较节点与它的直接孩子够吗？想一个反例。", "en": "Is comparing each node with its children enough? Find a counterexample."}, {"zh": "每个节点的取值都受祖先限制：它必须落在一个 (low, high) 开区间内。", "en": "Every node is bounded by its ancestors: it must lie in an open interval (low, high)."}, {"zh": "递归时把区间传下去；或利用“中序遍历严格递增”这一性质。", "en": "Pass the interval down the recursion, or use the fact that an inorder traversal must be strictly increasing."}]
+solution: {"explanation": {"zh": "递归携带上下界，或检查中序序列严格递增。时间 O(n)，空间 O(h)。", "en": "Recurse with lower and upper bounds, or check that the inorder sequence is strictly increasing. O(n) time, O(h) space."}}
+examples: [{"id": "ex-1", "args": [[2, 1, 3]], "expected": true}, {"id": "ex-2", "args": [[5, 1, 4, null, null, 3, 6]], "expected": false}]
+boundaryCases: [{"args": [[1]]}, {"args": [[2, 1, 3]]}, {"args": [[1, 1]]}, {"args": [[5, 4, 6, null, null, 3, 7]]}, {"args": [[2147483647]]}, {"args": [[-2147483648, null, 2147483647]]}]

@@ -4,8 +4,9 @@
 
 一个用于 LeetCode 风格算法学习的 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 插件，支持 **DSH 桌面端**和 **DSH Web**。
 
-- **课程**：六个主题（哈希、双指针、滑动窗口、二分查找、栈、二叉树）。每节课包含动机、策略、带逐步推演的示例、理解检查、练习题和反思。
-- **练习**：18 道真实 LeetCode 题，提供原创概述与官方题面链接，不复制题面。每道题有编辑器、“运行”与“提交”、自定义输入、笔记和提交历史。
+- **课程**：16 个主题，从哈希、双指针、滑动窗口、二分查找、栈，到链表、矩阵、图、回溯、堆、贪心、数据结构设计和动态规划。每节课包含动机、策略、带逐步推演的示例、理解检查、练习题和反思。
+- **练习**：108 道真实 LeetCode 题，完整包含 **LeetCode 热题 100**，提供原创概述与官方题面链接，不复制题面。“热题 100”视图沿用 LeetCode 的分组，并显示每组进度。每道题有编辑器、“运行”与“提交”、自定义输入、笔记和提交历史。设计题（LRU 缓存、最小栈等）、原地修改题和节点引用题（环形链表、相交链表、随机链表、最近公共祖先）都按 LeetCode 的方式评测。
+- **添加题目**：用自己的话描述想练什么（例如“3 道我没做过的中等 BFS 题”）。AI 智能体会搜索 LeetCode 的公开题目列表，撰写原创概述、提示、参考解和独立的暴力校验解，并且只有在通过与内置题目相同的校验后才会加入题库。不需要 JSON。
 - **评测**：代码在 Docker 容器中运行：无网络、只读文件系统，并限制内存、CPU 和进程数。判定只来自测试结果。可选的 AI 评测会给出反馈，但不能改变判定。通过表示“通过本地测试”，不等于 LeetCode 判定通过。
 - **辅导**：提示逐级解锁（方向、关键观察、思路大纲、解答），解答等级需要确认。辅导对话流式回复，除非你主动要求，否则不会直接给出完整解答。
 - **复习**：按你所在时区，以 1/3/7/14/30 天为间隔进行间隔重复，并有每日上限。每次复习使用经过验证的变体题，而不是重做原题。新变体由 AI 生成，必须先通过自动验证才会被使用。
@@ -68,10 +69,31 @@ dsh web
 
 真实邮件需要 `email.transport: smtp`、`email.liveSendingAuthorized: true`、`email.smtp.host`/`port`/`user`，并把 SMTP 密码存为名为 `email.smtp.passwordRef` 的 DSH 凭据（默认 `DSH_LEARN_SMTP_PASSWORD`）。未使用隐式 TLS 时要求 STARTTLS。
 
+## 添加题目（题目查找器）
+
+在“练习 → **添加题目**”中输入一段描述并选择数量（1–5）。运行过程实时显示（搜索、查看的题目、校验尝试、已添加或跳过的题目），可随时停止；已添加的题目会保留。
+
+- 智能体遵循随插件附带的技能 [`skills/learn-problem-author/SKILL.md`](skills/learn-problem-author/SKILL.md)。该技能只注册在查找器智能体内部，不会出现在你平常的 Session 中。
+- 题号、标题、难度、标签、评测签名和示例输入始终来自 LeetCode 元数据，而不是模型。付费题以及需要 Learn 不提供的特殊评测器的题目会被跳过。
+- 每次提交都会在生成的输入上将参考解与暴力解对拍、检查边界用例并冻结测试集。未通过的提交会连同失败的检查项一起被拒绝，每道题的重试次数有限。
+- 需要默认模型和 Docker。相关设置位于 `learn` 行的 `finder` 下：
+
+```yaml
+    finder:
+      enabled: true
+      maxProblems: 5                 # 每次最多添加的题目数
+      maxSubmissionsPerProblem: 3
+      maxLeetcodeRequests: 40        # 每次运行的 LeetCode 请求上限
+      requestIntervalMs: 1000        # LeetCode 请求间隔
+      leetcodeEndpoint: https://leetcode.com/graphql
+      leetcodeCnEndpoint: https://leetcode.cn/graphql/   # 中文标题；'' 表示不使用
+```
+
 ## 隐私与模型使用
 
 - 代码只在无网络访问的 Docker 容器中运行。隐藏测试的期望答案从不进入容器。
-- 配置了默认模型时，以下操作会通过 DSH 把题目概述和你当前的代码发送给该模型：“提交”（除非 `agents.judge: false`）、提示、辅导对话、反思和变体生成。每次运行都是普通的 DSH Session，会出现在你的 Session 历史中。
+- 配置了默认模型时，以下操作会通过 DSH 把题目概述和你当前的代码发送给该模型：“提交”（除非 `agents.judge: false`）、提示、辅导对话、反思和变体生成。“添加题目”会发送你的描述和 LeetCode 元数据（不会发送你的代码）。每次运行都是普通的 DSH Session，会出现在你的 Session 历史中。
+- “添加题目”只向 LeetCode 公开 GraphQL 接口（leetcode.com，以及用于中文标题的 leetcode.cn）查询题目元数据：不登录、不获取题面，请求有间隔并有每次运行的上限。
 - 除此之外不会有数据离开你的电脑；配置 SMTP 后的提醒邮件除外。
 
 ## 已知限制
@@ -95,7 +117,7 @@ node scripts/build.mjs ./dsh          # 复制源码、运行 pnpm install 和 D
 
 已安装依赖的代码可用 `--skip-install` 重新构建。测试在 DSH 代码中运行：`npx vitest run packages/experimental/learn/tests`（需要 Docker 和运行器镜像）。
 
-课程内容位于 `content/`：每道题包含声明输入域的 YAML 元数据、参考解、独立的暴力解、可选钩子，以及由生成器构建并验证的冻结测试集（参考解与暴力解差分测试、变异体检出、边界覆盖）。
+课程内容位于 `content/`（`content/collections/hot-100.yaml` 列出热题 100 的分组）：每道题包含声明输入域的 YAML 元数据、参考解、独立的暴力解、可选钩子，以及由生成器构建并验证的冻结测试集（参考解与暴力解差分测试、变异体检出、边界覆盖）。`authoring/` 中是生成热题 100 内容的脚本（`build_content.py`）和冻结测试集的脚本（`freeze.sh <dsh 代码目录>`）。
 
 ## 许可证
 

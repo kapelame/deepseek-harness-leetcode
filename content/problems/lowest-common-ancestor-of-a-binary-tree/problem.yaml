@@ -1,0 +1,21 @@
+id: "lowest-common-ancestor-of-a-binary-tree"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "二叉树的最近公共祖先", "en": "Lowest Common Ancestor of a Binary Tree"}
+difficulty: medium
+topics: ["trees"]
+leetcode: {"frontendId": 236, "title": "Lowest Common Ancestor of a Binary Tree", "slug": "lowest-common-ancestor-of-a-binary-tree", "difficulty": "medium", "tags": ["Tree", "Depth-First Search", "Binary Tree", "Binary Lifting", "Lowest Common Ancestor"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "给定二叉树和其中两个不同节点 p、q，返回它们的最近公共祖先（一个节点也可以是它自己的祖先）。测试输入用值标识 p 和 q，你的函数接收节点本身，结果显示为节点的值。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Given a binary tree and two distinct nodes p and q in it, return their lowest common ancestor; a node counts as its own ancestor. Tests identify p and q by value, your function receives the nodes, and the result is shown as the node's value. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "2 ≤ 节点数 ≤ 10⁵，值互不相同，p ≠ q，p 和 q 都在树中", "en": "2 ≤ nodes ≤ 10⁵, distinct values, p ≠ q, both are in the tree"}]
+params: [{"name": "root", "type": "tree"}, {"name": "p", "type": "int"}, {"name": "q", "type": "int"}]
+returns: "int"
+shape: {"kind": "harness", "name": "tree-node-refs"}
+comparator: {"kind": "exact"}
+entry: {"python": "lowestCommonAncestor", "typescript": "lowestCommonAncestor"}
+perCaseMs: 1000
+inputs: [{"type": "tree", "minLength": 2}, {"type": "int"}, {"type": "int"}]
+hints: [{"zh": "对某个节点，p 和 q 可能都在左子树、都在右子树，或者分居两侧。", "en": "For a node, p and q may both be on the left, both on the right, or split across the sides."}, {"zh": "递归返回“在这棵子树中找到的 p 或 q（或它们的 LCA）”。", "en": "Have the recursion return 'p or q, or their LCA, found in this subtree'."}, {"zh": "当前节点是 p 或 q 就返回它；左右递归结果都非空说明分居两侧，当前节点就是答案；否则返回非空的那一侧。", "en": "Return the node if it is p or q; if both sides return non-null, this node is the answer; otherwise return the non-null side."}]
+solution: {"explanation": {"zh": "一次后序遍历：左右子树各自报告找到的目标，第一次两侧都有结果的节点就是最近公共祖先。时间 O(n)，空间 O(h)。", "en": "One post-order pass: each subtree reports what it found, and the first node where both sides report something is the LCA. O(n) time, O(h) space."}}
+examples: [{"id": "ex-1", "args": [[3, 5, 1, 6, 2, 0, 8, null, null, 7, 4], 5, 1], "expected": 3}, {"id": "ex-2", "args": [[3, 5, 1, 6, 2, 0, 8, null, null, 7, 4], 5, 4], "expected": 5}, {"id": "ex-3", "args": [[1, 2], 1, 2], "expected": 1}]
+boundaryCases: [{"args": [[1, 2], 1, 2]}, {"args": [[1, 2], 2, 1]}, {"args": [[3, 5, 1, 6, 2, 0, 8, null, null, 7, 4], 7, 4]}, {"args": [[1, 2, 3], 2, 3]}]

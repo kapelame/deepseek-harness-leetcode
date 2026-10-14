@@ -1,0 +1,20 @@
+id: "pascals-triangle"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "杨辉三角", "en": "Pascal's Triangle"}
+difficulty: easy
+topics: ["dynamic-programming"]
+leetcode: {"frontendId": 118, "title": "Pascal's Triangle", "slug": "pascals-triangle", "difficulty": "easy", "tags": ["Array", "Dynamic Programming"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "生成杨辉三角的前 numRows 行：每行首尾为 1，中间每个数等于上一行左上方和右上方两数之和。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Generate the first numRows rows of Pascal's triangle: each row starts and ends with 1, and every inner number is the sum of the two numbers above it. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ numRows ≤ 30", "en": "1 ≤ numRows ≤ 30"}]
+params: [{"name": "numRows", "type": "int"}]
+returns: "int[][]"
+comparator: {"kind": "exact"}
+entry: {"python": "generate", "typescript": "generate"}
+perCaseMs: 1000
+inputs: [{"type": "int", "min": 1, "max": 30, "smallMin": 1, "smallMax": 8}]
+hints: [{"zh": "第 i 行有 i+1 个数，首尾都是 1。", "en": "Row i has i+1 numbers, starting and ending with 1."}, {"zh": "row[j] = prev[j-1] + prev[j]，其中 1 ≤ j ≤ i-1。", "en": "row[j] = prev[j-1] + prev[j] for 1 ≤ j ≤ i-1."}, {"zh": "逐行由上一行生成，直到 numRows 行。", "en": "Build each row from the previous one until there are numRows rows."}]
+solution: {"explanation": {"zh": "逐行递推，每个内部元素由上一行两个相邻元素相加。时间 O(numRows²)。", "en": "Row-by-row recurrence, each inner element summing two adjacent elements of the previous row. O(numRows²) time."}}
+examples: [{"id": "ex-1", "args": [5], "expected": [[1], [1, 1], [1, 2, 1], [1, 3, 3, 1], [1, 4, 6, 4, 1]]}, {"id": "ex-2", "args": [1], "expected": [[1]]}]
+boundaryCases: [{"args": [1]}, {"args": [2]}, {"args": [3]}, {"args": [30]}]

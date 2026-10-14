@@ -1,0 +1,21 @@
+id: "move-zeroes"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "移动零", "en": "Move Zeroes"}
+difficulty: easy
+topics: ["two-pointers"]
+leetcode: {"frontendId": 283, "title": "Move Zeroes", "slug": "move-zeroes", "difficulty": "easy", "tags": ["Array", "Two Pointers"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "原地把数组中所有的 0 移到末尾，同时保持非零元素的相对顺序。不要返回新数组。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Move every 0 to the end of the array in place while keeping the non-zero elements in their original order. Do not return a new array. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 10⁴，-2³¹ ≤ nums[i] ≤ 2³¹-1", "en": "1 ≤ n ≤ 10⁴, -2³¹ ≤ nums[i] ≤ 2³¹-1"}]
+params: [{"name": "nums", "type": "int[]"}]
+returns: "int[]"
+shape: {"kind": "in-place", "param": 0}
+comparator: {"kind": "exact"}
+entry: {"python": "moveZeroes", "typescript": "moveZeroes"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "smallMaxLength": 10, "largeLength": 10000, "min": -5, "max": 5, "smallMin": -2, "smallMax": 3}]
+hints: [{"zh": "能否用一个指针记录“下一个非零元素该放的位置”？", "en": "Can one pointer remember where the next non-zero element should go?"}, {"zh": "从左到右扫描，遇到非零元素就放到写指针处，写指针后移。", "en": "Scan left to right; each non-zero element goes to the write position, which then advances."}, {"zh": "扫描结束后，把写指针之后的位置全部填 0；或者在扫描时直接交换。", "en": "After the scan, fill everything after the write position with 0, or swap during the scan."}]
+solution: {"explanation": {"zh": "读写双指针：读指针遍历数组，写指针指向下一个非零元素的位置；交换保证顺序不变。时间 O(n)，额外空间 O(1)。", "en": "Read and write pointers: the reader scans, the writer marks where the next non-zero belongs; swapping keeps the order. O(n) time, O(1) extra space."}}
+examples: [{"id": "ex-1", "args": [[0, 1, 0, 3, 12]], "expected": [1, 3, 12, 0, 0]}, {"id": "ex-2", "args": [[0]], "expected": [0]}]
+boundaryCases: [{"args": [[0]]}, {"args": [[1]]}, {"args": [[0, 0, 1]]}, {"args": [[1, 2, 3]]}, {"args": [[0, -1, 0, -2]]}]

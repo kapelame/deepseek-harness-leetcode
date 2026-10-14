@@ -1,0 +1,20 @@
+id: "sliding-window-maximum"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "滑动窗口最大值", "en": "Sliding Window Maximum"}
+difficulty: hard
+topics: ["sliding-window"]
+leetcode: {"frontendId": 239, "title": "Sliding Window Maximum", "slug": "sliding-window-maximum", "difficulty": "hard", "tags": ["Array", "Queue", "Sliding Window", "Heap (Priority Queue)", "Monotonic Queue", "Range Minimum/Maximum Query"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "一个长度为 k 的窗口从左向右滑过数组，返回每个窗口位置中的最大值。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "A window of size k slides across the array from left to right; return the maximum of each window position. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 10⁵，-10⁴ ≤ nums[i] ≤ 10⁴，1 ≤ k ≤ n", "en": "1 ≤ n ≤ 10⁵, -10⁴ ≤ nums[i] ≤ 10⁴, 1 ≤ k ≤ n"}]
+params: [{"name": "nums", "type": "int[]"}, {"name": "k", "type": "int"}]
+returns: "int[]"
+comparator: {"kind": "exact"}
+entry: {"python": "maxSlidingWindow", "typescript": "maxSlidingWindow"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "smallMaxLength": 10, "largeLength": 20000, "min": -10000, "max": 10000, "smallMin": -5, "smallMax": 5}, {"type": "int", "min": 1, "max": 1}]
+hints: [{"zh": "每次重新扫描窗口要 O(nk)。哪些元素永远不可能再成为最大值？", "en": "Rescanning each window costs O(nk). Which elements can never be the maximum again?"}, {"zh": "如果右边来了一个更大的数，它左边更小的数在之后的窗口里都没用了。", "en": "When a larger number arrives on the right, smaller numbers to its left are useless for every later window."}, {"zh": "维护一个下标双端队列，对应的值单调递减；队首是当前最大值，过期时从队首弹出。", "en": "Keep a deque of indices with decreasing values; the front is the current maximum and is popped when it leaves the window."}]
+solution: {"explanation": {"zh": "单调递减双端队列：新元素入队前弹出所有不大于它的队尾，队首超出窗口时弹出。每个下标进出一次，时间 O(n)，空间 O(k)。", "en": "A decreasing deque: before pushing, pop every tail that is not larger; pop the front once it leaves the window. Each index enters and leaves once, O(n) time, O(k) space."}}
+examples: [{"id": "ex-1", "args": [[1, 3, -1, -3, 5, 3, 6, 7], 3], "expected": [3, 3, 5, 5, 6, 7]}, {"id": "ex-2", "args": [[1], 1], "expected": [1]}]
+boundaryCases: [{"args": [[1], 1]}, {"args": [[1, -1], 1]}, {"args": [[9, 8, 7], 3]}, {"args": [[1, 3, 1, 2, 0, 5], 3]}, {"args": [[-10000, -10000], 2]}]

@@ -1,0 +1,20 @@
+id: "partition-labels"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "划分字母区间", "en": "Partition Labels"}
+difficulty: medium
+topics: ["greedy"]
+leetcode: {"frontendId": 763, "title": "Partition Labels", "slug": "partition-labels", "difficulty": "medium", "tags": ["Hash Table", "Two Pointers", "String", "Greedy"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "把字符串划分成尽可能多的片段，使每个字母只出现在其中一个片段里。按顺序返回各片段的长度。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Split the string into as many parts as possible so that each letter appears in only one part; return the part lengths in order. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ |s| ≤ 500，只含小写字母", "en": "1 ≤ |s| ≤ 500, lowercase letters"}]
+params: [{"name": "s", "type": "string"}]
+returns: "int[]"
+comparator: {"kind": "exact"}
+entry: {"python": "partitionLabels", "typescript": "partitionLabels"}
+perCaseMs: 1000
+inputs: [{"type": "string", "minLength": 1, "maxLength": 500, "smallMaxLength": 10, "largeLength": 500, "alphabet": "abcdefghijklmnopqrstuvwxyz", "smallAlphabet": "abcd"}]
+hints: [{"zh": "一个片段包含字母 c，就必须延伸到 c 最后一次出现的位置。", "en": "A part containing letter c must extend to c's last occurrence."}, {"zh": "先记录每个字母最后出现的下标。", "en": "Record each letter's last index first."}, {"zh": "扫描时维护当前片段必须到达的最远位置 end；当 i == end 时可以切一刀。", "en": "While scanning keep end, how far the current part must reach; cut when i == end."}]
+solution: {"explanation": {"zh": "贪心：片段在“已见字母的最后出现位置的最大值”处结束。时间 O(n)，空间 O(1)。", "en": "Greedy: a part ends at the maximum last occurrence of the letters seen so far. O(n) time, O(1) space."}}
+examples: [{"id": "ex-1", "args": ["ababcbacadefegdehijhklij"], "expected": [9, 7, 8]}, {"id": "ex-2", "args": ["eccbbbbdec"], "expected": [10]}]
+boundaryCases: [{"args": ["a"]}, {"args": ["ab"]}, {"args": ["aa"]}, {"args": ["abca"]}, {"args": ["eccbbbbdec"]}]

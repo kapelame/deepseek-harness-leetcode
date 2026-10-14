@@ -1,0 +1,22 @@
+id: "matrix-count-not-greater"
+version: 1
+suiteVersion: 1
+parentProblemId: "search-a-2d-matrix-ii"
+topicId: "matrix"
+title: {"zh": "有序矩阵中不大于目标的元素个数", "en": "Count Elements Not Greater Than a Target"}
+summary: {"zh": "行列均递增的矩阵中，统计 ≤ target 的元素个数。", "en": "Count elements ≤ target in a matrix sorted along rows and columns."}
+statement: {"zh": "矩阵 `matrix` 每行从左到右非递减、每列从上到下非递减。给定 `target`，返回矩阵中**小于或等于** `target` 的元素个数。\n\n要求时间复杂度 O(m + n)。", "en": "Each row of `matrix` is non-decreasing left to right and each column is non-decreasing top to bottom. Given `target`, return how many elements are **less than or equal to** `target`.\n\nAim for O(m + n) time."}
+difficulty: medium
+skills: ["staircase search", "counting with monotone structure"]
+differences: [{"category": "output", "description": {"zh": "从“是否存在”变成“有多少个”，需要在走阶梯时累加整段的数量。", "en": "The question changes from whether the target exists to how many elements qualify, so whole segments are added while walking the staircase."}}, {"category": "reasoning", "description": {"zh": "必须想清楚每一步排除掉的那一行或一列中，有多少元素满足条件。", "en": "You must work out how many elements of the row or column discarded at each step satisfy the condition."}}]
+transfer: {"zh": "从角落出发、每次比较排除一行或一列的阶梯搜索保留；新增的是在排除时计数。", "en": "The staircase walk from a corner that discards a row or column per comparison carries over; the addition is counting while discarding."}
+entry: {"python": "countNotGreater", "typescript": "countNotGreater"}
+params: [{"name": "matrix", "type": "int[][]"}, {"name": "target", "type": "int"}]
+returns: "int"
+comparator: {"kind": "exact"}
+perCaseMs: 1000
+inputs: [{"type": "int[][]", "minLength": 1, "maxLength": 300, "smallMaxLength": 5, "largeLength": 300, "row": {"minLength": 1, "maxLength": 300, "smallMaxLength": 5, "largeLength": 300}, "cell": {"min": 0, "max": 3}}, {"type": "int", "min": -10, "max": 1000}]
+constraints: [{"zh": "1 ≤ m, n ≤ 300，-10⁹ ≤ 元素, target ≤ 10⁹", "en": "1 ≤ m, n ≤ 300, -10⁹ ≤ values, target ≤ 10⁹"}]
+examples: [{"args": [[[1, 4, 7], [2, 5, 8], [3, 6, 9]], 5], "expected": 5}, {"args": [[[1, 1], [1, 1]], 1], "expected": 4}]
+boundaryCases: [{"args": [[[1]], 0]}, {"args": [[[1]], 1]}, {"args": [[[1, 2], [2, 3]], 2]}, {"args": [[[-5, -5]], -6]}]
+hints: [{"zh": "从左下角出发：当前值 ≤ target 时，这一列在它上面的元素都满足条件吗？", "en": "Start at the bottom-left: when the value is ≤ target, do all elements above it in this column qualify?"}, {"zh": "是的：这一列从顶到当前行都 ≤ target，可以一次加上 i + 1 个，然后右移。", "en": "Yes: the column from the top down to this row is ≤ target, so add i + 1 at once and move right."}, {"zh": "当前值 > target 时上移一行；走出矩阵时结束，共 O(m + n) 步。", "en": "When the value exceeds target, move up a row; stop when you leave the matrix, O(m + n) steps."}]

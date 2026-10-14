@@ -1,0 +1,20 @@
+id: "jump-game-ii"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "跳跃游戏 II", "en": "Jump Game II"}
+difficulty: medium
+topics: ["greedy"]
+leetcode: {"frontendId": 45, "title": "Jump Game II", "slug": "jump-game-ii", "difficulty": "medium", "tags": ["Array", "Dynamic Programming", "Greedy"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "规则同“跳跃游戏”，保证一定能到达最后一个下标，求最少跳跃次数。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Same rules as Jump Game, with the last index guaranteed reachable; return the fewest jumps. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ n ≤ 10⁴，0 ≤ nums[i] ≤ 1000，保证可以到达终点", "en": "1 ≤ n ≤ 10⁴, 0 ≤ nums[i] ≤ 1000, the end is reachable"}]
+params: [{"name": "nums", "type": "int[]"}]
+returns: "int"
+comparator: {"kind": "exact"}
+entry: {"python": "jump", "typescript": "jump"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "smallMaxLength": 8, "largeLength": 10000, "min": 1, "max": 3, "smallMin": 0, "smallMax": 3}]
+hints: [{"zh": "把“跳 k 次能到达的位置”看成一层，这是一种 BFS。", "en": "Treat the positions reachable in k jumps as one level, a BFS."}, {"zh": "第 k 层是一个连续区间；下一层的右端是这一层所有位置能跳到的最远处。", "en": "Level k is a contiguous range; the next level ends at the farthest point reachable from it."}, {"zh": "遍历时维护当前层的右端 end 和下一层的最远 far；走到 end 时跳数加一，end = far。", "en": "While scanning keep the current level's end and the next level's far; on reaching end, add a jump and set end = far."}]
+solution: {"explanation": {"zh": "按层的贪心（隐式 BFS），一次扫描。时间 O(n)，空间 O(1)。", "en": "Level-by-level greed, an implicit BFS, in one scan. O(n) time, O(1) space."}}
+examples: [{"id": "ex-1", "args": [[2, 3, 1, 1, 4]], "expected": 2}, {"id": "ex-2", "args": [[2, 3, 0, 1, 4]], "expected": 2}]
+boundaryCases: [{"args": [[0]]}, {"args": [[1, 0]]}, {"args": [[2, 1]]}, {"args": [[1, 1, 1]]}, {"args": [[3, 0, 0, 0]]}]

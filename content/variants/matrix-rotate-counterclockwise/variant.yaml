@@ -1,0 +1,23 @@
+id: "matrix-rotate-counterclockwise"
+version: 1
+suiteVersion: 1
+parentProblemId: "rotate-image"
+topicId: "matrix"
+title: {"zh": "逆时针旋转图像", "en": "Rotate an Image Counter-clockwise"}
+summary: {"zh": "把 n×n 矩阵原地逆时针旋转 90 度。", "en": "Rotate an n×n matrix 90 degrees counter-clockwise in place."}
+statement: {"zh": "给定 n×n 整数矩阵 `matrix`，将它**逆时针**旋转 90 度。\n\n必须原地修改 `matrix`，不能分配另一个矩阵；函数不返回值。", "en": "Given an n×n integer matrix `matrix`, rotate it 90 degrees **counter-clockwise**.\n\nModify `matrix` in place without allocating another matrix; the function returns nothing."}
+difficulty: medium
+skills: ["coordinate transforms", "in-place swaps"]
+differences: [{"category": "output", "description": {"zh": "旋转方向相反，(i, j) 去到 (n-1-j, i)。", "en": "The direction is reversed, so (i, j) moves to (n-1-j, i)."}}, {"category": "reasoning", "description": {"zh": "需要重新推导由哪两个原地翻转组合而成。", "en": "You must re-derive which two in-place flips compose the rotation."}}]
+transfer: {"zh": "“把旋转拆成两个天然原地的翻转”的方法保留；需要重新验证翻转的组合与顺序。", "en": "Splitting a rotation into two naturally in-place flips carries over; the combination and order of the flips must be re-derived."}
+entry: {"python": "rotateLeft", "typescript": "rotateLeft"}
+params: [{"name": "matrix", "type": "int[][]"}]
+returns: "int[][]"
+shape: {"kind": "in-place", "param": 0}
+comparator: {"kind": "exact"}
+perCaseMs: 1000
+inputs: [{"type": "int[][]", "minLength": 1, "maxLength": 20, "smallMaxLength": 5, "largeLength": 20, "row": {"minLength": 1, "maxLength": 20}, "cell": {"min": -1000, "max": 1000}}]
+constraints: [{"zh": "1 ≤ n ≤ 20，-1000 ≤ matrix[i][j] ≤ 1000", "en": "1 ≤ n ≤ 20, -1000 ≤ matrix[i][j] ≤ 1000"}]
+examples: [{"args": [[[1, 2], [3, 4]]], "expected": [[2, 4], [1, 3]]}, {"args": [[[1, 2, 3], [4, 5, 6], [7, 8, 9]]], "expected": [[3, 6, 9], [2, 5, 8], [1, 4, 7]]}]
+boundaryCases: [{"args": [[[1]]]}, {"args": [[[0, 1], [2, 3]]]}, {"args": [[[5, 1, 9, 11], [2, 4, 8, 10], [13, 3, 6, 7], [15, 14, 12, 16]]]}]
+hints: [{"zh": "逆时针旋转后，第一行变成了哪里？", "en": "After a counter-clockwise rotation, where does the first row go?"}, {"zh": "第一行变成第一列（自下而上读）。试试先转置，再看还差什么。", "en": "The first row becomes the first column, read bottom to top. Try transposing first and see what is left."}, {"zh": "转置后再上下翻转（翻转行的顺序）即可；或先左右翻转每行再转置。", "en": "After transposing, reverse the order of the rows; or reverse each row first and then transpose."}]

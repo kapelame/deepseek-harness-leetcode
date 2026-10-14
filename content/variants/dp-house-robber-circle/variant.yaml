@@ -1,0 +1,22 @@
+id: "dp-house-robber-circle"
+version: 1
+suiteVersion: 1
+parentProblemId: "house-robber"
+topicId: "dynamic-programming"
+title: {"zh": "环形街道上的打家劫舍", "en": "House Robber on a Circular Street"}
+summary: {"zh": "房子围成一圈（首尾相邻），相邻房子不能同时偷，求最多能偷多少。", "en": "The houses form a circle, so the first and last are adjacent; rob no two neighbors and return the maximum total."}
+statement: {"zh": "街道上的房子围成一个**圆圈**：第一间和最后一间房子也相邻。`nums[i]` 是第 `i` 间房子里的钱，相邻的两间房子不能在同一晚都被偷。\n\n返回最多能偷到的钱。", "en": "The houses stand in a **circle**, so the first and last houses are neighbors too. `nums[i]` is the money in house `i`, and two neighboring houses cannot both be robbed on the same night.\n\nReturn the maximum amount that can be robbed."}
+difficulty: medium
+skills: ["linear DP", "case splitting"]
+differences: [{"category": "input-structure", "description": {"zh": "街道变成环形，第一间与最后一间房子相邻。", "en": "The street becomes a circle, so the first and last houses are adjacent."}}, {"category": "reasoning", "description": {"zh": "需要拆成两种情况：不偷第一间，或不偷最后一间，分别做线性 DP 后取较大值。", "en": "Split into two cases, skipping the first house or skipping the last, run the linear DP on each, and take the larger."}}]
+transfer: {"zh": "线性打家劫舍的状态与转移完全复用；新的步骤是把环拆成两条线：首尾不能同时偷，所以至少有一端被排除。", "en": "The linear state and transition are reused as is; the new step breaks the circle into two lines, since the two ends cannot both be robbed."}
+entry: {"python": "robCircle", "typescript": "robCircle"}
+params: [{"name": "nums", "type": "int[]"}]
+returns: "int"
+comparator: {"kind": "exact"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "maxLength": 100, "smallMaxLength": 8, "largeLength": 100, "min": 0, "max": 1000, "smallMin": 0, "smallMax": 9}]
+constraints: [{"zh": "1 ≤ n ≤ 100，0 ≤ nums[i] ≤ 1000", "en": "1 ≤ n ≤ 100, 0 ≤ nums[i] ≤ 1000"}]
+examples: [{"args": [[2, 3, 2]], "expected": 3}, {"args": [[1, 2, 3, 1]], "expected": 4}, {"args": [[1, 2, 3]], "expected": 3}]
+boundaryCases: [{"args": [[5]]}, {"args": [[1, 2]]}, {"args": [[3, 1, 3]]}, {"args": [[0, 0, 0]]}, {"args": [[1000, 1, 1, 1000]]}]
+hints: [{"zh": "首尾相邻意味着什么？第一间和最后一间房子不能同时偷。", "en": "What does adjacency of the ends mean? The first and last houses cannot both be robbed."}, {"zh": "所以最优方案要么不包含第一间，要么不包含最后一间。", "en": "So the best plan excludes either the first house or the last."}, {"zh": "分别对 nums[1:] 和 nums[:-1] 做线性打家劫舍，取较大值；只有一间房时直接返回它。", "en": "Run the linear version on nums[1:] and on nums[:-1] and take the larger; with one house, return it."}]

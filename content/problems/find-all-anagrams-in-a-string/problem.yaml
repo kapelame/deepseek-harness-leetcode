@@ -1,0 +1,20 @@
+id: "find-all-anagrams-in-a-string"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "找到字符串中所有字母异位词", "en": "Find All Anagrams in a String"}
+difficulty: medium
+topics: ["sliding-window"]
+leetcode: {"frontendId": 438, "title": "Find All Anagrams in a String", "slug": "find-all-anagrams-in-a-string", "difficulty": "medium", "tags": ["Hash Table", "String", "Sliding Window"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "在字符串 s 中找出所有是 p 的字母异位词（字符相同、顺序可不同）的子串，返回这些子串的起始下标，顺序不限。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Find every substring of s that is an anagram of p (same letters in any order) and return their start indices in any order. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ |s|, |p| ≤ 3×10⁴，只含小写字母", "en": "1 ≤ |s|, |p| ≤ 3×10⁴, lowercase letters only"}]
+params: [{"name": "s", "type": "string"}, {"name": "p", "type": "string"}]
+returns: "int[]"
+comparator: {"kind": "unordered"}
+entry: {"python": "findAnagrams", "typescript": "findAnagrams"}
+perCaseMs: 1000
+inputs: [{"type": "string", "minLength": 1, "smallMaxLength": 12, "largeLength": 30000, "alphabet": "abc", "smallAlphabet": "ab"}, {"type": "string", "minLength": 1, "smallMaxLength": 4, "largeLength": 1000, "alphabet": "abc", "smallAlphabet": "ab"}]
+hints: [{"zh": "异位词的长度一定等于 |p|。需要检查的子串有什么共同点？", "en": "An anagram must have length |p|. What do all the candidate substrings have in common?"}, {"zh": "用长度固定为 |p| 的窗口在 s 上滑动，维护窗口内 26 个字母的计数。", "en": "Slide a window of fixed length |p| over s and keep counts of its 26 letters."}, {"zh": "窗口每右移一格，加入一个字符、移出一个字符；计数与 p 的计数相同则记录起点。", "en": "Each shift adds one character and removes one; record the start whenever the counts equal p's counts."}]
+solution: {"explanation": {"zh": "定长滑动窗口维护字母计数，每次移动 O(1) 更新，比较 26 个计数即可判断异位词。时间 O(26·|s|)，空间 O(1)。", "en": "A fixed-length sliding window keeps letter counts updated in O(1) per move; comparing 26 counts detects an anagram. O(26·|s|) time, O(1) space."}}
+examples: [{"id": "ex-1", "args": ["cbaebabacd", "abc"], "expected": [0, 6]}, {"id": "ex-2", "args": ["abab", "ab"], "expected": [0, 1, 2]}]
+boundaryCases: [{"args": ["a", "a"]}, {"args": ["a", "ab"]}, {"args": ["aaaa", "aa"]}, {"args": ["abc", "d"]}, {"args": ["ab", "ba"]}]

@@ -1,0 +1,20 @@
+id: "kth-smallest-element-in-a-bst"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "二叉搜索树中第 K 小的元素", "en": "Kth Smallest Element in a BST"}
+difficulty: medium
+topics: ["trees"]
+leetcode: {"frontendId": 230, "title": "Kth Smallest Element in a BST", "slug": "kth-smallest-element-in-a-bst", "difficulty": "medium", "tags": ["Tree", "Depth-First Search", "Binary Search Tree", "Binary Tree"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "返回二叉搜索树中第 k 小的值（k 从 1 开始）。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "Return the k-th smallest value in the binary search tree (1-indexed). (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ k ≤ n ≤ 10⁴，0 ≤ Node.val ≤ 10⁴", "en": "1 ≤ k ≤ n ≤ 10⁴, 0 ≤ Node.val ≤ 10⁴"}]
+params: [{"name": "root", "type": "tree"}, {"name": "k", "type": "int"}]
+returns: "int"
+comparator: {"kind": "exact"}
+entry: {"python": "kthSmallest", "typescript": "kthSmallest"}
+perCaseMs: 1000
+inputs: [{"type": "tree", "minLength": 1, "maxLength": 10000, "smallMaxLength": 8, "largeLength": 3000, "min": 0, "max": 10000}, {"type": "int", "min": 1, "max": 1}]
+hints: [{"zh": "二叉搜索树的中序遍历有什么特点？", "en": "What does an inorder traversal of a BST look like?"}, {"zh": "中序遍历按升序访问所有值，第 k 个访问到的就是答案。", "en": "It visits values in increasing order, so the k-th visit is the answer."}, {"zh": "用迭代中序遍历，访问到第 k 个时立即返回，不必遍历整棵树。", "en": "Use an iterative inorder walk and return as soon as the k-th node is visited."}]
+solution: {"explanation": {"zh": "迭代中序遍历并计数，到第 k 个即停止。时间 O(h + k)，空间 O(h)。", "en": "Count during an iterative inorder walk and stop at the k-th node. O(h + k) time, O(h) space."}}
+examples: [{"id": "ex-1", "args": [[3, 1, 4, null, 2], 1], "expected": 1}, {"id": "ex-2", "args": [[5, 3, 6, 2, 4, null, null, 1], 3], "expected": 3}]
+boundaryCases: [{"args": [[1], 1]}, {"args": [[2, 1, 3], 1]}, {"args": [[2, 1, 3], 3]}, {"args": [[3, 1, 4, null, 2], 2]}]

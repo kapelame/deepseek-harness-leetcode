@@ -232,6 +232,7 @@ export class DockerRunner implements RunnerBackend {
       entry: request.entry,
       params: request.params,
       returns: request.returns,
+      shape: request.shape ?? null,
       cases: request.cases,
       perCaseMs,
       moduleTimeMs: perCaseMs,

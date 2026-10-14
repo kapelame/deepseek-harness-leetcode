@@ -1,0 +1,22 @@
+id: "array-max-circular-subarray"
+version: 1
+suiteVersion: 1
+parentProblemId: "maximum-subarray"
+topicId: "array-techniques"
+title: {"zh": "环形子数组的最大和", "en": "Maximum Sum of a Circular Subarray"}
+summary: {"zh": "数组首尾相连成环，求和最大的非空连续子数组（每个元素至多用一次）。", "en": "The array wraps around; return the largest sum of a non-empty contiguous subarray, using each element at most once."}
+statement: {"zh": "给定首尾相连的环形整数数组 `nums`，求和最大的**非空**连续子数组。子数组可以跨过末尾回到开头，但每个元素至多出现一次。\n\n返回这个最大和。", "en": "Given a circular integer array `nums` whose end connects to its start, find the **non-empty** contiguous subarray with the largest sum. A subarray may wrap from the end back to the start, but each element appears at most once.\n\nReturn that maximum sum."}
+difficulty: medium
+skills: ["Kadane's algorithm", "complement reasoning"]
+differences: [{"category": "input-structure", "description": {"zh": "数组变成环形，最优子数组可能跨越首尾。", "en": "The array becomes circular, so the best subarray may wrap around the ends."}}, {"category": "reasoning", "description": {"zh": "跨越首尾的子数组 = 总和 − 中间某段不选的子数组，需要同时求最小子数组和，并处理全为负数的情况。", "en": "A wrapping subarray equals the total minus some middle part left out, so the minimum subarray sum is needed too, along with the all-negative case."}}]
+transfer: {"zh": "Kadane“以当前位置结尾的最佳值”的递推保留，并对称地用于求最小和；新增的思考是用补集把环形情况化归为线性情况。", "en": "Kadane's best-ending-here recurrence carries over and is mirrored for the minimum; the new step reduces the circular case to the linear one through the complement."}
+entry: {"python": "maxSubarraySumCircular", "typescript": "maxSubarraySumCircular"}
+params: [{"name": "nums", "type": "int[]"}]
+returns: "int"
+comparator: {"kind": "exact"}
+perCaseMs: 1000
+inputs: [{"type": "int[]", "minLength": 1, "smallMaxLength": 9, "largeLength": 20000, "min": -30000, "max": 30000, "smallMin": -6, "smallMax": 6}]
+constraints: [{"zh": "1 ≤ n ≤ 3×10⁴，-3×10⁴ ≤ nums[i] ≤ 3×10⁴", "en": "1 ≤ n ≤ 3×10⁴, -3×10⁴ ≤ nums[i] ≤ 3×10⁴"}]
+examples: [{"args": [[5, -3, 5]], "expected": 10}, {"args": [[-3, -2, -3]], "expected": -2}, {"args": [[1, -2, 3, -2]], "expected": 3}]
+boundaryCases: [{"args": [[-1]]}, {"args": [[7]]}, {"args": [[-2, -3]]}, {"args": [[3, -1, 2, -1]]}, {"args": [[30000, -30000, 30000]]}]
+hints: [{"zh": "最优子数组要么不跨越首尾，要么跨越。前一种就是普通的最大子数组和。", "en": "The best subarray either wraps or it does not; the second case is the ordinary maximum subarray."}, {"zh": "跨越首尾的子数组，等于总和减去中间一段被“丢掉”的子数组。让丢掉的部分尽量小。", "en": "A wrapping subarray is the total minus a middle part that is left out; make the left-out part as small as possible."}, {"zh": "答案 = max(最大子数组和, 总和 − 最小子数组和)；但如果所有数都为负，只能取前者。", "en": "Answer = max(max subarray, total − min subarray), except when all numbers are negative, where only the former counts."}]

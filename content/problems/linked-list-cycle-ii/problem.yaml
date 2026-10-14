@@ -1,0 +1,21 @@
+id: "linked-list-cycle-ii"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "环形链表 II", "en": "Linked List Cycle II"}
+difficulty: medium
+topics: ["linked-list"]
+leetcode: {"frontendId": 142, "title": "Linked List Cycle II", "slug": "linked-list-cycle-ii", "difficulty": "medium", "tags": ["Hash Table", "Linked List", "Two Pointers", "Floyd's Cycle Finding Algorithm"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "如果链表有环，返回环的入口节点；没有环返回 null。结果以入口节点在链表中的下标显示（null 显示为 -1）。不能修改链表。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "If the list has a cycle, return the node where the cycle begins, otherwise null. Results are shown as that node's index in the list (null as -1). Do not modify the list. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "0 ≤ 节点数 ≤ 10⁴，-10⁵ ≤ Node.val ≤ 10⁵；进阶：O(1) 额外空间", "en": "0 ≤ nodes ≤ 10⁴, -10⁵ ≤ Node.val ≤ 10⁵; follow-up: O(1) extra space"}]
+params: [{"name": "head", "type": "linked-list"}, {"name": "pos", "type": "int"}]
+returns: "int"
+shape: {"kind": "harness", "name": "linked-list-cycle"}
+comparator: {"kind": "exact"}
+entry: {"python": "detectCycle", "typescript": "detectCycle"}
+perCaseMs: 1000
+inputs: [{"type": "linked-list", "minLength": 0, "smallMaxLength": 8, "largeLength": 10000, "min": -100000, "max": 100000, "smallMin": -9, "smallMax": 9}, {"type": "int", "min": -1, "max": -1}]
+hints: [{"zh": "先用快慢指针判断是否有环。相遇点和入口点之间有什么关系？", "en": "First detect the cycle with slow and fast pointers. How does the meeting point relate to the entry?"}, {"zh": "设头到入口距离 a，入口到相遇点距离 b，环长 c。快指针走过的路程是慢指针的两倍，可推出 a ≡ c - b (mod c)。", "en": "Let a be head-to-entry, b entry-to-meeting, c the cycle length. Fast travels twice as far as slow, which gives a ≡ c - b (mod c)."}, {"zh": "相遇后，把一个指针放回头部，两个指针都每次走一步，再次相遇处就是入口。", "en": "After meeting, move one pointer back to the head and step both one node at a time; they meet again at the entry."}]
+solution: {"explanation": {"zh": "Floyd 算法第二阶段：从头和从相遇点同时出发、同速前进，会在环入口相遇。时间 O(n)，空间 O(1)。", "en": "The second phase of Floyd's algorithm: walking at equal speed from the head and from the meeting point, the pointers meet at the cycle entry. O(n) time, O(1) space."}}
+examples: [{"id": "ex-1", "args": [[3, 2, 0, -4], 1], "expected": 1}, {"id": "ex-2", "args": [[1, 2], 0], "expected": 0}, {"id": "ex-3", "args": [[1], -1], "expected": -1}]
+boundaryCases: [{"args": [[], -1]}, {"args": [[1], -1]}, {"args": [[1], 0]}, {"args": [[1, 2], 0]}, {"args": [[1, 2], 1]}, {"args": [[3, 2, 0, -4], 1]}]

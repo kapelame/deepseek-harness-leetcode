@@ -3,6 +3,8 @@
 # size)` entry, so most problems need no hand-written generator. Optional
 # hooks: `adjust(args, rng, size)` rewrites a candidate (for example to plant
 # an answer) and `valid(args)` rejects candidates that break a precondition.
+# A `json` domain yields None; its adjust() hook builds the structured value,
+# such as design-problem operation lists or harness inputs.
 import random
 
 _LETTERS = "abcdefghijklmnopqrstuvwxyz"
@@ -126,6 +128,15 @@ def _value(domain, rng, size):
         return _matrix(domain, rng, size)
     if kind == "tree":
         return _tree(domain, rng, size)
+    if kind == "linked-list[]":
+        inner = dict(domain.get("row", {}))
+        for key in ("min", "max", "smallMin", "smallMax", "sorted", "distinct"):
+            if key in domain:
+                inner[key] = domain[key]
+        return [_ints(inner, rng, size) for _ in range(_length(domain, rng, size))]
+    if kind == "json":
+        # Structured arguments (design operations, harness inputs) are built by an adjust() hook.
+        return None
     raise ValueError("unsupported domain type %s" % kind)
 
 

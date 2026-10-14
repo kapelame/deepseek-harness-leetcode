@@ -26,6 +26,17 @@ class ListNode:
         self.next = next
 
 
+class Node:
+    def __init__(self, x=0, next=None, random=None):
+        self.val = x
+        self.next = next
+        self.random = random
+
+
+class _InvalidOutput(Exception):
+    pass
+
+
 class _CaseTimeout(BaseException):
     pass
 
@@ -101,10 +112,9 @@ def _main():
         if kind == "tree":
             return _build_tree(value)
         if kind == "linked-list":
-            head = None
-            for item in reversed(value):
-                head = ListNode(item, head)
-            return head
+            return _build_list(value)
+        if kind == "linked-list[]":
+            return [_build_list(item) for item in value]
         return value
 
     def encode(kind, value):
@@ -140,6 +150,7 @@ def _main():
     exec(_PRELUDE, namespace)
     namespace["TreeNode"] = TreeNode
     namespace["ListNode"] = ListNode
+    namespace["Node"] = Node
     try:
         arm(int(request["moduleTimeMs"]))
         exec(compiled, namespace)
@@ -152,10 +163,21 @@ def _main():
         emit({"type": "module-error", "kind": "runtime", "message": "%s: %s" % (type(error).__name__, error), "line": solution_line(error.__traceback__)})
         return
 
+    shape = request.get("shape") or {"kind": "function"}
     entry_name = request["entry"]
     entry = None
-    holder = namespace.get("Solution")
-    if isinstance(holder, type) and callable(getattr(holder, entry_name, None)):
+    if shape["kind"] == "design":
+        holder = namespace.get(shape["className"])
+        if not isinstance(holder, type):
+            emit({"type": "compile-error", "message": "Define class %s" % shape["className"], "line": None})
+            return
+        entry = holder
+        holder = None
+    else:
+        holder = namespace.get("Solution")
+    if entry is not None:
+        pass
+    elif isinstance(holder, type) and callable(getattr(holder, entry_name, None)):
         try:
             entry = getattr(holder(), entry_name)
         except BaseException as error:
@@ -175,14 +197,14 @@ def _main():
         emit({"type": "start", "id": case["id"]})
         capture.take()
         try:
-            args = [decode(kind, value) for kind, value in zip(params, case["args"])]
+            call, finish = _prepare(shape, entry, params, returns, case["args"], decode, encode)
         except BaseException as error:
             emit({"type": "driver-error", "message": "Cannot decode case %s: %s" % (case["id"], error)})
             return
         started = time.perf_counter()
         try:
             arm(per_case_ms)
-            result = entry(*args)
+            result = call()
             disarm()
         except _CaseTimeout:
             output, truncated = capture.take()
@@ -206,16 +228,170 @@ def _main():
         elapsed = _ms(started)
         output, truncated = capture.take()
         try:
-            value = encode(returns, result)
+            value = finish(result)
             size = len(json.dumps(value, separators=(",", ":"), allow_nan=False))
-        except (TypeError, ValueError) as error:
-            emit({"type": "case", "id": case["id"], "ok": False, "error": {"kind": "invalid-output", "message": "Returned value is not valid for %s: %s" % (returns, error), "line": None}, "timeMs": elapsed, "stdout": output, "stdoutTruncated": truncated})
+        except (TypeError, ValueError, _InvalidOutput) as error:
+            emit({"type": "case", "id": case["id"], "ok": False, "error": {"kind": "invalid-output", "message": "Returned value is not valid: %s" % error, "line": None}, "timeMs": elapsed, "stdout": output, "stdoutTruncated": truncated})
             continue
         if size > max_value_bytes:
             emit({"type": "case", "id": case["id"], "ok": False, "error": {"kind": "output-limit", "message": "Returned value exceeds %d bytes" % max_value_bytes, "line": None}, "timeMs": elapsed, "stdout": output, "stdoutTruncated": truncated})
             return
         emit({"type": "case", "id": case["id"], "ok": True, "value": value, "timeMs": elapsed, "stdout": output, "stdoutTruncated": truncated})
     emit({"type": "done"})
+
+
+def _build_list(values):
+    head = None
+    for item in reversed(values):
+        head = ListNode(item, head)
+    return head
+
+
+def _walk(head, limit=100000):
+    nodes = []
+    while head is not None:
+        if len(nodes) >= limit:
+            raise ValueError("linked list is too long or contains a cycle")
+        nodes.append(head)
+        head = head.next
+    return nodes
+
+
+def _index_of(node, nodes):
+    for index, candidate in enumerate(nodes):
+        if candidate is node:
+            return index
+    return None
+
+
+def _prepare(shape, entry, params, returns, raw_args, decode, encode):
+    kind = shape["kind"]
+    if kind == "design":
+        return _prepare_design(shape, entry, raw_args, decode, encode)
+    if kind == "harness":
+        return _prepare_harness(shape["name"], entry, returns, raw_args)
+    args = [decode(param, value) for param, value in zip(params, raw_args)]
+    if kind == "in-place":
+        index = shape["param"]
+        return (lambda: entry(*args)), (lambda _result: encode(params[index], args[index]))
+    return (lambda: entry(*args)), (lambda result: encode(returns, result))
+
+
+def _prepare_design(shape, cls, raw_args, decode, encode):
+    operations, arguments = raw_args
+    if len(operations) != len(arguments) or not operations or operations[0] != shape["className"]:
+        raise ValueError("design cases start with the constructor and pair every operation with its arguments")
+    methods = dict((method["name"], method) for method in shape["methods"])
+    for name in operations[1:]:
+        if name not in methods:
+            raise ValueError("unknown operation %s" % name)
+
+    def call():
+        instance = cls(*[decode(param["type"], value) for param, value in zip(shape["constructorParams"], arguments[0])])
+        results = [(None, "void")]
+        for name, values in zip(operations[1:], arguments[1:]):
+            method = methods[name]
+            decoded = [decode(param["type"], value) for param, value in zip(method["params"], values)]
+            results.append((getattr(instance, name)(*decoded), method["returns"]))
+        return results
+
+    def finish(results):
+        return [None if kind == "void" else encode(kind, value) for value, kind in results]
+
+    return call, finish
+
+
+def _prepare_harness(name, entry, returns, raw_args):
+    if name == "linked-list-cycle":
+        values, pos = raw_args
+        nodes = [ListNode(value) for value in values]
+        for left, right in zip(nodes, nodes[1:]):
+            left.next = right
+        if nodes and pos >= 0:
+            nodes[-1].next = nodes[pos]
+        head = nodes[0] if nodes else None
+
+        def finish(result):
+            if returns == "bool":
+                if not isinstance(result, bool):
+                    raise _InvalidOutput("expected a bool")
+                return result
+            if result is None:
+                return -1
+            index = _index_of(result, nodes)
+            if index is None:
+                raise _InvalidOutput("the returned node is not a node of the input list")
+            return index
+        return (lambda: entry(head)), finish
+    if name == "linked-list-intersection":
+        intersect_val, list_a, list_b, skip_a, skip_b = raw_args
+        nodes_a = [ListNode(value) for value in list_a]
+        for left, right in zip(nodes_a, nodes_a[1:]):
+            left.next = right
+        shared = intersect_val != 0 and skip_a < len(nodes_a)
+        own_b = [ListNode(value) for value in (list_b[:skip_b] if shared else list_b)]
+        for left, right in zip(own_b, own_b[1:]):
+            left.next = right
+        if shared:
+            if own_b:
+                own_b[-1].next = nodes_a[skip_a]
+            head_b = own_b[0] if own_b else nodes_a[skip_a]
+        else:
+            head_b = own_b[0] if own_b else None
+        head_a = nodes_a[0] if nodes_a else None
+
+        def finish(result):
+            if result is None:
+                return None
+            index = _index_of(result, nodes_a)
+            if index is None:
+                raise _InvalidOutput("the returned node is not a node of listA")
+            return result.val
+        return (lambda: entry(head_a, head_b)), finish
+    if name == "random-list":
+        pairs = raw_args[0]
+        nodes = [Node(pair[0]) for pair in pairs]
+        for left, right in zip(nodes, nodes[1:]):
+            left.next = right
+        for node, pair in zip(nodes, pairs):
+            node.random = nodes[pair[1]] if pair[1] is not None else None
+        head = nodes[0] if nodes else None
+        originals = set(id(node) for node in nodes)
+
+        def finish(result):
+            copied = _walk(result)
+            positions = dict((id(node), index) for index, node in enumerate(copied))
+            out = []
+            for node in copied:
+                if id(node) in originals:
+                    raise _InvalidOutput("the result reuses input nodes; return a deep copy")
+                target = getattr(node, "random", None)
+                if target is not None and id(target) not in positions:
+                    raise _InvalidOutput("a random pointer leaves the copied list")
+                out.append([_plain(node.val), None if target is None else positions[id(target)]])
+            return out
+        return (lambda: entry(head)), finish
+    if name == "tree-node-refs":
+        values, p_value, q_value = raw_args
+        root = _build_tree(values)
+        found = {}
+        stack = [root]
+        while stack:
+            node = stack.pop()
+            if node is None:
+                continue
+            found.setdefault(node.val, node)
+            stack.append(node.left)
+            stack.append(node.right)
+        if p_value not in found or q_value not in found:
+            raise ValueError("p and q must be values present in the tree")
+
+        def finish(result):
+            if not isinstance(result, TreeNode):
+                raise _InvalidOutput("expected a tree node")
+            return _plain(result.val)
+        return (lambda: entry(root, found[p_value], found[q_value])), finish
+    raise ValueError("unknown harness %s" % name)
 
 
 _PRELUDE = """

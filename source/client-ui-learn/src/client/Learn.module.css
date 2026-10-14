@@ -762,3 +762,24 @@
     padding: 12px;
   }
 }
+
+.finderLog {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 280px;
+  overflow-y: auto;
+  font-size: 13px;
+}
+
+.finderLog li[data-kind='added'] {
+  color: var(--dsw-alias-state-success-primary);
+  font-weight: 600;
+}
+
+.finderLog li[data-kind='rejected'],
+.finderLog li[data-kind='error'] {
+  color: var(--dsw-alias-state-error-primary);
+}

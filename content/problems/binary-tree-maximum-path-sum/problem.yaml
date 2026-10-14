@@ -1,0 +1,20 @@
+id: "binary-tree-maximum-path-sum"
+kind: leetcode
+version: 1
+suiteVersion: 1
+title: {"zh": "二叉树中的最大路径和", "en": "Binary Tree Maximum Path Sum"}
+difficulty: hard
+topics: ["trees"]
+leetcode: {"frontendId": 124, "title": "Binary Tree Maximum Path Sum", "slug": "binary-tree-maximum-path-sum", "difficulty": "hard", "tags": ["Dynamic Programming", "Tree", "Depth-First Search", "Binary Tree", "DP on Trees"], "paidOnly": false, "verifiedAt": "2026-10-14"}
+summary: {"zh": "路径是沿父子边连接的节点序列，每个节点至多出现一次，至少包含一个节点，不必经过根。返回所有路径中节点值之和的最大值。（本课程原创简述，完整题面见 LeetCode 官方页面。）", "en": "A path is a sequence of nodes joined by parent-child edges, each node used at most once, with at least one node and not necessarily through the root. Return the largest sum of node values over all paths. (Original summary written for Learn; see LeetCode for the official statement.)"}
+constraints: [{"zh": "1 ≤ 节点数 ≤ 3×10⁴，-1000 ≤ Node.val ≤ 1000", "en": "1 ≤ nodes ≤ 3×10⁴, -1000 ≤ Node.val ≤ 1000"}]
+params: [{"name": "root", "type": "tree"}]
+returns: "int"
+comparator: {"kind": "exact"}
+entry: {"python": "maxPathSum", "typescript": "maxPathSum"}
+perCaseMs: 1000
+inputs: [{"type": "tree", "minLength": 1, "maxLength": 30000, "smallMaxLength": 9, "largeLength": 3000, "min": -1000, "max": 1000, "smallMin": -6, "smallMax": 6}]
+hints: [{"zh": "和“直径”类似：最优路径在某个节点拐弯。这时它由哪几部分组成？", "en": "Like the diameter: the best path turns at some node. What parts make it up there?"}, {"zh": "节点值 + 左边向下延伸的最大收益 + 右边向下延伸的最大收益；收益为负时就不要它（取 0）。", "en": "Node value + best downward gain on the left + best downward gain on the right, dropping a negative gain (use 0)."}, {"zh": "递归函数返回“从该节点向下的单边最大路径和”，同时用全局变量更新拐弯路径的最大值。", "en": "The recursion returns the best one-sided downward sum from the node while a global tracks the best turning path."}]
+solution: {"explanation": {"zh": "后序遍历：返回单边最大贡献 max(0, …)，在每个节点用 值 + 左贡献 + 右贡献 更新答案。时间 O(n)，空间 O(h)。", "en": "Post-order: return the best one-sided contribution clipped at 0 and update the answer with value + left + right at each node. O(n) time, O(h) space."}}
+examples: [{"id": "ex-1", "args": [[1, 2, 3]], "expected": 6}, {"id": "ex-2", "args": [[-10, 9, 20, null, null, 15, 7]], "expected": 42}]
+boundaryCases: [{"args": [[-3]]}, {"args": [[1]]}, {"args": [[-1, -2, -3]]}, {"args": [[2, -1]]}, {"args": [[-10, 9, 20, null, null, 15, 7]]}]
