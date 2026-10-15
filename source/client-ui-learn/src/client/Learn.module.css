@@ -857,3 +857,121 @@
 .feedback[data-passed='true'] {
   border-left-color: var(--dsw-alias-state-success-primary);
 }
+
+.submissionRow { cursor: pointer; }
+.submissionRow:hover td { background: var(--dsw-alias-bg-layer-2); }
+
+.codeBlock {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--dsw-alias-bg-layer-2);
+  font-family: var(--dsw-font-markdown-code-font-family, monospace);
+  font-size: 12px;
+  line-height: 18px;
+  white-space: pre;
+  overflow-x: auto;
+  max-height: 360px;
+}
+
+.solvedRing {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.ringTrack { stroke: var(--dsw-alias-border-l2); }
+.ringArc { stroke-linecap: butt; }
+.ringArc[data-difficulty='easy'] { stroke: var(--dsw-alias-state-success-primary); }
+.ringArc[data-difficulty='medium'] { stroke: var(--dsw-alias-state-warn-primary); }
+.ringArc[data-difficulty='hard'] { stroke: var(--dsw-alias-state-error-primary); }
+.ringValue { font-size: 26px; font-weight: 600; fill: var(--dsw-alias-label-primary); }
+.ringLabel { font-size: 13px; fill: var(--dsw-alias-label-secondary); }
+
+.difficultyBars {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 140px;
+  flex: 1;
+}
+
+.difficultyBars > li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--dsw-alias-bg-layer-2);
+}
+
+.statList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 10px;
+  margin: 0;
+}
+
+.statList dt { color: var(--dsw-alias-label-secondary); font-size: 12px; }
+.statList dd { margin: 2px 0 0; font-size: 20px; font-weight: 600; }
+
+.heatmapWrap { overflow-x: auto; }
+.heatmap { min-width: 680px; width: 100%; height: auto; }
+.heatCell { fill: var(--dsw-alias-border-l2); }
+.heatCell[data-level='1'] { fill: color-mix(in srgb, var(--dsw-alias-state-success-primary) 35%, transparent); }
+.heatCell[data-level='2'] { fill: color-mix(in srgb, var(--dsw-alias-state-success-primary) 55%, transparent); }
+.heatCell[data-level='3'] { fill: color-mix(in srgb, var(--dsw-alias-state-success-primary) 78%, transparent); }
+.heatCell[data-level='4'] { fill: var(--dsw-alias-state-success-primary); }
+
+.statusButton {
+  border: 0;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  white-space: nowrap;
+  font: inherit;
+}
+
+.subtle {
+  color: var(--dsw-alias-label-secondary);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.recordTop {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: inherit;
+}
+
+.heatMonth {
+  font-size: 9px;
+  fill: var(--dsw-alias-label-secondary);
+}
+
+.submissionTable {
+  table-layout: fixed;
+  font-size: 13px;
+}
+
+.submissionTable th,
+.submissionTable td {
+  padding-left: 6px;
+  padding-right: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.submissionTable th:first-child { width: 42%; }
+
+/* The expanded detail row wraps and scrolls its code instead of widening the table. */
+.submissionTable td[colspan] {
+  white-space: normal;
+  overflow: visible;
+}

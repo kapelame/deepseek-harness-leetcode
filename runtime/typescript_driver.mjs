@@ -322,7 +322,9 @@ async function main() {
     }
     emit({ type: 'case', id: testCase.id, ok: true, value, timeMs: elapsed, stdout, stdoutTruncated })
   }
-  emit({ type: 'done' })
+  let peakKb = null
+  try { peakKb = process.resourceUsage().maxRSS } catch { peakKb = null }
+  emit({ type: 'done', peakKb })
 }
 
 main().catch(error => { writeOut(`driver failure ${String(error?.message ?? error)}\n`); process.exitCode = 70 })

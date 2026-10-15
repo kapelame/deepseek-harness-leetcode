@@ -237,7 +237,13 @@ def _main():
             emit({"type": "case", "id": case["id"], "ok": False, "error": {"kind": "output-limit", "message": "Returned value exceeds %d bytes" % max_value_bytes, "line": None}, "timeMs": elapsed, "stdout": output, "stdoutTruncated": truncated})
             return
         emit({"type": "case", "id": case["id"], "ok": True, "value": value, "timeMs": elapsed, "stdout": output, "stdoutTruncated": truncated})
-    emit({"type": "done"})
+    peak = None
+    try:
+        import resource
+        peak = int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)  # KiB on Linux
+    except Exception:
+        peak = None
+    emit({"type": "done", "peakKb": peak})
 
 
 def _build_list(values):

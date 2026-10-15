@@ -841,6 +841,7 @@ export default class LearnService extends Service implements LearnRuntime {
   progressView(learner: LearnerId): ProgressView {
     this.ensure(learner)
     return {
+      stats: this.progress.stats(learner),
       mastery: this.progress.mastery(learner),
       mistakes: this.progress.mistakes(learner),
       history: this.store.reviewEvents(learner, 50),

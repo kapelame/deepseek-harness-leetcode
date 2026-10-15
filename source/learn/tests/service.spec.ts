@@ -72,7 +72,18 @@ describe.skipIf(!probe.ready)('learning loop', () => {
     expect(passed.verdict?.kind).toBe('passed-local-tests')
     expect(passed.verdict?.passed).toBe(passed.verdict?.total)
     expect(passed.support).toBe('independent')
+    expect(passed.verdict?.peakMemoryKb).toBeGreaterThan(1024)
     expect(learn.store.lessons(OWNER_LEARNER).find(item => item.topicId === HASHING)?.stage).toBe('reflection')
+
+    // LeetCode-style record: every graded submission counts, one problem solved, one active day.
+    const { stats } = learn.progressView(OWNER_LEARNER)
+    expect(stats.submissions).toEqual({ total: 3, passed: 1 })
+    expect(stats.solved.byDifficulty.easy.solved).toBe(1)
+    expect(stats.solved.solved).toBe(1)
+    expect(stats.solved.total).toBeGreaterThanOrEqual(100)
+    expect(stats.calendar).toEqual([{ date: stats.today, count: 3 }])
+    expect(stats.streak).toEqual({ current: 1, longest: 1 })
+    expect(stats.recentPassed.map(item => item.problemId)).toEqual([TWO_SUM])
 
     await first.ctx.fiber.dispose()
     const second = await fixture({ model: false, dataRoot })

@@ -76,6 +76,7 @@ export function assembleVerdict(input: VerdictInput): ExecutionVerdict {
   const byId = new Map(input.cases.map(item => [item.id, item]))
   const results = 'cases' in outcome ? outcome.cases : []
   const measuredMs = results.reduce((sum, item) => sum + item.timeMs, 0)
+  const memory = outcome.status === 'completed' && outcome.peakKb !== undefined ? { peakMemoryKb: outcome.peakKb } : {}
   const passedCount = results.filter((item) => {
     const judged = byId.get(item.id)
     return judged !== undefined && item.ok && (judged.expected === undefined || outputsMatch(input.comparator, item.value, judged.expected,
@@ -153,11 +154,11 @@ export function assembleVerdict(input: VerdictInput): ExecutionVerdict {
     if (!reported.ok) {
       const kind: VerdictKind = reported.error.kind === 'invalid-output' ? 'wrong-answer' : 'runtime-error'
       return withCases({ ...base, kind, passed: passedCount, message: reported.error.message, failing: failingCase(judged, reported),
-        measuredMs })
+        measuredMs, ...memory })
     }
     if (judged.expected !== undefined && !outputsMatch(input.comparator, reported.value, judged.expected, judged.args)) {
-      return withCases({ ...base, kind: 'wrong-answer', passed: passedCount, failing: failingCase(judged, reported), measuredMs })
+      return withCases({ ...base, kind: 'wrong-answer', passed: passedCount, failing: failingCase(judged, reported), measuredMs, ...memory })
     }
   }
-  return withCases({ ...base, kind: 'passed-local-tests', passed: passedCount, measuredMs })
+  return withCases({ ...base, kind: 'passed-local-tests', passed: passedCount, measuredMs, ...memory })
 }

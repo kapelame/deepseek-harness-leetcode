@@ -366,6 +366,8 @@ export interface ExecutionVerdict {
   readonly cases?: readonly CaseResult[]
   /** Sum of measured per-case wall time inside the container, when available. */
   readonly measuredMs?: number
+  /** Peak resident memory of the whole run inside the container (interpreter included), in KiB, when available. */
+  readonly peakMemoryKb?: number
   readonly message?: string
   readonly coverageNote: Localized
   readonly createdAt: string
@@ -637,7 +639,27 @@ export interface MistakePattern {
 }
 
 /** Progress page projection. */
+/** LeetCode-style practice record: solved counts, submissions, activity calendar, and streaks. */
+export interface PracticeStats {
+  /** Learner-local date the calendar and streaks end on. */
+  readonly today: string
+  readonly solved: {
+    readonly solved: number
+    readonly total: number
+    readonly byDifficulty: Readonly<Record<Difficulty, { readonly solved: number; readonly total: number }>>
+  }
+  /** Graded submissions and how many passed the local tests. */
+  readonly submissions: { readonly total: number; readonly passed: number }
+  /** Submissions per learner-local day over the last 365 days; days without submissions are omitted. */
+  readonly calendar: readonly { readonly date: string; readonly count: number }[]
+  readonly activeDays: number
+  readonly streak: { readonly current: number; readonly longest: number }
+  /** Most recent first, one entry per problem. */
+  readonly recentPassed: readonly { readonly problemId: ProblemId; readonly at: string }[]
+}
+
 export interface ProgressView {
+  readonly stats: PracticeStats
   readonly mastery: readonly TopicMastery[]
   readonly mistakes: readonly MistakePattern[]
   readonly history: readonly ReviewEventView[]

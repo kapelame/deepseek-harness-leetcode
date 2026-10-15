@@ -57,7 +57,7 @@ export type UnavailableReason = 'runner-missing' | 'daemon-unavailable' | 'image
  * outcome, in request order. A non-`completed` status never implies success.
  */
 export type ExecutionOutcome =
-  | { readonly status: 'completed'; readonly cases: readonly CaseOutcome[]; readonly runner: string }
+  | { readonly status: 'completed'; readonly cases: readonly CaseOutcome[]; readonly runner: string; /** Peak resident memory of the run, in KiB. */ readonly peakKb?: number }
   | { readonly status: 'compile-error'; readonly message: string; readonly line: number | null; readonly runner: string }
   | { readonly status: 'module-error'; readonly kind: 'runtime' | 'timeout'; readonly message: string; readonly line: number | null; readonly runner: string }
   | { readonly status: 'timeout'; readonly cases: readonly CaseOutcome[]; readonly caseId: string | null; readonly runner: string }

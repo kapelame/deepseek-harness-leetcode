@@ -45,7 +45,7 @@ English | [中文](README.zh.md)
   </tr>
 </table>
 
-Also included: an AI tutor chat, spaced-repetition reviews with fresh validated variants, progress by concept, and optional daily reminder email.
+Also included: a LeetCode-style record (solved count by difficulty, a yearly submission calendar, streaks, and a Submissions tab per problem with runtime and memory), an AI tutor chat, spaced-repetition reviews with fresh validated variants, progress by concept, and optional daily reminder email.
 
 ## Quick start
 

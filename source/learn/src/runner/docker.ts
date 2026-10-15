@@ -53,7 +53,7 @@ type DriverEvent =
   | { readonly type: 'compile-error'; readonly message: string; readonly line: number | null }
   | { readonly type: 'module-error'; readonly kind: 'runtime' | 'timeout'; readonly message: string; readonly line: number | null }
   | { readonly type: 'driver-error'; readonly message: string }
-  | { readonly type: 'done' }
+  | { readonly type: 'done'; readonly peakKb?: number | null }
 
 const LABEL = 'dsh.learn.runner'
 const STALE_CONTAINER_MS = 10 * 60_000
@@ -275,7 +275,7 @@ export class DockerRunner implements RunnerBackend {
     ]
     const budget = Math.min(this.options.maxWallMs, this.options.startupAllowanceMs + perCaseMs * Math.max(1, request.cases.length))
     const cases: CaseOutcome[] = []
-    const progress: { started: string | null; ready: boolean; done: boolean } = { started: null, ready: false, done: false }
+    const progress: { started: string | null; ready: boolean; done: boolean; peakKb?: number } = { started: null, ready: false, done: false }
     let terminal: ExecutionOutcome | undefined
     let stopCause: 'timeout' | 'cancelled' | 'output-limit' | undefined
     const diagnostics: string[] = []
@@ -334,7 +334,10 @@ export class DockerRunner implements RunnerBackend {
         case 'module-error': terminal = { status: 'module-error', kind: event.kind, message: event.message, line: event.line,
           runner: this.id }; break
         case 'driver-error': terminal = { status: 'runner-error', message: event.message, runner: this.id }; break
-        case 'done': progress.done = true; break
+        case 'done':
+          progress.done = true
+          if (typeof event.peakKb === 'number' && Number.isFinite(event.peakKb) && event.peakKb > 0) progress.peakKb = Math.round(event.peakKb)
+          break
         default: break
       }
     }
@@ -384,7 +387,9 @@ export class DockerRunner implements RunnerBackend {
     if (stopCause === 'output-limit') return { status: 'output-limit', cases, caseId: progress.started, runner: this.id }
     if (oomKilled) return { status: 'memory-limit', cases, caseId: progress.started, runner: this.id }
     if (terminal !== undefined) return terminal
-    if (progress.done && exitCode === 0) return { status: 'completed', cases, runner: this.id }
+    if (progress.done && exitCode === 0) {
+      return { status: 'completed', cases, runner: this.id, ...progress.peakKb === undefined ? {} : { peakKb: progress.peakKb } }
+    }
     if (/Unable to find image|No such image/i.test(stderr)) {
       return { status: 'unavailable', reason: 'image-missing',
         message: `Image ${this.options.images[request.language]} is not present locally.`, runner: this.id }
