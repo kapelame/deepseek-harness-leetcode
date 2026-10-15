@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="docs/images/hero.jpg" alt="鲸鱼主题的少女正在用 DeepSeek 刷 LeetCode 两数之和" width="880">
+
 # DeepSeek Harness LeetCode
 
 **在 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 里学算法：课程讲解、完整的力扣热题 100、本地沙箱评测和 AI 辅导。**
@@ -11,8 +13,6 @@
 ![桌面端与 Web](https://img.shields.io/badge/%E6%A1%8C%E9%9D%A2%E7%AB%AF%20%26%20Web-%E6%94%AF%E6%8C%81-2EA043)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey)
 
-<img src="docs/images/hot100.png" alt="Learn 中的 LeetCode 热题 100，按 LeetCode 分组并显示每组进度" width="880">
-
 </div>
 
 ## 亮点
@@ -23,6 +23,8 @@
 - **一句话添加题目。** 例如“3 道我没做过的中等 BFS 题”：AI 智能体会在 LeetCode 上找题、编写测试，只有通过校验的题才会加入题库。
 
 ## 界面一览
+
+<p align="center"><img src="docs/images/hot100.png" alt="Learn 中的 LeetCode 热题 100，按 LeetCode 分组并显示每组进度" width="880"><br><b>热题 100</b>：沿用 LeetCode 的分组，显示每组进度</p>
 
 <table>
   <tr>

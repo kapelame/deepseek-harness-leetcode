@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="docs/images/hero.jpg" alt="A whale-themed coder solving Two Sum on LeetCode with DeepSeek" width="880">
+
 # DeepSeek Harness LeetCode
 
 **Learn algorithms inside [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness): lessons, all of LeetCode Hot 100, a sandboxed judge, and an AI tutor.**
@@ -11,8 +13,6 @@ English | [中文](README.zh.md)
 ![Desktop & Web](https://img.shields.io/badge/Desktop%20%26%20Web-supported-2EA043)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey)
 
-<img src="docs/images/hot100.png" alt="LeetCode Hot 100 in Learn, grouped like LeetCode with progress per group" width="880">
-
 </div>
 
 ## Why
@@ -23,6 +23,8 @@ English | [中文](README.zh.md)
 - **Add problems by just describing them.** "3 medium BFS problems I haven't done" — an AI agent finds them on LeetCode, writes the tests, and adds them only if they pass validation.
 
 ## A closer look
+
+<p align="center"><img src="docs/images/hot100.png" alt="LeetCode Hot 100 in Learn, grouped like LeetCode with progress per group" width="880"><br><b>Hot 100</b> — LeetCode's own grouping, with your progress per group</p>
 
 <table>
   <tr>
