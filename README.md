@@ -19,7 +19,7 @@ English | [中文](README.zh.md)
 
 - **All of LeetCode Hot 100**, plus 8 more classics — each with an original summary, three progressive hints, and an explained solution. Statements stay on LeetCode; every problem links to the official page.
 - **A real judge on your machine.** Code runs in Docker with no network. Hidden boundary, random, and large cases catch wrong and slow solutions — including design classes, in-place edits, and linked-list/tree node problems.
-- **Lessons before problems.** 16 topics, from hashing to dynamic programming, each with a worked example you can trace step by step.
+- **Lessons before problems.** 16 topics, from hashing to dynamic programming, each with a worked example you can trace step by step. Then the tutor writes a short check about the lesson, reviews your answers, and decides when you're ready for the practice problem.
 - **Add problems by just describing them.** "3 medium BFS problems I haven't done" — an AI agent finds them on LeetCode, writes the tests, and adds them only if they pass validation.
 
 ## A closer look
@@ -49,11 +49,7 @@ Also included: an AI tutor chat, spaced-repetition reviews with fresh validated 
 
 ## Quick start
 
-1. **Install Docker** and pull the runner images once:
-
-   ```sh
-   docker pull python:3.13-alpine node:24-alpine
-   ```
+1. **Install Docker Desktop.** Learn then guides the rest: it can start Docker and download the runner images with one click, or run `docker pull python:3.13-alpine node:24-alpine` yourself.
 
 2. **Install the plugin** from `github:kapelame/deepseek-harness-leetcode`:
    - **Desktop:** Plugins → install from GitHub.
@@ -66,7 +62,7 @@ Also included: an AI tutor chat, spaced-repetition reviews with fresh validated 
 
 3. **Open Learn** in the sidebar. Explanations default to Chinese; switch to English in Learn → Settings.
 
-Needs DSH 0.2.0-rc.2 or newer, below 0.3 (tested on 0.2.0-rc.2 and 0.2.1-alpha.3). A default model (for example, signed in to DeepSeek) is optional: it powers the tutor, AI feedback, and Add problems. Running, judging, and written hints work without one.
+Needs DSH 0.2.0-rc.2 or newer, below 0.3 (tested on 0.2.0-rc.2 and 0.2.1-alpha.3). A default model (for example, signed in to DeepSeek) is optional: it powers the tutor, tutor-written lesson checks, AI feedback, and Add problems. Running, judging, written hints, and the lessons' built-in check questions work without one.
 
 <details>
 <summary><b>Install from the command line on Desktop</b></summary>
@@ -96,7 +92,7 @@ Practice → **Add problems**. Describe what you want and pick how many (1–5).
 ## Privacy
 
 - Your code runs only inside offline Docker containers.
-- With a default model, Submit (unless `agents.judge: false`), hints, tutor chat, reflections, and variant generation send the problem summary and your code to that model through DSH. Add problems sends your description and LeetCode metadata, never your code. Each run appears in your Session history.
+- With a default model, Submit (unless `agents.judge: false`), hints, tutor chat, reflections, and variant generation send the problem summary and your code to that model through DSH. Lesson checks send the lesson and your answers. Add problems sends your description and LeetCode metadata, never your code. Each run appears in your Session history.
 - Add problems queries LeetCode's public GraphQL API for problem metadata only: no login, no statements, paced requests with a per-run budget.
 - Nothing else leaves your machine, except reminder email if you configure SMTP.
 
@@ -133,7 +129,7 @@ Real email needs `email.transport: smtp`, `email.liveSendingAuthorized: true`, `
 <details>
 <summary><b>Limitations</b></summary>
 
-- Docker is required for running code.
+- Docker is required for running code. DSH's own process sandbox only restricts file writes (it allows network access and reading your files), so Learn does not use it as a substitute.
 - Reminders are sent only while DSH is running with the plugin enabled; a missed daily digest is sent later the same day, never on a later day.
 - TypeScript submissions have their types removed but are not type-checked.
 - The tutor sees only the last ten messages of a conversation.

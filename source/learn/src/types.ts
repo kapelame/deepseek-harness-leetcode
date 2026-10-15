@@ -20,6 +20,8 @@ export type TutorThreadId = Branded<'LearnTutorThreadId'>
 export type EmailJobId = Branded<'LearnEmailJobId'>
 /** Problem-finder run identifier. */
 export type FinderRunId = Branded<'LearnFinderRunId'>
+/** One understanding check of a lesson. */
+export type LessonCheckId = Branded<'LearnLessonCheckId'>
 
 /** Tutoring and explanation language. Code identifiers stay idiomatic in every locale. */
 export type LearnLocale = 'zh' | 'en'
@@ -260,6 +262,40 @@ export interface LessonProgress {
   readonly reflection?: string
   readonly reflectionFeedback?: string
   readonly completedAt?: string
+}
+
+/** One question of a lesson check, written in the learner's locale. */
+export interface LessonCheckQuestion {
+  readonly id: string
+  readonly prompt: string
+  /** Choices of a multiple-choice question; absent when the learner writes an answer. */
+  readonly options?: readonly string[]
+}
+
+/** Verdict on one answer of a lesson check. */
+export interface LessonCheckGrade {
+  readonly questionId: string
+  readonly passed: boolean
+  readonly feedback: string
+}
+
+/**
+ * Understanding check of a lesson. `tutor` checks are written and graded by the
+ * tutor; `authored` checks use the lesson's built-in questions and answer key.
+ */
+export interface LessonCheckView {
+  readonly id: LessonCheckId
+  readonly topicId: TopicId
+  readonly source: 'tutor' | 'authored'
+  readonly questions: readonly LessonCheckQuestion[]
+  readonly status: 'open' | 'passed' | 'failed'
+  /** Graded submissions so far. */
+  readonly attempts: number
+  readonly answers?: Readonly<Record<string, string>>
+  readonly grades?: readonly LessonCheckGrade[]
+  readonly summary?: string
+  readonly createdAt: string
+  readonly gradedAt?: string
 }
 
 /** Concept mastery projected from attempts and reviews. */
@@ -549,6 +585,8 @@ export interface EmailPreview {
 export interface RunnerStatus {
   readonly backend: string
   readonly available: boolean
+  /** Next setup step: install Docker, start it, download the runner images, or none. */
+  readonly setup: 'install' | 'start' | 'images' | 'ready'
   readonly languages: readonly {
     readonly language: CodeLanguage
     readonly available: boolean

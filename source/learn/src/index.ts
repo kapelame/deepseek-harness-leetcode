@@ -16,7 +16,7 @@ import type {} from '@deepseek-ai/dsh-credentials'
 import type {} from '@deepseek-ai/dsh-host-webserver'
 import type {
   AttemptId, AttemptView, CodeLanguage, EmailJobId, EmailJobView, EmailPreview, EmailSettingsView, HintLevel, HintView, LearnerId,
-  LearnerSettings, LearnExport, LearnOverview, LessonProgress, LessonStage, ProblemId, ProblemSummary, ProgressView, RecallRating,
+  LearnerSettings, LearnExport, LearnOverview, LessonCheckId, LessonCheckView, TopicView, LessonProgress, LessonStage, ProblemId, ProblemSummary, ProgressView, RecallRating,
   ReviewCompletion, ReviewItemId, ReviewQueue, RunnerStatus, TodayView, TopicId, TutorStatus, TutorStreamFrame, TutorThreadId,
   FinderRunId, FinderRunView, FinderStreamFrame,
   VariantRecord, WorkspaceState,
@@ -24,6 +24,7 @@ import type {
 import { ConfigSchema, type Config } from './config.ts'
 import { loadCurriculum, problemView, readGeneratorLibrary, type ProblemDefinition } from './content/catalog.ts'
 import { FINDER_SKILL, ProblemFinder } from './finder/index.ts'
+import { LessonChecks } from './checks.ts'
 import { executionSignature } from './content/signature.ts'
 import { openLearnDatabase } from './store/schema.ts'
 import { LearnStore } from './store/store.ts'
@@ -77,6 +78,7 @@ export default class LearnService extends Service implements LearnRuntime {
   private readonly reviews: Reviews
   private readonly variants: Variants
   private readonly finder: ProblemFinder
+  private readonly checks: LessonChecks
   private readonly progress: Progress
   private readonly reminders: Reminders
   private lastAgentFailure: string | undefined
@@ -95,6 +97,7 @@ export default class LearnService extends Service implements LearnRuntime {
     this.tutoring = new Tutoring(this)
     this.variants = new Variants(this)
     this.finder = new ProblemFinder(this)
+    this.checks = new LessonChecks(this)
     this.reviews = new Reviews(this, (learner, parent) => { this.requestVariant(learner, parent) })
     this.progress = new Progress(this)
     this.reminders = new Reminders(this, this.reviews, () => this.transportChoice(), () => this.baseUrl())
@@ -451,53 +454,94 @@ export default class LearnService extends Service implements LearnRuntime {
   }
 
   /**
-   * Move a lesson to a stage, recording check answers.
+   * Move a lesson to a stage. The practice problem and later stages need a passed understanding check.
    * @param learner - learner.
    * @param topicId - topic.
    * @param stage - target stage.
-   * @param answers - check answers keyed by question id.
-   * @returns updated progress and per-question correctness.
+   * @returns updated progress.
    */
-  lesson(learner: LearnerId, topicId: TopicId, stage: LessonStage, answers: Readonly<Record<string,
-    number>> = {}): { progress: LessonProgress; correct: Record<string, boolean> } {
+  lesson(learner: LearnerId, topicId: TopicId, stage: LessonStage): LessonProgress {
     this.ensure(learner)
     const topic = this.problems.curriculum.topics.find(item => item.id === topicId)
     if (topic === undefined) throw new LearnError('not-found', `Unknown topic ${topicId}`)
     const order: LessonStage[] = ['motivation', 'strategy', 'example', 'check', 'problem', 'reflection', 'complete']
     if (!order.includes(stage) || stage === 'complete') throw new LearnError('invalid', 'Complete a lesson through its reflection')
     const existing = this.store.lessons(learner).find(item => item.topicId === topicId)
-    const checkAnswers = { ...existing?.checkAnswers, ...answers }
-    const correct = Object.fromEntries(topic.lesson.check.map(question => [question.id, checkAnswers[question.id] === question.answer]))
-    if (order.indexOf(stage) > order.indexOf('check') && !Object.values(correct).every(Boolean)) {
-      throw new LearnError('invalid', 'Answer every understanding check correctly before the practice problem')
+    if (order.indexOf(stage) > order.indexOf('check') && !this.checkPassed(learner, topic, existing)) {
+      throw new LearnError('invalid', 'Pass the understanding check before the practice problem')
     }
     const progress: LessonProgress = {
-      topicId, stage, checkAnswers, skipped: existing?.skipped ?? false,
+      topicId, stage, checkAnswers: existing?.checkAnswers ?? {}, skipped: existing?.skipped ?? false,
       ...existing?.reflection === undefined ? {} : { reflection: existing.reflection },
       ...existing?.reflectionFeedback === undefined ? {} : { reflectionFeedback: existing.reflectionFeedback },
       ...existing?.completedAt === undefined ? {} : { completedAt: existing.completedAt },
     }
     this.store.saveLesson(learner, progress, this.iso())
-    return { progress, correct }
+    return progress
+  }
+
+  /** A passed check, or (for progress saved before tutor checks) every built-in question answered correctly. */
+  private checkPassed(learner: LearnerId, topic: TopicView, existing: LessonProgress | undefined): boolean {
+    if (this.checks.passed(learner, topic.id)) return true
+    const answers = existing?.checkAnswers ?? {}
+    return topic.lesson.check.length > 0 && topic.lesson.check.every(question => answers[question.id] === question.answer)
   }
 
   /**
-   * Diagnostic skip: answering every check correctly marks the lesson complete.
+   * The newest understanding check of a lesson.
    * @param learner - learner.
    * @param topicId - topic.
-   * @param answers - answers to every check question.
-   * @returns progress and per-question correctness; the lesson stays unchanged when any answer is wrong.
+   * @returns the check, or undefined before the first one.
    */
-  skipLesson(learner: LearnerId, topicId: TopicId, answers: Readonly<Record<string,
-    number>>): { progress?: LessonProgress; correct: Record<string, boolean> } {
+  lessonCheck(learner: LearnerId, topicId: TopicId): LessonCheckView | undefined {
+    this.ensure(learner)
+    return this.checks.current(learner, topicId)
+  }
+
+  /**
+   * Start an understanding check with fresh questions.
+   * @param learner - learner.
+   * @param topicId - topic.
+   * @param source - `tutor` (written and graded by the tutor) or `authored` (the lesson's built-in questions).
+   * @param signal - cancellation.
+   * @returns the open check.
+   */
+  startLessonCheck(learner: LearnerId, topicId: TopicId, source: LessonCheckView['source'], signal: AbortSignal): Promise<LessonCheckView> {
+    this.ensure(learner)
+    return this.checks.start(learner, topicId, source, AbortSignal.any([signal, this.lifetime.signal]))
+  }
+
+  /**
+   * Submit answers to an understanding check; the tutor (or the answer key) decides whether the learner passes.
+   * @param learner - learner.
+   * @param checkId - check.
+   * @param answers - answer per question id.
+   * @param signal - cancellation.
+   * @returns the graded check.
+   */
+  submitLessonCheck(learner: LearnerId, checkId: LessonCheckId, answers: Readonly<Record<string, string>>, signal: AbortSignal): Promise<LessonCheckView> {
+    this.ensure(learner)
+    return this.checks.submit(learner, checkId, answers, AbortSignal.any([signal, this.lifetime.signal]))
+  }
+
+  /**
+   * Skip the rest of a lesson after passing its understanding check.
+   * @param learner - learner.
+   * @param topicId - topic.
+   * @returns the completed progress.
+   */
+  skipLesson(learner: LearnerId, topicId: TopicId): LessonProgress {
     this.ensure(learner)
     const topic = this.problems.curriculum.topics.find(item => item.id === topicId)
     if (topic === undefined) throw new LearnError('not-found', `Unknown topic ${topicId}`)
-    const correct = Object.fromEntries(topic.lesson.check.map(question => [question.id, answers[question.id] === question.answer]))
-    if (!Object.values(correct).every(Boolean)) return { correct }
-    const progress: LessonProgress = { topicId, stage: 'complete', checkAnswers: { ...answers }, skipped: true, completedAt: this.iso() }
+    const existing = this.store.lessons(learner).find(item => item.topicId === topicId)
+    if (!this.checkPassed(learner, topic, existing)) throw new LearnError('invalid', 'Pass the understanding check before skipping the lesson')
+    const progress: LessonProgress = { topicId, stage: 'complete', checkAnswers: existing?.checkAnswers ?? {}, skipped: true,
+      ...existing?.reflection === undefined ? {} : { reflection: existing.reflection },
+      ...existing?.reflectionFeedback === undefined ? {} : { reflectionFeedback: existing.reflectionFeedback },
+      completedAt: existing?.completedAt ?? this.iso() }
     this.store.saveLesson(learner, progress, this.iso())
-    return { progress, correct }
+    return progress
   }
 
   /**
@@ -813,21 +857,43 @@ export default class LearnService extends Service implements LearnRuntime {
     if (this.runnerStatusCache !== undefined && !refresh) return this.runnerStatusCache
     const probe = await this.runner.probe(AbortSignal.any([AbortSignal.timeout(30_000), this.lifetime.signal]))
     this.runnerStatusCache = {
-      backend: this.runner.id, available: probe.available && probe.languages.some(item => item.available),
+      backend: this.runner.id, available: probe.available && probe.languages.some(item => item.available), setup: probe.setup,
       languages: probe.languages, ...probe.reason === undefined ? {} : { reason: probe.reason }, checkedAt: this.iso(),
     }
     return this.runnerStatusCache
   }
 
   /**
-   * Fetch a runner image.
-   * @param language - language.
+   * Fetch runner images: one language, or every missing one.
+   * @param language - language, or undefined for every missing image.
    * @param signal - cancellation.
    * @returns refreshed status.
    */
-  async prepareRunner(language: CodeLanguage, signal: AbortSignal): Promise<RunnerStatus> {
-    await this.runner.prepare(language, AbortSignal.any([signal, this.lifetime.signal]))
+  async prepareRunner(language: CodeLanguage | undefined, signal: AbortSignal): Promise<RunnerStatus> {
+    const combined = AbortSignal.any([signal, this.lifetime.signal])
+    const targets = language !== undefined ? [language]
+      : (await this.runnerStatus(true)).languages.filter(item => !item.available).map(item => item.language)
+    for (const target of targets) await this.runner.prepare(target, combined)
     return await this.runnerStatus(true)
+  }
+
+  /**
+   * Launch Docker Desktop and wait up to two minutes for its daemon.
+   * @param signal - cancellation.
+   * @returns refreshed status; `setup` stays `start` when the daemon did not come up in time.
+   */
+  async startRunner(signal: AbortSignal): Promise<RunnerStatus> {
+    const combined = AbortSignal.any([signal, this.lifetime.signal])
+    await this.runner.start(combined)
+    const deadline = Date.now() + 120_000
+    for (;;) {
+      const status = await this.runnerStatus(true)
+      if (status.setup !== 'start' || Date.now() > deadline) return status
+      await new Promise<void>((resolve, reject) => {
+        const timer = setTimeout(resolve, 3000)
+        combined.addEventListener('abort', () => { clearTimeout(timer); reject(combined.reason as Error) }, { once: true })
+      })
+    }
   }
 
   /**

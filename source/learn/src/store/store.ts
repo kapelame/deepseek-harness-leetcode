@@ -6,7 +6,7 @@ import { z } from 'zod'
 import type {
   AttemptId, AttemptView, CodeLanguage, ContentOrigin, VariantSpec, VariantValidation, EmailJobId, EmailJobView, ExecutionVerdict,
   FinderRunId, FinderRunView,
-  HintLevel, HintView, LearnerId,
+  HintLevel, HintView, LearnerId, LessonCheckId, LessonCheckView,
   LearnerSettings, LessonProgress, LessonStage, Localized, ProblemId, ReviewEventView, ReviewItemId, SupportLevel, TopicId,
   TutorAssessment, TutorMessage, TutorThreadId,
 } from '../types.ts'
@@ -167,6 +167,31 @@ function finderRunFromRow(row: Row): FinderRunView {
     ...error === undefined ? {} : { error },
     createdAt: text(row, 'created_at'),
     updatedAt: text(row, 'updated_at'),
+  }
+}
+
+const checkQuestionsSchema = z.array(z.object({ id: z.string(), prompt: z.string(), options: z.array(z.string()).optional() }))
+const checkGradesSchema = z.array(z.object({ questionId: z.string(), passed: z.boolean(), feedback: z.string() }))
+const answerKeySchema = z.record(z.string(), z.number().int())
+
+function lessonCheckFromRow(row: Row): LessonCheckView {
+  const answers = optionalText(row, 'answers_json')
+  const grades = optionalText(row, 'grades_json')
+  const summary = optionalText(row, 'summary')
+  const graded = optionalText(row, 'graded_at')
+  return {
+    id: brandString<LessonCheckId>(text(row, 'id')),
+    topicId: brandString<TopicId>(text(row, 'topic_id')),
+    source: text(row, 'source') as LessonCheckView['source'],
+    questions: checkQuestionsSchema.parse(parseJson(text(row, 'questions_json'))).map(question => ({ id: question.id, prompt: question.prompt,
+      ...question.options === undefined ? {} : { options: question.options } })),
+    status: text(row, 'status') as LessonCheckView['status'],
+    attempts: Number(row['attempts']),
+    ...answers === undefined ? {} : { answers: z.record(z.string(), z.string()).parse(parseJson(answers)) },
+    ...grades === undefined ? {} : { grades: checkGradesSchema.parse(parseJson(grades)) },
+    ...summary === undefined ? {} : { summary },
+    createdAt: text(row, 'created_at'),
+    ...graded === undefined ? {} : { gradedAt: graded },
   }
 }
 
@@ -1131,7 +1156,7 @@ export class LearnStore {
    */
   exportRows(learner: LearnerId): Record<string, Record<string, JsonValue>[]> {
     const scoped = ['learners', 'lesson_progress', 'drafts', 'notes', 'attempts', 'hint_events', 'mistake_tags', 'tutor_threads',
-      'problems', 'review_items', 'review_events', 'email_jobs', 'finder_runs']
+      'problems', 'review_items', 'review_events', 'email_jobs', 'finder_runs', 'lesson_checks']
     const tables: Record<string, Record<string, JsonValue>[]> = {}
     for (const table of scoped) {
       const column = table === 'learners' ? 'id' : 'learner_id'
@@ -1184,6 +1209,64 @@ export class LearnStore {
   interruptFinderRuns(now: string): void {
     this.run(`UPDATE finder_runs SET status = 'failed', error = 'The Host stopped while this run was in progress.', updated_at = ?
       WHERE status = 'running'`, now)
+  }
+
+  /**
+   * Record a new lesson check.
+   * @param learner - learner.
+   * @param check - the check as created.
+   * @param answerKey - option index per question for authored checks; never sent to the client.
+   */
+  insertLessonCheck(learner: LearnerId, check: LessonCheckView, answerKey?: Readonly<Record<string, number>>): void {
+    this.run(`INSERT INTO lesson_checks (id, learner_id, topic_id, source, questions_json, answer_key_json, status, attempts, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, check.id, learner, check.topicId, check.source, JSON.stringify(check.questions),
+    answerKey === undefined ? null : JSON.stringify(answerKey), check.status, check.attempts, check.createdAt, check.createdAt)
+  }
+
+  /**
+   * Store a graded submission of a lesson check.
+   * @param check - check with its new answers, grades, and status.
+   * @param now - ISO timestamp.
+   */
+  gradeLessonCheck(check: LessonCheckView, now: string): void {
+    this.run(`UPDATE lesson_checks SET status = ?, attempts = ?, answers_json = ?, grades_json = ?, summary = ?, graded_at = ?, updated_at = ?
+      WHERE id = ?`, check.status, check.attempts, JSON.stringify(check.answers ?? {}), JSON.stringify(check.grades ?? []), check.summary ?? null,
+    check.gradedAt ?? null, now, check.id)
+  }
+
+  /**
+   * One lesson check with its answer key.
+   * @param learner - owning learner.
+   * @param id - check.
+   * @returns the check, or undefined when the learner has no such check.
+   */
+  lessonCheck(learner: LearnerId, id: LessonCheckId): { check: LessonCheckView; answerKey?: Record<string, number> } | undefined {
+    const row = this.all('SELECT * FROM lesson_checks WHERE id = ? AND learner_id = ?', id, learner)[0]
+    if (row === undefined) return undefined
+    const key = optionalText(row, 'answer_key_json')
+    return { check: lessonCheckFromRow(row), ...key === undefined ? {} : { answerKey: answerKeySchema.parse(parseJson(key)) } }
+  }
+
+  /**
+   * The newest check of a lesson.
+   * @param learner - learner.
+   * @param topicId - topic.
+   * @returns the check, or undefined before the first one.
+   */
+  latestLessonCheck(learner: LearnerId, topicId: TopicId): LessonCheckView | undefined {
+    const row = this.all('SELECT * FROM lesson_checks WHERE learner_id = ? AND topic_id = ? ORDER BY created_at DESC, rowid DESC LIMIT 1',
+      learner, topicId)[0]
+    return row === undefined ? undefined : lessonCheckFromRow(row)
+  }
+
+  /**
+   * Whether the learner ever passed a check of this lesson.
+   * @param learner - learner.
+   * @param topicId - topic.
+   * @returns true after any passed check.
+   */
+  passedLessonCheck(learner: LearnerId, topicId: TopicId): boolean {
+    return this.all(`SELECT 1 FROM lesson_checks WHERE learner_id = ? AND topic_id = ? AND status = 'passed' LIMIT 1`, learner, topicId).length > 0
   }
 
   /**

@@ -18,7 +18,7 @@ You add practice problems to a learner's problem bank. The learner describes wha
 1. **Read the request.** Extract the topic or technique, the difficulty, how many problems, and anything to avoid (for example "not ones I have done"). If no count is given, the run's count applies. Never add more problems than requested.
 2. **Search.** Translate the request into tag slugs and/or keywords (see the table below). Prefer several narrow searches over one broad one. Skip problems with `inBank: true`.
 3. **Inspect candidates** with `get_leetcode_problem`. Drop any with `supported: false`. Prefer problems you know well enough to solve correctly and describe accurately; skip a problem rather than guess what it asks.
-4. **Write the specification** (next sections) and call `add_problem`.
+4. **Write the specification** by filling in the `submissionTemplate` that `get_leetcode_problem` returns (next sections), and call `add_problem`.
 5. **Fix and resubmit** if a check fails. Read the failing check's detail; it names the case and both outputs. When the budget for a problem is spent, move to another candidate.
 6. **Stop** once the requested number of problems is added, or when nothing suitable remains. Finish with one or two sentences summarizing what you added, in the learner's language.
 
@@ -34,14 +34,14 @@ You add practice problems to a learner's problem bank. The learner describes wha
 | `hints` | Exactly three `{ zh, en }` hints, progressively stronger: 1) a direction or guiding question, 2) the key observation or invariant, 3) an outline of the algorithm. No code. |
 | `explanation` | `{ zh, en }`: the solution idea with time and space complexity, shown after the learner solves the problem or opens the solution. |
 | `comparator` | How outputs are compared (see below). |
-| `reference` | A correct, efficient Python 3 solution. |
-| `oracle` | An **independent** brute-force Python 3 solution, written differently from the reference (enumeration, simulation, or memoized search). It only runs on small inputs, so it may be slow. |
-| `inputs` | One input domain per parameter (see below). |
+| `reference` | A correct, efficient Python 3 solution, as one code string. |
+| `oracle` | An **independent** brute-force Python 3 solution, written differently from the reference (enumeration, simulation, or memoized search), as one code string. It defines the **same function (or class) name** as the reference. It only runs on small inputs, so it may be slow. |
+| `inputs` | A list with one input domain per parameter, **in parameter order** (see below). |
 | `hooks` | Optional Python with `adjust(args, rng, size)` and/or `valid(args)`. |
 | `generator` | Optional Python `generate(seed, size)` returning one argument list; only when domains plus hooks cannot express the inputs. |
 | `boundaryCases` | 3–10 argument lists covering edges: minimum sizes, duplicates, negatives, all-equal values, empty results, extreme values. |
 
-Write Chinese and English with equal care. Use the problem's own terms (array, string, tree, …) and inline code for identifiers.
+`constraints` and `hints` are lists of `{ "zh": ..., "en": ... }` pairs, one pair per line or hint. Write Chinese and English with equal care. Use the problem's own terms (array, string, tree, …) and inline code for identifiers.
 
 ### Code conventions
 
@@ -85,6 +85,34 @@ A `json` domain produces `None`; build that argument in `adjust`. This is how de
 
 If several answers are valid and no comparator fits, make the answer unique with `valid` (as LeetCode's own tests do) or choose another problem.
 
+## Complete example
+
+A submission for 1480 Running Sum of 1d Array (`def runningSum(nums)`, one `int[]` parameter):
+
+```json
+{
+  "topicId": "array-techniques",
+  "summary": { "zh": "给定整数数组，返回一个新数组，其第 i 项是原数组前 i+1 项之和。", "en": "Given an integer array, return the array whose i-th entry is the sum of the first i+1 input entries." },
+  "constraints": [
+    { "zh": "`1 <= nums.length <= 1000`", "en": "`1 <= nums.length <= 1000`" },
+    { "zh": "`-10^6 <= nums[i] <= 10^6`", "en": "`-10^6 <= nums[i] <= 10^6`" }
+  ],
+  "hints": [
+    { "zh": "相邻两项输出之间有什么关系？", "en": "How does each output entry relate to the previous one?" },
+    { "zh": "第 i 项等于第 i-1 项加上 nums[i]。", "en": "Entry i equals entry i-1 plus nums[i]." },
+    { "zh": "扫描一遍，维护累加和。", "en": "Scan once, keeping a running total." }
+  ],
+  "explanation": { "zh": "一次扫描维护累加和。时间 O(n)，额外空间 O(1)（不计输出）。", "en": "One scan with a running total. O(n) time, O(1) extra space besides the output." },
+  "comparator": { "kind": "exact" },
+  "reference": "def runningSum(nums):\n    out, total = [], 0\n    for x in nums:\n        total += x\n        out.append(total)\n    return out\n",
+  "oracle": "def runningSum(nums):\n    return [sum(nums[:i + 1]) for i in range(len(nums))]\n",
+  "inputs": [
+    { "type": "int[]", "min": -1000000, "max": 1000000, "smallMin": -5, "smallMax": 5, "minLength": 1, "maxLength": 1000, "smallMaxLength": 8, "largeLength": 1000 }
+  ],
+  "boundaryCases": [[[0]], [[-1000000]], [[5, -5, 5, -5]]]
+}
+```
+
 ## Common LeetCode tag slugs
 
 `array`, `string`, `hash-table`, `two-pointers`, `sliding-window`, `prefix-sum`, `binary-search`, `sorting`, `stack`, `monotonic-stack`, `queue`, `monotonic-queue`, `heap-priority-queue`, `linked-list`, `tree`, `binary-tree`, `binary-search-tree`, `depth-first-search`, `breadth-first-search`, `graph`, `topological-sort`, `union-find`, `trie`, `backtracking`, `recursion`, `divide-and-conquer`, `dynamic-programming`, `memoization`, `greedy`, `bit-manipulation`, `math`, `matrix`, `simulation`, `design`, `counting`.
@@ -93,10 +121,11 @@ Tags combine with AND. Difficulty is `EASY`, `MEDIUM`, or `HARD`.
 
 ## Reading validator reports
 
-- `schema` — a field is missing or malformed; the detail names it.
+- `schema` — a field is missing or malformed; the detail names it. Compare your submission with `submissionTemplate`.
 - `signature` — an example or boundary case does not match the parameter encodings.
 - `generator` — your domains or hooks failed or produced invalid arguments.
 - `reference` — your reference crashed, timed out, or returned the wrong type.
+- `compile error: Define class Solution with method X, or a top-level function X` — the reference or oracle does not define the entry name; both must use it.
 - `oracle` — reference and oracle disagree on a case; one of them is wrong. Re-derive the problem rules before changing either.
 - `coverage` — a required kind of case is missing.
 

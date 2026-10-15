@@ -13,6 +13,7 @@ import { PracticeTab } from './PracticeTab.tsx'
 import { ReviewTab } from './ReviewTab.tsx'
 import { ProgressTab } from './ProgressTab.tsx'
 import { SettingsTab } from './SettingsTab.tsx'
+import { RunnerSetup } from './RunnerSetup.tsx'
 import css from './Learn.module.css'
 
 /** Injected actions and persisted route. */
@@ -56,12 +57,12 @@ export function LearnPage({ api, useRoute, navigate, setOpen, t }: LearnPageProp
           const env: LearnEnv = { api, t, route, navigate, overview: data, refreshOverview, locale: data.settings.locale }
           return (
             <LearnEnvContext.Provider value={env}>
-              {!data.runner.available && (
-                <div className={css.banner} data-tone="warn" role="status">
-                  <span>{t('banner.runner',
-                    { reason: data.runner.reason ?? data.runner.languages.find(item => !item.available)?.reason ?? '' })}</span>
-                  <button type="button" className={css.linkButton} onClick={() => { navigate({ tab: 'settings' }) }}>{t('banner.runnerAction')}</button>
-                </div>
+              {!data.runner.available && route.tab !== 'settings' && (
+                <section className={css.setupBanner} aria-label={t('banner.runner')}>
+                  <strong>{t('banner.runner')}</strong>
+                  <span className={css.muted}>{t('banner.runnerWhy')}</span>
+                  <RunnerSetup status={data.runner} onChange={refreshOverview} />
+                </section>
               )}
               {!data.tutor.configured && <div className={css.banner} data-tone="info" role="status">{t('banner.tutor')}</div>}
               <main id="learn-panel" className={css.body} role="tabpanel" aria-labelledby={`learn-tab-${route.tab}`}>

@@ -145,6 +145,15 @@ const SPEC = {
   boundaryCases: [[[0]], [[-1_000_000]], [[1_000_000, 1_000_000, 1_000_000]], [[5, -5, 5, -5]]],
 }
 
+// The shapes live models wrote: locale-major lists, domains keyed by name, and wrapped code.
+const NATURAL_SPEC = {
+  ...SPEC,
+  constraints: { zh: SPEC.constraints.map(item => item.zh), en: SPEC.constraints.map(item => item.en) },
+  hints: { zh: SPEC.hints.map(item => item.zh), en: SPEC.hints.map(item => item.en) },
+  reference: { python: REFERENCE },
+  inputs: { nums: SPEC.inputs[0] },
+}
+
 function toolResults(fixtureValue: LearnFixture): string {
   return JSON.stringify(fixtureValue.adapter.requests.at(-1)?.messages ?? [])
 }
@@ -159,7 +168,7 @@ describe.skipIf(!probe.ready)('problem finder', () => {
       toolCallResponse('c5', 'add_problem', { slug: RUNNING_SUM.titleSlug, spec: { ...SPEC, title: 'Invented', frontendId: 9999 } }),
       toolCallResponse('c6', 'add_problem', { slug: RUNNING_SUM.titleSlug, spec: { ...SPEC,
         reference: 'def runningSum(nums):\n    return [sum(nums[:i]) for i in range(len(nums))]\n' } }),
-      toolCallResponse('c7', 'add_problem', { slug: RUNNING_SUM.titleSlug, spec: SPEC }),
+      toolCallResponse('c7', 'add_problem', { slug: RUNNING_SUM.titleSlug, spec: NATURAL_SPEC }),
     ] })
     const { learn } = created
     const run = learn.findProblems(OWNER_LEARNER, 'one easy prefix sum problem', 1)
@@ -182,6 +191,8 @@ describe.skipIf(!probe.ready)('problem finder', () => {
     const transcript = toolResults(created)
     expect(transcript).not.toContain('perform-string-shifts')
     expect(transcript).toContain('Inspect populating-next-right-pointers-in-each-node with get_leetcode_problem first')
+    expect(transcript).toContain('submissionTemplate')
+    expect(transcript).toContain('def runningSum(nums):')
 
     // Number, title, difficulty, and signature come from LeetCode, never from the model.
     const workspace = learn.workspace(OWNER_LEARNER, id)

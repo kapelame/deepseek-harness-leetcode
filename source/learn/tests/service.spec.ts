@@ -37,10 +37,16 @@ describe.skipIf(!probe.ready)('learning loop', () => {
     const { learn, dataRoot } = first
     learn.lesson(OWNER_LEARNER, HASHING, 'strategy')
     learn.lesson(OWNER_LEARNER, HASHING, 'example')
-    learn.lesson(OWNER_LEARNER, HASHING, 'check', { 'insert-order': 0 })
+    learn.lesson(OWNER_LEARNER, HASHING, 'check')
+    await expect(learn.startLessonCheck(OWNER_LEARNER, HASHING, 'tutor', AbortSignal.timeout(10_000))).rejects.toThrow(/default model/)
+    const check = await learn.startLessonCheck(OWNER_LEARNER, HASHING, 'authored', AbortSignal.timeout(10_000))
+    const missed = await learn.submitLessonCheck(OWNER_LEARNER, check.id, { 'insert-order': '0', complexity: '2' }, AbortSignal.timeout(10_000))
+    expect(missed).toMatchObject({ status: 'failed', attempts: 1 })
+    expect(missed.grades?.map(grade => grade.passed)).toEqual([false, true])
     expect(() => learn.lesson(OWNER_LEARNER, HASHING, 'problem')).toThrow(/understanding check/)
-    const checked = learn.lesson(OWNER_LEARNER, HASHING, 'problem', { 'insert-order': 1, complexity: 2 })
-    expect(checked.correct).toEqual({ 'insert-order': true, complexity: true })
+    const cleared = await learn.submitLessonCheck(OWNER_LEARNER, check.id, { 'insert-order': '1', complexity: '2' }, AbortSignal.timeout(10_000))
+    expect(cleared).toMatchObject({ status: 'passed', attempts: 2 })
+    expect(learn.lesson(OWNER_LEARNER, HASHING, 'problem').stage).toBe('problem')
 
     learn.saveDraft(OWNER_LEARNER, TWO_SUM, 'python', WRONG)
     const run = await learn.run(OWNER_LEARNER, { problemId: TWO_SUM, language: 'python', code: WRONG, customInputs: [[[1, 9, 4], 13]] },

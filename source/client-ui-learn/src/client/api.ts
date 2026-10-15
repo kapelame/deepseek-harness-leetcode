@@ -7,7 +7,7 @@ import type {} from '@deepseek-ai/dsh-experimental-api-learn/remote'
 import type { ReviewMoveTarget, VariantGenerationView } from '@deepseek-ai/dsh-experimental-api-learn/types'
 import type {
   AttemptId, AttemptView, CodeLanguage, EmailJobId, EmailJobView, EmailPreview, EmailSettingsView, HintLevel, HintView, JsonValue,
-  FinderRunId, FinderRunView, FinderStreamFrame,
+  FinderRunId, FinderRunView, FinderStreamFrame, LessonCheckId, LessonCheckView,
   LearnerSettings, LearnExport, LearnOverview, LessonProgress, LessonStage, ProblemId, ProgressView, RecallRating, ReviewCompletion,
   ReviewItemId, ReviewQueue, RunnerStatus, TodayView, TopicId, TutorStreamFrame, TutorThreadId, VariantRecord, WorkspaceState,
 } from '@deepseek-ai/dsh-experimental-learn/types'
@@ -27,22 +27,16 @@ async function unwrap<T>(pending: Promise<RemoteResult<T>>): Promise<T> {
   throw new LearnApiError(error.message ?? 'Request failed', error.code)
 }
 
-/** Check answers keyed by question id. */
-export type CheckAnswers = Readonly<Record<string, number>>
-
-/** Lesson stage change with per-question correctness. */
-export interface LessonResult {
-  readonly progress: LessonProgress
-  readonly correct: Record<string, boolean>
-}
-
 /** Every Learn action the page uses; each rejects with {@link LearnApiError}. */
 export interface LearnApi {
   overview(): Promise<LearnOverview>
   today(): Promise<TodayView>
   updateSettings(patch: Partial<LearnerSettings>): Promise<LearnerSettings>
-  lesson(topicId: TopicId, stage: LessonStage, answers: CheckAnswers): Promise<LessonResult>
-  skipLesson(topicId: TopicId, answers: CheckAnswers): Promise<Partial<LessonResult> & Pick<LessonResult, 'correct'>>
+  lesson(topicId: TopicId, stage: LessonStage): Promise<LessonProgress>
+  lessonCheck(topicId: TopicId): Promise<LessonCheckView | null>
+  startLessonCheck(topicId: TopicId, source: LessonCheckView['source'], signal: AbortSignal): Promise<LessonCheckView>
+  submitLessonCheck(checkId: LessonCheckId, answers: Readonly<Record<string, string>>, signal: AbortSignal): Promise<LessonCheckView>
+  skipLesson(topicId: TopicId): Promise<LessonProgress>
   reflect(topicId: TopicId, text: string, signal: AbortSignal): Promise<LessonProgress>
   workspace(problemId: ProblemId): Promise<WorkspaceState>
   saveDraft(problemId: ProblemId, language: CodeLanguage, code: string): Promise<string>
@@ -81,7 +75,8 @@ export interface LearnApi {
   finderFollow(runId: FinderRunId, onFrame: (frame: FinderStreamFrame) => void, signal: AbortSignal): Promise<void>
   progress(): Promise<ProgressView>
   runnerStatus(refresh: boolean): Promise<RunnerStatus>
-  prepareRunner(language: CodeLanguage, signal: AbortSignal): Promise<RunnerStatus>
+  prepareRunner(language: CodeLanguage | null, signal: AbortSignal): Promise<RunnerStatus>
+  startRunner(signal: AbortSignal): Promise<RunnerStatus>
   emailSettings(): Promise<EmailSettingsView>
   setEmailAddress(address: string): Promise<EmailSettingsView>
   verifyEmail(code: string): Promise<EmailSettingsView>
@@ -105,8 +100,11 @@ export function createLearnApi(ctx: Context): LearnApi {
     overview: () => unwrap(learn.overview()),
     today: () => unwrap(learn.today()),
     updateSettings: patch => unwrap(learn.updateSettings(patch)),
-    lesson: (topicId, stage, answers) => unwrap(learn.lesson(topicId, stage, answers)),
-    skipLesson: (topicId, answers) => unwrap(learn.skipLesson(topicId, answers)),
+    lesson: (topicId, stage) => unwrap(learn.lesson(topicId, stage)),
+    lessonCheck: topicId => unwrap(learn.lessonCheck(topicId)),
+    startLessonCheck: (topicId, source, signal) => unwrap(learn.startLessonCheck(topicId, source, signal)),
+    submitLessonCheck: (checkId, answers, signal) => unwrap(learn.submitLessonCheck(checkId, answers, signal)),
+    skipLesson: topicId => unwrap(learn.skipLesson(topicId)),
     reflect: (topicId, text, signal) => unwrap(learn.reflect(topicId, text, signal)),
     workspace: problemId => unwrap(learn.workspace(problemId)),
     saveDraft: (problemId, language, code) => unwrap(learn.saveDraft(problemId, language, code)),
@@ -167,6 +165,7 @@ export function createLearnApi(ctx: Context): LearnApi {
     progress: () => unwrap(learn.progress()),
     runnerStatus: refresh => unwrap(learn.runnerStatus(refresh)),
     prepareRunner: (language, signal) => unwrap(learn.prepareRunner(language, signal)),
+    startRunner: signal => unwrap(learn.startRunner(signal)),
     emailSettings: () => unwrap(learn.emailSettings()),
     setEmailAddress: address => unwrap(learn.setEmailAddress(address)),
     verifyEmail: code => unwrap(learn.verifyEmail(code)),

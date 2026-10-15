@@ -12,7 +12,7 @@ import type {
   LearnerSettings, LearnExport, LearnOverview, LessonProgress, LessonStage, ProblemId, ProgressView, RecallRating, ReviewCompletion,
   ReviewItemId, ReviewQueue,
   RunnerStatus, TodayView, TopicId, TutorStreamFrame, TutorThreadId, VariantRecord, WorkspaceState,
-  FinderRunId, FinderRunView, FinderStreamFrame,
+  FinderRunId, FinderRunView, FinderStreamFrame, LessonCheckId, LessonCheckView,
 } from '@deepseek-ai/dsh-experimental-learn/types'
 import type { ReviewMoveTarget, VariantGenerationView } from './types.ts'
 
@@ -94,27 +94,58 @@ export default class LearnController extends TypertRemoteService {
     patch)) }
 
   /**
-   * Move a lesson to a stage, recording check answers.
+   * Move a lesson to a stage; the practice problem needs a passed understanding check.
    * @param topicId - topic.
    * @param stage - target stage.
-   * @param answers - check answers by question id.
-   * @returns progress and per-question correctness.
+   * @returns updated progress.
    */
   @Remote
-  lesson(topicId: TopicId, stage: LessonStage, answers: Readonly<Record<string,
-    number>>): { progress: LessonProgress; correct: Record<string, boolean> } {
-    return remote(() => this.ctx.learn.lesson(OWNER_LEARNER, topicId, stage, answers))
+  lesson(topicId: TopicId, stage: LessonStage): LessonProgress {
+    return remote(() => this.ctx.learn.lesson(OWNER_LEARNER, topicId, stage))
   }
 
   /**
-   * Diagnostic skip of a lesson.
+   * The newest understanding check of a lesson.
    * @param topicId - topic.
-   * @param answers - answers to every check.
-   * @returns progress when every answer is correct, and per-question correctness.
+   * @returns the check, or null before the first one.
    */
   @Remote
-  skipLesson(topicId: TopicId, answers: Readonly<Record<string, number>>): { progress?: LessonProgress; correct: Record<string, boolean> } {
-    return remote(() => this.ctx.learn.skipLesson(OWNER_LEARNER, topicId, answers))
+  lessonCheck(topicId: TopicId): LessonCheckView | null {
+    return remote(() => this.ctx.learn.lessonCheck(OWNER_LEARNER, topicId) ?? null)
+  }
+
+  /**
+   * Start an understanding check with fresh questions.
+   * @param topicId - topic.
+   * @param source - `tutor` or `authored`.
+   * @param signal - cancellation.
+   * @returns the open check.
+   */
+  @Remote
+  startLessonCheck(topicId: TopicId, source: LessonCheckView['source'], signal: AbortSignal): Promise<LessonCheckView> {
+    return remoteAsync(() => this.ctx.learn.startLessonCheck(OWNER_LEARNER, topicId, source, signal))
+  }
+
+  /**
+   * Submit answers to an understanding check.
+   * @param checkId - check.
+   * @param answers - answer per question id.
+   * @param signal - cancellation.
+   * @returns the graded check.
+   */
+  @Remote
+  submitLessonCheck(checkId: LessonCheckId, answers: Readonly<Record<string, string>>, signal: AbortSignal): Promise<LessonCheckView> {
+    return remoteAsync(() => this.ctx.learn.submitLessonCheck(OWNER_LEARNER, checkId, answers, signal))
+  }
+
+  /**
+   * Skip the rest of a lesson after passing its check.
+   * @param topicId - topic.
+   * @returns the completed progress.
+   */
+  @Remote
+  skipLesson(topicId: TopicId): LessonProgress {
+    return remote(() => this.ctx.learn.skipLesson(OWNER_LEARNER, topicId))
   }
 
   /**
@@ -364,14 +395,24 @@ export default class LearnController extends TypertRemoteService {
   runnerStatus(refresh: boolean): Promise<RunnerStatus> { return remoteAsync(() => this.ctx.learn.runnerStatus(refresh)) }
 
   /**
-   * Fetch a runner image.
-   * @param language - language.
+   * Fetch runner images.
+   * @param language - one language, or null for every missing image.
    * @param signal - cancellation.
    * @returns refreshed status.
    */
   @Remote
-  prepareRunner(language: CodeLanguage, signal: AbortSignal): Promise<RunnerStatus> {
-    return remoteAsync(() => this.ctx.learn.prepareRunner(language, signal))
+  prepareRunner(language: CodeLanguage | null, signal: AbortSignal): Promise<RunnerStatus> {
+    return remoteAsync(() => this.ctx.learn.prepareRunner(language ?? undefined, signal))
+  }
+
+  /**
+   * Launch Docker Desktop and wait for it.
+   * @param signal - cancellation.
+   * @returns refreshed status.
+   */
+  @Remote
+  startRunner(signal: AbortSignal): Promise<RunnerStatus> {
+    return remoteAsync(() => this.ctx.learn.startRunner(signal))
   }
 
   /**

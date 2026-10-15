@@ -788,3 +788,72 @@
 .finderLog li[data-kind='error'] {
   color: var(--dsw-alias-state-error-primary);
 }
+
+.setupBanner {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 8px 20px 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--dsw-alias-state-warn-primary);
+  background: var(--dsw-alias-bg-layer-1);
+}
+
+.setupSteps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: setup;
+}
+
+.setupSteps > li {
+  counter-increment: setup;
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  column-gap: 8px;
+  row-gap: 4px;
+}
+
+.setupSteps > li::before {
+  content: counter(setup);
+  grid-row: span 2;
+  width: 22px;
+  height: 22px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 12px;
+  border: 1px solid var(--dsw-alias-border-l2);
+  color: var(--dsw-alias-label-secondary);
+}
+
+.setupSteps > li[data-state='done']::before {
+  content: '✓';
+  border-color: var(--dsw-alias-state-success-primary);
+  color: var(--dsw-alias-state-success-primary);
+}
+
+.setupSteps > li[data-state='current']::before {
+  border-color: var(--dsw-alias-state-warn-primary);
+  color: var(--dsw-alias-label-primary);
+}
+
+.setupSteps > li[data-state='todo'] {
+  color: var(--dsw-alias-label-secondary);
+}
+
+.feedback {
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border-left: 3px solid var(--dsw-alias-state-error-primary);
+  background: var(--dsw-alias-bg-layer-2, transparent);
+}
+
+.feedback[data-passed='true'] {
+  border-left-color: var(--dsw-alias-state-success-primary);
+}

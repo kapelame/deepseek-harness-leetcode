@@ -22,6 +22,7 @@ import { LearnError } from '../judging.ts'
 import { toJson } from '../json.ts'
 import { LeetCodeError, LeetCodeSession, type LeetCodeQuestion } from './leetcode.ts'
 import { mapLeetCodeSignature, parseExampleInputs, type MappedSignature } from './signature.ts'
+import { normalizeSubmission } from './normalize.ts'
 
 /** Name of the bundled authoring skill. */
 export const FINDER_SKILL = 'learn-problem-author'
@@ -66,6 +67,32 @@ function difficultyFilter(value: unknown): 'EASY' | 'MEDIUM' | 'HARD' | undefine
   const upper = typeof value === 'string' ? value.toUpperCase() : ''
   if (upper === 'EASY' || upper === 'MEDIUM' || upper === 'HARD') return upper
   throw new Error('difficulty must be EASY, MEDIUM, or HARD')
+}
+
+/**
+ * The exact submission shape for one problem, with the verified entry name and parameter encodings filled in.
+ * @param signature - verified signature.
+ * @param examples - official example inputs.
+ * @returns a template the model completes; every placeholder is a string to replace.
+ */
+function submissionTemplate(signature: MappedSignature, examples: readonly JsonValue[][]): JsonValue {
+  const text = { zh: '…', en: '…' }
+  const args = signature.params.map(param => param.name).join(', ')
+  const entry = signature.shape?.kind === 'design'
+    ? `class ${signature.shape.className}:\n    def __init__(self, ${signature.shape.constructorParams.map(param => param.name).join(', ')}):\n        ...`
+    : `def ${signature.entry.python}(${args}):\n    ...`
+  return toJson({
+    topicId: '<one Learn topic id>',
+    summary: text,
+    constraints: [text],
+    hints: [text, text, text],
+    explanation: text,
+    comparator: { kind: 'exact' },
+    reference: `${entry}  # efficient solution with this exact name`,
+    oracle: `${entry}  # independent brute force with the SAME name`,
+    inputs: signature.params.map(param => ({ type: param.type })),
+    boundaryCases: examples.slice(0, 1),
+  })
 }
 
 /** Problem-finder runs for every learner, with live streaming of their progress. */
@@ -266,6 +293,7 @@ export class ProblemFinder {
           signature: mapping.ok ? { entry: mapping.signature.entry.python, params: mapping.signature.params, returns: mapping.signature.returns,
             shape: mapping.signature.shape ?? null } : null,
           exampleInputs: examples, topics, submissionsLeft: options.maxSubmissionsPerProblem - (submissions.get(slug) ?? 0),
+          ...mapping.ok && supported ? { submissionTemplate: submissionTemplate(mapping.signature, examples) } : {},
         })
       },
     })
@@ -315,7 +343,10 @@ export class ProblemFinder {
       skill: { name: FINDER_SKILL, description: SKILL_DESCRIPTION, content: this.runtime.finderSkill },
     })
     this.runtime.noteAgentResult(result)
-    if (result.text.trim() !== '') this.emit(live, { kind: 'message', at: at(), text: result.text.trim().slice(0, 2000) })
+    // After the last requested problem the run ends at once, so any text is an interim remark rather than a summary.
+    if (result.text.trim() !== '' && live.run.added.length < live.run.count) {
+      this.emit(live, { kind: 'message', at: at(), text: result.text.trim().slice(0, 2000) })
+    }
     if (result.status === 'completed') this.settle(live, 'completed')
     else if (result.status === 'cancelled') this.settle(live, 'cancelled')
     else {
@@ -340,10 +371,12 @@ export class ProblemFinder {
   private async validate(target: Inspected, raw: JsonValue, signal: AbortSignal): Promise<{ validation: VariantValidation;
     spec?: FoundProblemSpec; cases?: Awaited<ReturnType<typeof buildSuite>>['cases'] }> {
     const fail = (detail: string): { validation: VariantValidation } => ({ validation: { ok: false, checks: [{ name: 'schema', ok: false, detail }] } })
-    const parsed = foundSubmissionSchema.safeParse(raw)
-    if (!parsed.success) return fail(parsed.error.issues.slice(0, 8).map(issue => `${issue.path.join('.')}: ${issue.message}`).join('; '))
-    const data = parsed.data
     const { signature, question } = target
+    const parsed = foundSubmissionSchema.safeParse(normalizeSubmission(raw, signature.params))
+    if (!parsed.success) {
+      return fail(`${parsed.error.issues.slice(0, 8).map(issue => `${issue.path.join('.')}: ${issue.message}`).join('; ')}. Follow submissionTemplate from get_leetcode_problem.`)
+    }
+    const data = parsed.data
     if (!this.runtime.problems.curriculum.topics.some(topic => topic.id === data.topicId)) return fail(`topicId ${data.topicId} is not a Learn topic`)
     if (!hasInputSource(data)) return fail('declare inputs (one domain per parameter) or a generator')
     const mismatch = shapeProblem(signature.params, signature.returns, signature.shape)

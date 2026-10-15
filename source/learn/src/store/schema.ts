@@ -7,7 +7,7 @@ import { mkdir, open } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 
 /** Current monotonic schema version. */
-export const LEARN_SCHEMA_VERSION = 2
+export const LEARN_SCHEMA_VERSION = 3
 
 /** SQLite application id ("LERN") protecting unrelated databases. */
 export const LEARN_APPLICATION_ID = 0x4C45524E
@@ -268,6 +268,25 @@ const MIGRATIONS: readonly string[] = [
     updated_at TEXT NOT NULL
   ) STRICT;
   CREATE INDEX finder_runs_by_learner ON finder_runs (learner_id, created_at);
+  `,
+  `
+  CREATE TABLE lesson_checks (
+    id TEXT PRIMARY KEY,
+    learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
+    topic_id TEXT NOT NULL,
+    source TEXT NOT NULL CHECK (source IN ('tutor', 'authored')),
+    questions_json TEXT NOT NULL,
+    answer_key_json TEXT,
+    status TEXT NOT NULL CHECK (status IN ('open', 'passed', 'failed')),
+    attempts INTEGER NOT NULL,
+    answers_json TEXT,
+    grades_json TEXT,
+    summary TEXT,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    graded_at TEXT
+  ) STRICT;
+  CREATE INDEX lesson_checks_by_topic ON lesson_checks (learner_id, topic_id, created_at);
   `
 ]
 

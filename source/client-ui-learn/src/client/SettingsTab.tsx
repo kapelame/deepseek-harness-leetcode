@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Button, Input, Modal, Switch } from '@deepseek-ai/dsh-client-ui-primitives'
 import type { CodeLanguage, EmailPreview, EmailSettingsView, LearnerSettings } from '@deepseek-ai/dsh-experimental-learn/types'
 import { Chip, Loaded, messageOf, useAsync, useLearn, when } from './shared.tsx'
+import { RunnerSetup } from './RunnerSetup.tsx'
 import css from './Learn.module.css'
 
 /**
@@ -91,6 +92,7 @@ function Status() {
       <h3>{t('settings.runner')}</h3>
       <p>{runner.available ? t('settings.runnerReady', { backend: runner.backend }) : t('settings.runnerMissing',
         { reason: runner.reason ?? '' })}</p>
+      <RunnerSetup status={runner} onChange={(status) => { setRunner(status); refreshOverview() }} />
       <ul className={css.list}>
         {runner.languages.map(item => (
           <li key={item.language} className={css.listRow}>
@@ -98,7 +100,7 @@ function Status() {
               state: item.available ? t('settings.ready') : t('settings.notReady') })}</span>
             <code className={css.muted}>{item.image}</code>
             <span className={css.spacer} />
-            {!item.available && runner.reason === undefined && <Button size="sm" variant="outline" disabled={busy !== undefined} onClick={() => { prepare(item.language) }}>{busy === item.language ? t('loading') : t('settings.prepare')}</Button>}
+            {!item.available && runner.setup === 'ready' && <Button size="sm" variant="outline" disabled={busy !== undefined} onClick={() => { prepare(item.language) }}>{busy === item.language ? t('loading') : t('settings.prepare')}</Button>}
           </li>
         ))}
       </ul>

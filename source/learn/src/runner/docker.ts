@@ -163,11 +163,11 @@ export class DockerRunner implements RunnerBackend {
   async probe(signal: AbortSignal): Promise<BackendProbe> {
     const version = await this.control(['version', '--format', '{{.Server.Version}}'], 10_000, signal)
     if (version.spawnError !== undefined) {
-      return { available: false, reason: `Docker CLI "${this.options.command}" could not start: ${version.spawnError}`,
+      return { available: false, setup: 'install', reason: `Docker CLI "${this.options.command}" could not start: ${version.spawnError}`,
         languages: this.unavailableLanguages('runner-missing') }
     }
     if (version.code !== 0) {
-      return { available: false, reason: `Docker daemon is not reachable: ${firstLine(version.stderr) ?? `exit ${String(version.code)}`}`,
+      return { available: false, setup: 'start', reason: `Docker daemon is not reachable: ${firstLine(version.stderr) ?? `exit ${String(version.code)}`}`,
         languages: this.unavailableLanguages('daemon-unavailable') }
     }
     await this.sweep(signal)
@@ -180,7 +180,7 @@ export class DockerRunner implements RunnerBackend {
         : { language, available: false, image,
           reason: `Image ${image} is not present; prepare it from Learn settings or run "docker pull ${image}".` })
     }
-    return { available: true, languages }
+    return { available: true, setup: languages.every(item => item.available) ? 'ready' : 'images', languages }
   }
 
   private unavailableLanguages(reason: string): LanguageAvailability[] {
@@ -191,6 +191,25 @@ export class DockerRunner implements RunnerBackend {
   async prepare(language: CodeLanguage, signal: AbortSignal): Promise<void> {
     const pulled = await this.control(['pull', this.options.images[language]], 15 * 60_000, signal)
     if (pulled.code !== 0) throw new Error(`docker pull ${this.options.images[language]} failed: ${firstLine(pulled.stderr) ?? pulled.spawnError ?? `exit ${String(pulled.code)}`}`)
+  }
+
+  async start(signal: AbortSignal): Promise<void> {
+    // Only the platform's own launcher is used; no privileged commands are run on the learner's behalf.
+    const argv = process.platform === 'darwin' ? ['open', '-a', 'Docker']
+      : process.platform === 'win32' ? ['cmd', '/c', 'start', '', 'Docker Desktop']
+        : undefined
+    if (argv === undefined) throw new Error('Start Docker with your system service manager (for example "sudo systemctl start docker").')
+    let handle: SubprocessHandle
+    try {
+      handle = this.ctx.subprocess.spawn({ argv, cwd: this.options.cwd, stdio: { stdin: 'ignore', stdout: { maxBytes: 4096 }, stderr: { maxBytes: 4096 } },
+        graceMs: 1000, signal: AbortSignal.any([signal, AbortSignal.timeout(20_000)]) })
+    } catch (error) {
+      throw new Error(`Docker Desktop could not be launched: ${error instanceof Error ? error.message : String(error)}`)
+    }
+    const outcome = await handle.done
+    if (outcome.exitCode !== 0) {
+      throw new Error(`Docker Desktop could not be launched: ${firstLine(handle.collected.stderr?.readFrom(0).text ?? '') ?? `exit ${String(outcome.exitCode)}`}`)
+    }
   }
 
   private command(language: CodeLanguage): string[] {

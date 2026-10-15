@@ -30,7 +30,7 @@ declare module '@deepseek-ai/dsh-llm' {
 }
 
 /** Why a Learn agent runs; recorded in the message source and Session id. */
-export type LearnAgentPurpose = 'tutor' | 'judge' | 'variant' | 'reflection' | 'finder'
+export type LearnAgentPurpose = 'tutor' | 'judge' | 'variant' | 'reflection' | 'finder' | 'check'
 
 /** One agent run request. */
 export interface LearnAgentRun {

@@ -1,7 +1,7 @@
 /** Roadmap and staged lessons: motivation, strategy, worked example, check, problem, reflection. */
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@deepseek-ai/dsh-client-ui-primitives'
-import type { LessonProgress, LessonStage, TopicView } from '@deepseek-ai/dsh-experimental-learn/types'
+import type { LessonCheckGrade, LessonCheckView, LessonProgress, LessonStage, TopicView } from '@deepseek-ai/dsh-experimental-learn/types'
 import { TutorPane } from './TutorPane.tsx'
 import { Workspace } from './Workspace.tsx'
 import { Markdown, messageOf, pick, useLearn } from './shared.tsx'
@@ -70,8 +70,6 @@ function Lesson({ topic }: { topic: TopicView }) {
   const saved = overview.lessons.find(item => item.topicId === topic.id)
   const [progress, setProgress] = useState<LessonProgress | undefined>(saved)
   const [viewing, setViewing] = useState<LessonStage>(saved === undefined || saved.stage === 'complete' ? 'motivation' : saved.stage)
-  const [answers, setAnswers] = useState<Record<string, number>>(saved?.checkAnswers ?? {})
-  const [correct, setCorrect] = useState<Record<string, boolean>>({})
   const [reflection, setReflection] = useState(saved?.reflection ?? '')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | undefined>()
@@ -84,27 +82,17 @@ function Lesson({ topic }: { topic: TopicView }) {
     setError(undefined)
     if (STAGES.indexOf(stage) <= reached || progress?.stage === 'complete') { setViewing(stage); return }
     setBusy(true)
-    api.lesson(topic.id, stage, answers).then((result) => {
-      setProgress(result.progress)
-      setCorrect(result.correct)
+    api.lesson(topic.id, stage).then((result) => {
+      setProgress(result)
       setViewing(stage)
       refreshOverview()
     }, (failure: unknown) => { setError(messageOf(failure)) }).finally(() => { setBusy(false) })
   }
 
-  const checkAnswers = (): void => {
-    setBusy(true)
-    api.lesson(topic.id, 'check', answers).then((result) => { setProgress(result.progress); setCorrect(result.correct) },
-      (failure: unknown) => { setError(messageOf(failure)) })
-      .finally(() => { setBusy(false) })
-  }
-
   const skip = (): void => {
     setBusy(true)
-    api.skipLesson(topic.id, answers).then((result) => {
-      setCorrect(result.correct)
-      if (result.progress !== undefined) { setProgress(result.progress); setNotice(t('lesson.skipped')); refreshOverview() } else setNotice(t('lesson.skipFailed'))
-    }, (failure: unknown) => { setError(messageOf(failure)) }).finally(() => { setBusy(false) })
+    api.skipLesson(topic.id).then((result) => { setProgress(result); setNotice(t('lesson.skipped')); refreshOverview() },
+      (failure: unknown) => { setError(messageOf(failure)) }).finally(() => { setBusy(false) })
   }
 
   const reflect = (): void => {
@@ -152,34 +140,7 @@ function Lesson({ topic }: { topic: TopicView }) {
             </div>
           </div>
         )}
-        {viewing === 'check' && (
-          <div className={css.stack}>
-            {lesson.check.map(question => (
-              <fieldset key={question.id} className={css.card}>
-                <legend className={css.cardTitle}>{pick(question.prompt, locale)}</legend>
-                {question.options.map((option, choice) => (
-                  <label key={choice} className={css.choice}>
-                    <input type="radio" name={question.id} checked={answers[question.id] === choice} onChange={() => { setAnswers(current => ({ ...current, [question.id]: choice })) }} />
-                    <span>{pick(option, locale)}</span>
-                  </label>
-                ))}
-                {correct[question.id] !== undefined && (
-                  <p className={correct[question.id] === true ? css.success : css.errorText}>
-                    {correct[question.id] === true ? t('lesson.correct') : t('lesson.incorrect')}
-                    {correct[question.id] === true && <> · {pick(question.explanation, locale)}</>}
-                  </p>
-                )}
-              </fieldset>
-            ))}
-            <p className={css.muted}>{t('lesson.checkAll')}</p>
-            <div className={css.row}>
-              <Button variant="outline" disabled={busy} onClick={checkAnswers}>{t('lesson.checkSubmit')}</Button>
-              <span className={css.spacer} />
-              <span className={css.muted}>{t('lesson.skipHelp')}</span>
-              <Button variant="ghost" disabled={busy} onClick={skip}>{t('lesson.skip')}</Button>
-            </div>
-          </div>
-        )}
+        {viewing === 'check' && <CheckPanel topic={topic} onContinue={() => { go('problem') }} onSkip={skip} busy={busy} />}
         {viewing === 'problem' && practice !== undefined && (
           <div className={css.stack}>
             <p>{progress?.stage === 'reflection' || progress?.stage === 'complete' ? t('lesson.problemPassed') : t('lesson.problemIntro')}</p>
@@ -213,6 +174,113 @@ function Lesson({ topic }: { topic: TopicView }) {
         <summary>{t('ws.tutor')}</summary>
         <TutorPane topicId={topic.id} initial={[]} />
       </details>
+    </div>
+  )
+}
+
+/** Understanding check: tutor-written questions graded by the tutor, or the lesson's built-in questions on request. */
+function CheckPanel({ topic, onContinue, onSkip, busy }: { topic: TopicView; onContinue: () => void; onSkip: () => void; busy: boolean }) {
+  const { api, t, overview } = useLearn()
+  const [check, setCheck] = useState<LessonCheckView | null | undefined>(undefined)
+  const [draft, setDraft] = useState<Record<string, string>>({})
+  const [working, setWorking] = useState<'writing' | 'grading' | undefined>()
+  const [error, setError] = useState<{ message: string; tutor: boolean } | undefined>()
+  useEffect(() => {
+    let live = true
+    api.lessonCheck(topic.id).then((found) => { if (live) { setCheck(found); setDraft({ ...found?.answers }) } },
+      (failure: unknown) => { if (live) { setCheck(null); setError({ message: messageOf(failure), tutor: false }) } })
+    return () => { live = false }
+  }, [api, topic.id])
+
+  const start = (source: LessonCheckView['source']): void => {
+    setError(undefined)
+    setWorking('writing')
+    api.startLessonCheck(topic.id, source, AbortSignal.timeout(180_000)).then((created) => { setCheck(created); setDraft({}) },
+      (failure: unknown) => { setError({ message: messageOf(failure), tutor: source === 'tutor' }) }).finally(() => { setWorking(undefined) })
+  }
+  const submit = (): void => {
+    if (check === null || check === undefined) return
+    setError(undefined)
+    setWorking('grading')
+    api.submitLessonCheck(check.id, draft, AbortSignal.timeout(180_000)).then(setCheck,
+      (failure: unknown) => { setError({ message: messageOf(failure), tutor: check.source === 'tutor' }) }).finally(() => { setWorking(undefined) })
+  }
+
+  const errorBox = error !== undefined && (
+    <div className={css.errorBox} role="alert">
+      {t('failed', { message: error.message })}
+      {error.tutor && <> <Button size="sm" variant="ghost" disabled={working !== undefined} onClick={() => { start('authored') }}>{t('check.useBuiltIn')}</Button></>}
+    </div>
+  )
+  if (check === undefined) return <p className={css.muted}>{t('loading')}</p>
+  if (check === null || working === 'writing') {
+    return (
+      <div className={css.stack}>
+        <p>{t('check.intro')}</p>
+        {working === 'writing' ? <p className={css.muted} role="status">{t('check.writing')}</p> : (
+          <div className={css.row}>
+            {overview.tutor.configured
+              ? <Button variant="primary" onClick={() => { start('tutor') }}>{t('check.start')}</Button>
+              : <p className={css.note}>{t('check.noModel')}</p>}
+            <Button variant={overview.tutor.configured ? 'ghost' : 'primary'} onClick={() => { start('authored') }}>{t('check.useBuiltIn')}</Button>
+          </div>
+        )}
+        {errorBox}
+      </div>
+    )
+  }
+  const grade = (id: string): LessonCheckGrade | undefined =>
+    check.status === 'open' ? undefined : check.grades?.find(item => item.questionId === id)
+  const complete = check.questions.every(question => (draft[question.id] ?? '').trim() !== '')
+  return (
+    <div className={css.stack}>
+      <p className={css.muted}>{check.source === 'tutor' ? t('check.byTutor') : t('check.builtIn')}</p>
+      {check.questions.map((question, position) => {
+        const result = grade(question.id)
+        return (
+          <fieldset key={question.id} className={css.card} disabled={check.status === 'passed' || working !== undefined}>
+            <legend className={css.cardTitle}>{position + 1}.</legend>
+            <Markdown text={question.prompt} />
+            {question.options === undefined
+              ? <textarea className={css.textarea} rows={3} value={draft[question.id] ?? ''} aria-label={t('check.answer', { n: position + 1 })}
+                placeholder={t('check.placeholder')} onChange={(event) => { setDraft(current => ({ ...current, [question.id]: event.target.value })) }} />
+              : question.options.map((option, choice) => (
+                <label key={choice} className={css.choice}>
+                  <input type="radio" name={question.id} checked={draft[question.id] === String(choice)}
+                    onChange={() => { setDraft(current => ({ ...current, [question.id]: String(choice) })) }} />
+                  <span>{option}</span>
+                </label>
+              ))}
+            {result !== undefined && (
+              <p className={css.feedback} data-passed={result.passed}>
+                <strong>{result.passed ? t('check.good') : t('check.notYet')}</strong> {result.feedback}
+              </p>
+            )}
+          </fieldset>
+        )
+      })}
+      {check.status !== 'open' && (
+        <div className={check.status === 'passed' ? css.card : css.errorBox} role="status">
+          <strong>{check.status === 'passed' ? t('check.passed') : t('check.failed')}</strong>
+          {check.summary !== undefined && <p>{check.summary}</p>}
+        </div>
+      )}
+      {working === 'grading' && <p className={css.muted} role="status">{check.source === 'tutor' ? t('check.grading') : t('loading')}</p>}
+      {check.status === 'passed' ? (
+        <div className={css.row}>
+          <Button variant="primary" disabled={busy} onClick={onContinue}>{t('check.continue')}</Button>
+          <span className={css.spacer} />
+          <span className={css.muted}>{t('lesson.skipHelp')}</span>
+          <Button variant="ghost" disabled={busy} onClick={onSkip}>{t('lesson.skip')}</Button>
+        </div>
+      ) : (
+        <div className={css.row}>
+          <Button variant="primary" disabled={!complete || working !== undefined} onClick={submit}>{check.source === 'tutor' ? t('check.submit') : t('check.submitBuiltIn')}</Button>
+          <span className={css.spacer} />
+          <Button variant="ghost" disabled={working !== undefined} onClick={() => { start(check.source) }}>{t('check.newQuestions')}</Button>
+        </div>
+      )}
+      {errorBox}
     </div>
   )
 }

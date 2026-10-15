@@ -54,6 +54,7 @@ node scripts/build.mjs ../dsh --stage-only       # copy sources in without build
 - The problem finder fetches metadata only (no statements, no login, no credentials), paces requests, and respects its per-run budget. Trusted fields (number, title, difficulty, tags, signature, examples) come from LeetCode, never from the model. Do not add bulk scraping.
 
 **Behavior**
+- Lesson checks are written and graded by the tutor; the built-in multiple-choice questions are used only when the learner explicitly chooses them (for example without a model). A tutor failure is shown, never treated as a pass.
 - No silent fallbacks, mocked core behavior, or TODOs presented as finished work.
 - Do not send real email in development or tests; the default `capture` transport writes previews only.
 - Do not run live-model flows (tutor, finder, AI judge) against the user's account without explicit permission; tests use the scripted model in `tests/service-fixture.ts`.

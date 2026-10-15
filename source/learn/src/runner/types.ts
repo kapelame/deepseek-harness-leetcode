@@ -75,9 +75,13 @@ export interface LanguageAvailability {
   readonly reason?: string
 }
 
+/** Next setup step a learner must take: install the backend, start it, download images, or nothing. */
+export type RunnerSetupStep = 'install' | 'start' | 'images' | 'ready'
+
 /** Backend probe result. */
 export interface BackendProbe {
   readonly available: boolean
+  readonly setup: RunnerSetupStep
   readonly reason?: string
   readonly languages: readonly LanguageAvailability[]
 }
@@ -111,4 +115,10 @@ export interface RunnerBackend {
    * @returns after the image is available.
    */
   prepare(language: CodeLanguage, signal: AbortSignal): Promise<void>
+  /**
+   * Ask the operating system to start the backend (for example Docker Desktop).
+   * @param signal - cancellation.
+   * @returns after the start request was issued; the backend may still be starting.
+   */
+  start(signal: AbortSignal): Promise<void>
 }
