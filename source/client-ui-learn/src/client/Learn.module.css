@@ -225,7 +225,6 @@
 .level[data-level='practicing'] { color: var(--dsw-alias-state-warn-primary); }
 
 .meter {
-  flex: none;
   width: 100%;
   height: 6px;
   border-radius: 999px;
@@ -234,6 +233,12 @@
   overflow: hidden;
   flex: 1;
   min-width: 80px;
+}
+
+/* In a column layout the bar keeps its height; in a row it fills the free width. */
+.card > .meter,
+.stack > .meter {
+  flex: none;
 }
 
 .meterFill {
