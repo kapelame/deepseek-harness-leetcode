@@ -16,7 +16,7 @@ Explanations are in Chinese by default; switch to English in Learn → Settings.
 
 ## Requirements
 
-- **DSH 0.2.0-rc.2 or newer, below 0.3.** DSH refuses to load the plugin on other versions.
+- **DSH 0.2.0-rc.2 or newer, below 0.3** (tested on 0.2.0-rc.2 and 0.2.1-alpha.3). DSH refuses to load the plugin on other versions.
 - **Docker** running on the same machine, with the runner images pulled once:
 
   ```sh

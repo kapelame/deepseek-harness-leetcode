@@ -375,7 +375,7 @@ export default class LearnService extends Service implements LearnRuntime {
     if (this.config.email.publicBaseUrl !== '') return this.config.email.publicBaseUrl.replace(/\/+$/, '')
     const server = this.ctx.get('webServer')
     if (server === undefined) return undefined
-    let port: number
+    let port: number | undefined
     try {
       port = server.port
     } catch {

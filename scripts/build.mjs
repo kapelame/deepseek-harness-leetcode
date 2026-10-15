@@ -67,6 +67,11 @@ function stage() {
   cpSync(join(root, 'content'), join(experimental, 'learn/content'), { recursive: true })
   cpSync(join(root, 'runtime'), join(experimental, 'learn/runtime'), { recursive: true })
   cpSync(join(root, 'skills'), join(experimental, 'learn/skills'), { recursive: true })
+  // DSH 0.2.1 changed clientBundle() to take the package directory instead of the package name.
+  if (/export function clientBundle\(\s*packageDir/.test(readFileSync(join(dsh, 'packages/client/tsdown.client.ts'), 'utf8'))) {
+    const config = join(experimental, 'client-ui-learn/tsdown.config.ts')
+    writeFileSync(config, readFileSync(config, 'utf8').replace(`'@deepseek-ai/dsh-experimental-client-ui-learn'`, 'import.meta.dirname'))
+  }
   const paths = ['learn', 'learn/types', 'api-learn', 'api-learn/types', 'client-ui-learn', 'client-ui-learn/client'].map((spec) => {
     const [pkg, sub] = spec.split('/')
     const file = sub === undefined ? 'index.ts' : sub === 'client' ? 'client/index.ts' : 'types.ts'
