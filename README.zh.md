@@ -1,4 +1,4 @@
-# dsh-plugin-learn
+# DeepSeek Harness LeetCode (dsh-plugin-learn)
 
 [English](README.md) | 中文
 
@@ -28,11 +28,11 @@
 
 ## 在 DSH 桌面端安装
 
-1. 在桌面端打开 **插件**，用 GitHub 地址 `github:kapelame/dsh-plugin-learn` 安装。
+1. 在桌面端打开 **插件**，用 GitHub 地址 `github:kapelame/deepseek-harness-leetcode` 安装。
    如果想用命令行，先完全退出桌面端，再运行桌面端自带的 CLI：
 
    ```sh
-   "/Applications/DeepSeek Harness.app/Contents/Resources/runtime/cli/bin/dsh" plugin --profile desktop add github:kapelame/dsh-plugin-learn
+   "/Applications/DeepSeek Harness.app/Contents/Resources/runtime/cli/bin/dsh" plugin --profile desktop add github:kapelame/deepseek-harness-leetcode
    ```
 
 2. 重新打开桌面端，在侧边栏选择 **Learn**。
@@ -40,13 +40,13 @@
 ## 在 DSH Web 安装
 
 ```sh
-dsh plugin --profile web add github:kapelame/dsh-plugin-learn
+dsh plugin --profile web add github:kapelame/deepseek-harness-leetcode
 dsh web
 ```
 
 请使用你的 Web 实际启动的配置名（默认 Web 配置为 `web`），然后在侧边栏打开 **Learn**。
 
-仓库附带预先构建好的 `lib/`，因此从 GitHub 安装时不运行构建脚本，也不需要额外的构建授权。如需可复现的安装，可固定提交：`github:kapelame/dsh-plugin-learn#<commit>`。
+仓库附带预先构建好的 `lib/`，因此从 GitHub 安装时不运行构建脚本，也不需要额外的构建授权。如需可复现的安装，可固定提交：`github:kapelame/deepseek-harness-leetcode#<commit>`。
 
 ## 配置
 

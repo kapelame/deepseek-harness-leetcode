@@ -7,14 +7,20 @@
   "icon": "./icon.svg",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kapelame/dsh-plugin-learn.git"
+    "url": "git+https://github.com/kapelame/deepseek-harness-leetcode.git"
   },
   "keywords": [
     "dsh",
+    "deepseek",
     "deepseek-harness",
     "dsh-plugin",
     "leetcode",
-    "algorithms"
+    "leetcode-hot-100",
+    "hot100",
+    "algorithms",
+    "data-structures",
+    "interview-preparation",
+    "ai-tutor"
   ],
   "main": "lib/index.js",
   "exports": {
@@ -79,5 +85,6 @@
   },
   "engines": {
     "node": "^22.19 || >=24"
-  }
+  },
+  "homepage": "https://github.com/kapelame/deepseek-harness-leetcode#readme"
 }

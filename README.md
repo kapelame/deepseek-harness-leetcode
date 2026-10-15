@@ -1,4 +1,4 @@
-# dsh-plugin-learn
+# DeepSeek Harness LeetCode (dsh-plugin-learn)
 
 English | [中文](README.zh.md)
 
@@ -28,11 +28,11 @@ Explanations are in Chinese by default; switch to English in Learn → Settings.
 
 ## Install on DSH Desktop
 
-1. Open **Plugins** in Desktop and install from the GitHub source `github:kapelame/dsh-plugin-learn`.
+1. Open **Plugins** in Desktop and install from the GitHub source `github:kapelame/deepseek-harness-leetcode`.
    To use the command line instead, quit Desktop completely, then run Desktop's bundled CLI:
 
    ```sh
-   "/Applications/DeepSeek Harness.app/Contents/Resources/runtime/cli/bin/dsh" plugin --profile desktop add github:kapelame/dsh-plugin-learn
+   "/Applications/DeepSeek Harness.app/Contents/Resources/runtime/cli/bin/dsh" plugin --profile desktop add github:kapelame/deepseek-harness-leetcode
    ```
 
 2. Reopen Desktop and choose **Learn** in the sidebar.
@@ -40,13 +40,13 @@ Explanations are in Chinese by default; switch to English in Learn → Settings.
 ## Install on DSH Web
 
 ```sh
-dsh plugin --profile web add github:kapelame/dsh-plugin-learn
+dsh plugin --profile web add github:kapelame/deepseek-harness-leetcode
 dsh web
 ```
 
 Use the profile name your Web setup boots (`web` is the default Web profile). Then open **Learn** in the sidebar.
 
-The repository ships prebuilt files in `lib/`, so installing from GitHub runs no build script and needs no extra build permission. Pin a commit for reproducible installs: `github:kapelame/dsh-plugin-learn#<commit>`.
+The repository ships prebuilt files in `lib/`, so installing from GitHub runs no build script and needs no extra build permission. Pin a commit for reproducible installs: `github:kapelame/deepseek-harness-leetcode#<commit>`.
 
 ## Configuration
 
