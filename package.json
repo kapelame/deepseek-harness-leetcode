@@ -1,6 +1,6 @@
 {
   "name": "dsh-plugin-learn",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Algorithm learning mode for DeepSeek Harness: lessons, Docker-isolated judging, a tutor with progressive hints, variant reviews, and reminder email",
   "license": "MIT",
   "type": "module",

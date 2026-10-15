@@ -29,27 +29,36 @@ English | [中文](README.zh.md)
 <table>
   <tr>
     <td width="50%"><img src="docs/images/workspace.png" alt="Solving LRU Cache: Python editor and a passed verdict"></td>
-    <td width="50%"><img src="docs/images/lesson.png" alt="Lesson worked example with a step-by-step trace table"></td>
+    <td width="50%"><img src="docs/images/submissions.png" alt="Submissions tab with status, runtime, memory, and the submitted code"></td>
   </tr>
   <tr>
     <td align="center"><b>Solve</b> — editor, Run and Submit, hidden tests</td>
-    <td align="center"><b>Learn</b> — worked examples you can trace</td>
-  </tr>
-  <tr>
-    <td width="50%"><img src="docs/images/hints.png" alt="Hints unlocked one level at a time"></td>
-    <td width="50%"><img src="docs/images/add-problems.png" alt="Add problems from a plain description"></td>
-  </tr>
-  <tr>
-    <td align="center"><b>Hints</b> — direction, key idea, outline, solution</td>
-    <td align="center"><b>Add problems</b> — describe it, the agent does the rest</td>
+    <td align="center"><b>Submissions</b> — runtime, memory, and every past attempt</td>
   </tr>
 </table>
 
-Also included: a LeetCode-style record (solved count by difficulty, a yearly submission calendar, streaks, and a Submissions tab per problem with runtime and memory), an AI tutor chat, spaced-repetition reviews with fresh validated variants, progress by concept, and optional daily reminder email.
+<p align="center"><img src="docs/images/record.png" alt="Practice record: solved ring by difficulty, submission stats, yearly calendar, and recent passes" width="880"><br><b>Your record</b> — solved by difficulty, a yearly calendar, streaks, and recent passes</p>
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/images/lesson.png" alt="Lesson worked example with a step-by-step trace table"></td>
+    <td width="50%"><img src="docs/images/hints.png" alt="Hints unlocked one level at a time"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Learn</b> — worked examples you can trace</td>
+    <td align="center"><b>Hints</b> — direction, key idea, outline, solution</td>
+  </tr>
+</table>
+
+<p align="center"><img src="docs/images/check.png" alt="Tutor-written understanding check with the tutor's feedback on each answer" width="880"><br><b>Tutor check</b> — questions written for the lesson, answers reviewed by the tutor (real DeepSeek output)</p>
+
+Also included: an AI tutor chat, spaced-repetition reviews with fresh validated variants, progress by concept, and optional daily reminder email.
 
 ## Quick start
 
 1. **Install Docker Desktop.** Learn then guides the rest: it can start Docker and download the runner images with one click, or run `docker pull python:3.13-alpine node:24-alpine` yourself.
+
+   <img src="docs/images/setup.png" alt="Guided setup: install Docker, start it, download the runner images" width="640">
 
 2. **Install the plugin** from `github:kapelame/deepseek-harness-leetcode`:
    - **Desktop:** Plugins → install from GitHub.
@@ -83,11 +92,16 @@ Every verdict comes from test execution only. Your code runs in a Docker contain
 
 ## Add problems
 
+<img src="docs/images/finder.png" alt="A finished Add problems run: searches, inspected problems, one rejected submission, and two problems added" width="300" align="right">
+
 Practice → **Add problems**. Describe what you want and pick how many (1–5). Progress streams live, and you can stop at any time; problems already added stay.
 
 - The agent follows the bundled skill [`skills/learn-problem-author/SKILL.md`](skills/learn-problem-author/SKILL.md), which is visible only to the finder agent, never in your normal Sessions.
 - Number, title, difficulty, tags, signature, and examples always come from LeetCode's metadata, never from the model. Paid-only problems and problems that need a judge Learn does not provide are skipped.
 - Each problem must pass the same validation as the built-in ones before it is added.
+- In our live tests with DeepSeek, a run took 70–300 seconds and added every problem requested.
+
+<br clear="right">
 
 ## Privacy
 

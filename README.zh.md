@@ -29,27 +29,36 @@
 <table>
   <tr>
     <td width="50%"><img src="docs/images/workspace.png" alt="解答 LRU 缓存：Python 编辑器与通过判定"></td>
-    <td width="50%"><img src="docs/images/lesson.png" alt="课程示例与逐步推演表"></td>
+    <td width="50%"><img src="docs/images/submissions.png" alt="提交记录：状态、执行用时、内存消耗和提交的代码"></td>
   </tr>
   <tr>
     <td align="center"><b>做题</b>：编辑器、运行与提交、隐藏测试</td>
-    <td align="center"><b>学习</b>：可逐步推演的示例</td>
-  </tr>
-  <tr>
-    <td width="50%"><img src="docs/images/hints.png" alt="逐级解锁的提示"></td>
-    <td width="50%"><img src="docs/images/add-problems.png" alt="用一句描述添加题目"></td>
-  </tr>
-  <tr>
-    <td align="center"><b>提示</b>：方向、关键观察、思路大纲、解答</td>
-    <td align="center"><b>添加题目</b>：描述需求，其余交给智能体</td>
+    <td align="center"><b>提交记录</b>：执行用时、内存消耗和每一次提交</td>
   </tr>
 </table>
 
-此外还有类似 LeetCode 的做题记录（按难度统计的已解答数、全年提交日历、连续天数，以及每道题带执行用时和内存消耗的提交记录）、AI 辅导对话、使用新变体题的间隔复习、按知识点统计的进度，以及可选的每日提醒邮件。
+<p align="center"><img src="docs/images/record.png" alt="做题记录：按难度的已解答环、提交统计、全年日历和最近通过" width="880"><br><b>做题记录</b>：按难度统计、全年提交日历、连续天数和最近通过</p>
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/images/lesson.png" alt="课程示例与逐步推演表"></td>
+    <td width="50%"><img src="docs/images/hints.png" alt="逐级解锁的提示"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>学习</b>：可逐步推演的示例</td>
+    <td align="center"><b>提示</b>：方向、关键观察、思路大纲、解答</td>
+  </tr>
+</table>
+
+<p align="center"><img src="docs/images/check.png" alt="导师出题的理解检查，以及导师对每个回答的反馈" width="880"><br><b>导师检查</b>：根据本课出题，由导师评阅回答（DeepSeek 真实输出）</p>
+
+此外还有 AI 辅导对话、使用新变体题的间隔复习、按知识点统计的进度，以及可选的每日提醒邮件。
 
 ## 快速开始
 
 1. **安装 Docker Desktop。** 之后由 Learn 引导完成其余步骤：一键启动 Docker、一键下载运行镜像；也可以自己运行 `docker pull python:3.13-alpine node:24-alpine`。
+
+   <img src="docs/images/setup.png" alt="引导设置：安装 Docker、启动 Docker、下载运行镜像" width="640">
 
 2. **安装插件**，地址为 `github:kapelame/deepseek-harness-leetcode`：
    - **桌面端：** 插件 → 从 GitHub 安装。
@@ -83,11 +92,16 @@
 
 ## 添加题目
 
+<img src="docs/images/finder.png" alt="一次完成的添加题目：搜索、查看题目、一次被拒的提交以及两道已添加的题目" width="300" align="right">
+
 在“练习 → **添加题目**”中描述需求并选择数量（1–5）。进度实时显示，可随时停止；已添加的题目会保留。
 
 - 智能体遵循随插件附带的技能 [`skills/learn-problem-author/SKILL.md`](skills/learn-problem-author/SKILL.md)，它只在查找器智能体内部可见，不会出现在你平常的 Session 中。
 - 题号、标题、难度、标签、签名和示例始终来自 LeetCode 元数据，而不是模型。付费题和需要特殊评测器的题会被跳过。
 - 每道题都必须通过与内置题目相同的校验才会加入。
+- 我们用 DeepSeek 实测时，每次运行用时 70–300 秒，都添加了要求数量的题目。
+
+<br clear="right">
 
 ## 隐私
 

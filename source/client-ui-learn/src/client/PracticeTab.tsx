@@ -207,7 +207,7 @@ function AddProblemsDialog({ open, onClose }: { open: boolean; onClose: () => vo
           : <Button variant="primary" disabled={starting || description.trim().length < 3} onClick={start}>{t('finder.start')}</Button>}
       </>}
     >
-      <div className={css.stack}>
+      <div className={css.finderBody}>
         <textarea className={css.textarea} rows={3} value={description} disabled={running} placeholder={t('finder.placeholder')}
           aria-label={t('finder.description')} onChange={(event) => { setDescription(event.target.value) }} />
         <label className={css.row}>

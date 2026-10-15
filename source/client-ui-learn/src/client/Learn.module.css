@@ -770,13 +770,23 @@
 
 .finderLog {
   margin: 0;
-  padding-left: 20px;
+  padding-left: 28px;
   display: flex;
   flex-direction: column;
   gap: 4px;
-  max-height: 280px;
+  max-height: min(280px, 30vh);
   overflow-y: auto;
   font-size: 13px;
+}
+
+/* Keeps the dialog inside short windows: its body scrolls instead of pushing the title off screen. */
+.finderBody {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: calc(100vh - 300px);
+  min-height: 160px;
+  overflow-y: auto;
 }
 
 .finderLog li[data-kind='added'] {
